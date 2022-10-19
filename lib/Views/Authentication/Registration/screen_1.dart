@@ -29,105 +29,103 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(backgroundColor: kWhiteColor,iconTheme: const IconThemeData(color: kBlackColor),),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
+        body: SingleChildScrollView(
+          child: Container(
     margin: EdgeInsets.symmetric(horizontal: kMargin),
       child: Column(
-            children: [
-              SvgPicture.asset('assets/user.svg'),
-              Text("Add Photo [Optional]",style: Theme.of(context).textTheme.headline6,),
-              spacing(),
-              const Text(kName),
-              spacing(),
-              Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  crossAxisAlignment:CrossAxisAlignment.start,
-                  children: [
-                    spacing(),
+          children: [
+            SvgPicture.asset('assets/user.svg'),
+            Text("Add Photo [Optional]",style: Theme.of(context).textTheme.headline6,),
+            spacing(),
+            const Text(kName),
+            spacing(),
+            Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                crossAxisAlignment:CrossAxisAlignment.start,
+                children: [
+                  spacing(),
 
-                    TextFormField(
-                      controller: _fName,
-                      autocorrect: true,
-                      autofocus: true,
-                      cursorColor: (kOrangeColor),
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.sentences,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      validator: Validator.validateFirstName,
-                      decoration: const InputDecoration(
-                        hintText: kFName,
+                  TextFormField(
+                    controller: _fName,
+                    autocorrect: true,
+                    autofocus: true,
+                    cursorColor: (kOrangeColor),
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.sentences,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    validator: Validator.validateFirstName,
+                    decoration: const InputDecoration(
+                      hintText: kFName,
 
-                      ),
-                      onSaved: (String? value) {
-                        firstname = value!;
-                      },
                     ),
+                    onSaved: (String? value) {
+                      firstname = value!;
+                    },
+                  ),
 
-                    spacing(),
+                  spacing(),
 
-                    TextFormField(
-                      controller: _lName,
-                      autocorrect: true,
-                      autofocus: true,
-                      cursorColor: (kOrangeColor),
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.sentences,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      validator: Validator.validateLastName,
-                      decoration: const InputDecoration(
-                        hintText: kLName,
+                  TextFormField(
+                    controller: _lName,
+                    autocorrect: true,
+                    autofocus: true,
+                    cursorColor: (kOrangeColor),
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.sentences,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    validator: Validator.validateLastName,
+                    decoration: const InputDecoration(
+                      hintText: kLName,
 
-                      ),
-                      onSaved: (String? value) {
-                        lastname = value!;
-                      },
                     ),
+                    onSaved: (String? value) {
+                      lastname = value!;
+                    },
+                  ),
 
-                  ],
-                ),
+                ],
               ),
-              spacing(),
-                Column(
+            ),
+            spacing(),
+              Column(
 
-                  children: <Widget>[
-                    ListTile(
-                      title: const Text('Male'),
-                      leading: Radio<Gender>(
-                        value: Gender.male,
-                        groupValue: _gender,
-                        onChanged: (Gender? value) {
-                          setState(() {
-                            _gender = value!;
-                          });
-                        },
-                      ),
+                children: <Widget>[
+                  ListTile(
+                    title: const Text('Male'),
+                    leading: Radio<Gender>(
+                      value: Gender.male,
+                      groupValue: _gender,
+                      onChanged: (Gender? value) {
+                        setState(() {
+                          _gender = value!;
+                        });
+                      },
                     ),
-                    ListTile(
-                      title: const Text('Female'),
-                      leading: Radio<Gender>(
-                        value: Gender.female,
-                        groupValue: _gender,
-                        onChanged: (Gender? value) {
-                          setState(() {
-                            _gender = value!;
-                          });
-                        },
-                      ),
+                  ),
+                  ListTile(
+                    title: const Text('Female'),
+                    leading: Radio<Gender>(
+                      value: Gender.female,
+                      groupValue: _gender,
+                      onChanged: (Gender? value) {
+                        setState(() {
+                          _gender = value!;
+                        });
+                      },
                     ),
-                  ],
-                ),
-              spacing(),
-              GeneralButton(tapStudiesButton: (){
-                Navigator.pushNamed(context, registrationScreen2);
-              },title: kNextBtn,)
+                  ),
+                ],
+              ),
+            spacing(),
+            GeneralButton(tapStudiesButton: (){
+              Navigator.pushNamed(context, registrationScreen2);
+            },title: kNextBtn,)
 
-            ],
+          ],
       ),
     ),
-          ),
         ));
   }
 }

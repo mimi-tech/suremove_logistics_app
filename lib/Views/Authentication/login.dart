@@ -101,7 +101,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             spacing(),
-            Text(kForgotPassword,style: Theme.of(context).textTheme.subtitle2,),
+            GestureDetector(
+                onTap: (){
+                  Navigator.pushNamed(context, verifyEmail);
+                },
+                child: Text(kForgotPassword,style: Theme.of(context).textTheme.subtitle2,)),
             spacing(),
             GeneralButton(tapStudiesButton: (){},title: kLogin,)
 

@@ -5,6 +5,7 @@ import 'package:sure_move/Commons/colors.dart';
 import 'package:sure_move/Commons/constants.dart';
 import 'package:sure_move/Commons/dimens.dart';
 import 'package:sure_move/Commons/strings.dart';
+import 'package:sure_move/Routes/strings.dart';
 import 'package:sure_move/Views/Authentication/validation.dart';
 import 'package:sure_move/utils/enums.dart';
 import 'package:sure_move/utils/generalButton.dart';
@@ -30,8 +31,8 @@ class _RegistrationScreen2State extends State<RegistrationScreen2> {
     textStyle: const TextStyle(fontSize: 20, color:kTextColor, fontWeight: FontWeight.w600),
 
     decoration: BoxDecoration(
-      border: Border.all(color: const Color.fromRGBO(234, 239, 243, 1)),
-      borderRadius: BorderRadius.circular(20),
+      border: Border.all(color: kOrangeColor),
+      borderRadius: BorderRadius.circular(8),
     ),
   );
 
@@ -54,6 +55,7 @@ class _RegistrationScreen2State extends State<RegistrationScreen2> {
           borderRadius: BorderRadius.circular(8),
         )
       ),
+
       submittedPinTheme: PinTheme(
         decoration: BoxDecoration(
           border: Border.all(color: kGreen),
@@ -67,56 +69,58 @@ class _RegistrationScreen2State extends State<RegistrationScreen2> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(backgroundColor: kWhiteColor,iconTheme: const IconThemeData(color: kBlackColor),),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: kMargin),
-              child: Column(
-                children: [
-                  SvgPicture.asset('assets/unlock.svg'),
-                  spacing(),
-                  const Text(kReferal,textAlign: TextAlign.center,),
-                  spacing(),
-                  Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      crossAxisAlignment:CrossAxisAlignment.start,
-                      children: [
-                        spacing(),
-                        animatingBorders(),
-                        spacing(),
-                        TextFormField(
-                          controller: _referral,
-                          autocorrect: true,
-                          autofocus: true,
-                          cursorColor: (kOrangeColor),
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.sentences,
-                          style: Theme.of(context).textTheme.bodyText1,
-                          decoration: const InputDecoration(
-                            hintText: "Referral username",
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: kMargin),
+            child: Column(
+              children: [
+                SvgPicture.asset('assets/unlock.svg'),
+                spacing(),
+                const Text(kTransactionPin,textAlign: TextAlign.center,),
 
-                          ),
-                          onSaved: (String? value) {
-                            referral = value!;
-                          },
+                Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    crossAxisAlignment:CrossAxisAlignment.start,
+                    children: [
+
+                      animatingBorders(),
+                      spacing(),
+                      const Text(kReferal,textAlign: TextAlign.center,),
+
+                      TextFormField(
+                        controller: _referral,
+                        autocorrect: true,
+                        autofocus: true,
+                        cursorColor: (kOrangeColor),
+                        keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        decoration: const InputDecoration(
+                          hintText: "Referral username",
+
                         ),
+                        onSaved: (String? value) {
+                          referral = value!;
+                        },
+                      ),
 
-                        spacing(),
+                      spacing(),
 
 
 
-                      ],
-                    ),
+                    ],
                   ),
-                  spacing(),
+                ),
+                spacing(),
 
-                  spacing(),
-                  GeneralButton(tapStudiesButton: (){},title: kNextBtn,)
+                spacing(),
+                GeneralButton(tapStudiesButton: (){
+                  Navigator.pushNamed(context, registrationScreen3);
+                },title: kNextBtn,)
 
-                ],
-              ),
+              ],
             ),
           ),
         ));
