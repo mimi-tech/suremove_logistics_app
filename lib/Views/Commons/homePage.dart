@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(body: Center(
       child: GeneralButton(title: "Booking", tapStudiesButton: (){
-        Navigator.pushNamed(context, itemDetails);
+        Navigator.pushNamed(context, deliveryScreen);
       }),
     ));
   }

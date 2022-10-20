@@ -13,11 +13,10 @@ class CustomTheme {
         primaryColor: kOrangeColor,
         scaffoldBackgroundColor: Colors.white,
 
-        // buttonTheme: ButtonThemeData( // 4
-        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
-        //   buttonColor: kNavyColor,
-        //   height: 40.0.sp,
-        // ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData( // 4
+          elevation: 5.0,
+
+        ),
 
         colorScheme: ThemeData().colorScheme.copyWith(
           primary: kWhiteColor,

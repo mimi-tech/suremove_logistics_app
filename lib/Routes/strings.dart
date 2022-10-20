@@ -15,4 +15,7 @@ const viewBookingDetails = "/view-booking-details";
 const ripplesAnimation = "/ripples-animation";
 const connectedVendorPage = "/connected-vendor-page";
 const customerEditBooking = "/customer-edit-booking";
+const vendorWaitingScreen = "/vendor-waiting-screen";
+const decisionScreen = "/decision-screen";
+const deliveryScreen = "/delivery-screen";
 

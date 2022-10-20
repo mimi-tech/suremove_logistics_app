@@ -16,6 +16,9 @@ import 'package:sure_move/Views/Booking/CustomerBooking/location.dart';
 import 'package:sure_move/Views/Booking/CustomerBooking/recieverInfo.dart';
 import 'package:sure_move/Views/Booking/CustomerBooking/ringingScreen.dart';
 import 'package:sure_move/Views/Booking/CustomerBooking/viewBookingDetails.dart';
+import 'package:sure_move/Views/Booking/VendorBooking/decisionScreen.dart';
+import 'package:sure_move/Views/Booking/VendorBooking/deliveryScreen.dart';
+import 'package:sure_move/Views/Booking/VendorBooking/waitingScreen.dart';
 import 'package:sure_move/Views/Commons/homePage.dart';
 import 'package:sure_move/Views/Commons/splashScreen.dart';
 
@@ -79,6 +82,15 @@ class AppRouter {
 
         case customerEditBooking:
         return MaterialPageRoute( builder: (_) => const CustomerEditBooking());
+
+        case vendorWaitingScreen:
+        return MaterialPageRoute( builder: (_) => const VendorWaitingScreen());
+
+        case decisionScreen:
+        return MaterialPageRoute( builder: (_) => const DecisionScreen());
+
+        case deliveryScreen:
+        return MaterialPageRoute( builder: (_) => const DeliveryScreen());
 
 
 

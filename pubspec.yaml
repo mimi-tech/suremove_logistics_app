@@ -39,6 +39,7 @@ dependencies:
   flutter_svg: ^1.1.5
   country_code_picker: ^2.0.2
   pinput: ^2.2.16
+  flutter_switch: ^0.3.2
 
 dev_dependencies:
   flutter_test:
