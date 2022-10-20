@@ -73,7 +73,7 @@ final kCaptionStyle = TextStyle(
 
 final kOverLineStyle = TextStyle(
   fontSize: kFontSize16,
-  fontWeight: FontWeight.w500,
+  fontWeight: FontWeight.bold,
   color: kWhiteColor,
 );
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sure_move/Commons/colors.dart';
+import 'package:sure_move/Commons/dimens.dart';
 import 'package:sure_move/themes/input_decoration_theme.dart';
 import 'package:sure_move/themes/text_styles.dart';
 
@@ -26,6 +27,9 @@ class CustomTheme {
           elevation: 0.0,
           backgroundColor: kOrangeColor,
           iconTheme: IconThemeData(color: kWhiteColor,size: 30.0.sp),
+           titleTextStyle: TextStyle(fontWeight: FontWeight.bold,
+           fontSize: kFontSize16
+           )
         ),
         fontFamily: GoogleFonts.oxanium().fontFamily,
 
@@ -63,7 +67,8 @@ class CustomTheme {
         // dialogBackgroundColor: Colors.blue,
 
         iconTheme: IconThemeData(size: 30.0.sp),
-        listTileTheme:const ListTileThemeData(textColor: kBlackColor,selectedColor: kOrangeColor)
+        listTileTheme:const ListTileThemeData(textColor: kBlackColor,selectedColor: kOrangeColor),
+          popupMenuTheme: PopupMenuThemeData(textStyle: TextStyle(color: kBlackColor,fontSize: kFontSize13,fontWeight: FontWeight.bold))
     );
   }
 }

@@ -1,5 +1,15 @@
 class Validator {
 
+  static String? validateField(String? value) {
+    if(value!.isEmpty) {
+      return "Field can't be empty";
+    }
+    if(value.length < 6) {
+      return "First name is too short";
+    }
+
+    return null;
+  }
 
 
   static String? validateFirstName(String? value) {
@@ -24,13 +34,43 @@ class Validator {
     return null;
   }
 
-
-  static String? validateFrom(String? value) {
+  static String? validateUsername(String? value) {
     if(value!.isEmpty) {
-      return "Message title can't be empty";
+      return "user name can't be empty";
+    }
+    if(value.length < 6) {
+      return "user name is too short";
+    }
+
+    return null;
+  }
+
+
+  static String? validateItemName(String? value) {
+    if(value!.isEmpty) {
+      return "Item name can't be empty";
     }
     if(value.length < 2) {
-      return "Message title is too short";
+      return "Item name is too short";
+    }
+
+    return null;
+  }
+
+  static String? validateItemSize(String? value) {
+    if(value!.isEmpty) {
+      return "Item number can't be empty";
+    }
+    if(int.parse(value) < 50) {
+      return "Item size can't be more than 50kg";
+    }
+
+    return null;
+  }
+
+  static String? validateItemNumber(String? value) {
+    if(value!.isEmpty) {
+      return "Item number can't be empty";
     }
 
     return null;

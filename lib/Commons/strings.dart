@@ -58,3 +58,35 @@ const String ErrorText = 'Sorry an error occurred, try again';
 const String kEmailExist = 'Sorry this Email already exist';
 const String kLoginError = 'Sorry you have no account with us';
 const String kTransactionPin = 'Please enter your transaction pin';
+
+//Booking
+const String kItemTitle = 'Item details';
+const String kItemDetails = 'Please put in details item description';
+const String kItemSize = 'Item size';
+const String kItemNumber = 'Item count';
+const String kItemName = 'Item name';
+const String kItemDeliveryLocation = 'Item  delivery location';
+const String kLocation = 'Please select your delivery locations';
+const String kSourceLocation = 'Source Location';
+const String kDestinationLocation = 'Destination Location';
+const String kSendersName = "Sender's name";
+const String kSendersPhoneNumber = "Sender's phone number";
+const String kReceiverName = "Receiver's name";
+const String kReceiverPhoneNumber = "Receiver's phone number";
+const String kItemInfo = "Please enter correct information on this fields";
+const String kPickUp = 'Pick up & deliver';
+const String kPayType = 'Pay type';
+const String kOrderDetails = 'View delivery details';
+const String kDeliveryFee = 'Delivery Fee';
+const String kTotal = 'Total';
+const String kBook = 'Book';
+const String kDeliveryDetails = 'Delivery details';
+const String kVendor = 'Vendor';
+const String kCancelBooking = "Are you sure you want to cancel this booking?";
+
+
+//commons
+const String kYes = 'Yes';
+const String kNo = 'No';
+
+

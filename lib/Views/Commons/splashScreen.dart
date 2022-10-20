@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
   void startTime() {
     Future.delayed(const Duration(seconds: 6), () {
-      Navigator.pushNamed(context, loginPage);
+      Navigator.pushNamed(context, homePage);
     });
   }
   @override

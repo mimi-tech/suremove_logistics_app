@@ -8,7 +8,16 @@ import 'package:sure_move/Views/Authentication/Registration/verifyMobileNumber.d
 import 'package:sure_move/Views/Authentication/forgotPassword/newPassword.dart';
 import 'package:sure_move/Views/Authentication/forgotPassword/verifyEmail.dart';
 import 'package:sure_move/Views/Authentication/login.dart';
-import 'package:sure_move/Views/splashScreen.dart';
+import 'package:sure_move/Views/Booking/CustomerBooking/connectVendorPage.dart';
+import 'package:sure_move/Views/Booking/CustomerBooking/editBooking.dart';
+import 'package:sure_move/Views/Booking/CustomerBooking/matchDriver.dart';
+import 'package:sure_move/Views/Booking/CustomerBooking/itemDetails.dart';
+import 'package:sure_move/Views/Booking/CustomerBooking/location.dart';
+import 'package:sure_move/Views/Booking/CustomerBooking/recieverInfo.dart';
+import 'package:sure_move/Views/Booking/CustomerBooking/ringingScreen.dart';
+import 'package:sure_move/Views/Booking/CustomerBooking/viewBookingDetails.dart';
+import 'package:sure_move/Views/Commons/homePage.dart';
+import 'package:sure_move/Views/Commons/splashScreen.dart';
 
 class AppRouter {
 
@@ -43,6 +52,33 @@ class AppRouter {
 
         case updatePassword:
         return MaterialPageRoute( builder: (_) => const UpdatePassword());
+
+        case homePage:
+        return MaterialPageRoute( builder: (_) => const HomePage());
+
+        case itemDetails:
+        return MaterialPageRoute( builder: (_) => const ItemDetails());
+
+        case itemDeliveryLocation:
+        return MaterialPageRoute( builder: (_) => const ItemDeliveryLocation());
+
+        case receiversInfo:
+        return MaterialPageRoute( builder: (_) => const ReceiversInfo());
+
+        case displayAmount:
+        return MaterialPageRoute( builder: (_) => const DisplayAmount());
+
+        case viewBookingDetails:
+        return MaterialPageRoute( builder: (_) => const ViewBookingDetails());
+
+        case ripplesAnimation:
+        return MaterialPageRoute( builder: (_) => const RipplesAnimation());
+
+        case connectedVendorPage:
+        return MaterialPageRoute( builder: (_) => const ConnectedVendorPage());
+
+        case customerEditBooking:
+        return MaterialPageRoute( builder: (_) => const CustomerEditBooking());
 
 
 

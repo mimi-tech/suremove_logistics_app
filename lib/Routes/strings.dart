@@ -6,4 +6,13 @@ const registrationScreen2 = "/registration-Screen2";
 const registrationScreen3 = "/registration-Screen3";
 const verifyEmail = "/verify-email";
 const updatePassword = "/update-password";
+const homePage = "/home-page";
+const itemDetails = "/item-details";
+const itemDeliveryLocation = "/item-delivery-location";
+const receiversInfo = "/receivers-info";
+const displayAmount = "/display-amount";
+const viewBookingDetails = "/view-booking-details";
+const ripplesAnimation = "/ripples-animation";
+const connectedVendorPage = "/connected-vendor-page";
+const customerEditBooking = "/customer-edit-booking";
 

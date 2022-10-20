@@ -76,7 +76,7 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
                         keyboardType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
                         style: Theme.of(context).textTheme.bodyText1,
-                        validator: Validator.validateFrom,
+                        validator: Validator.validateUsername,
                         decoration: const InputDecoration(
                           hintText: kUsername2,
 
