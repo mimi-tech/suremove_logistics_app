@@ -88,5 +88,28 @@ const String kCancelBooking = "Are you sure you want to cancel this booking?";
 //commons
 const String kYes = 'Yes';
 const String kNo = 'No';
+const String kDashBoard = 'Dashboard';
+const String kMessage = 'Message';
+const String kChangeProfile = 'Change profile image';
+const String kAdmin = 'Admin';
+const String kPromotion = 'Promotion';
+const String kVendor2 = 'Become A Vendor';
+const String kLogOut = 'Logout';
+const String kBlockUser = 'Block Account';
+const String kViewProfile = 'View Profile';
+const String kWork = 'Go to work';
+const String kPaymentMethod = 'Payment method';
+const String kSupport = 'Support';
 
-
+//Funds
+const String kCard = 'Card';
+const String kCard2 ="Add new card";
+const String kWallet = 'Wallet';
+const String kWallet2 = 'Fund Wallet';
+const String kCash = 'Cash';
+const String kCash2 = 'Transfer Cash';
+const String kPromo = 'Promo Account';
+const String kPromo2 = 'Promo Balance';
+const String kEnterAmount = 'Enter Amount';
+const String kEnterAmountHint = 'Not less than NGN 1000';
+const String kTxnDetails = 'Enter your transaction pin';

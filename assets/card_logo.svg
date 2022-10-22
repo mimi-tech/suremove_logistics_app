@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="39.723" height="27.021" viewBox="0 0 39.723 27.021">
+  <g id="credit-card_5_" data-name="credit-card (5)" transform="translate(0 -60.248)">
+    <path id="Path_3158" data-name="Path 3158" d="M36.913,191.813H2.808A2.808,2.808,0,0,1,0,189V167.6a2.808,2.808,0,0,1,2.808-2.808h34.1a2.808,2.808,0,0,1,2.808,2.808V189A2.809,2.809,0,0,1,36.913,191.813Z" transform="translate(0 -104.544)" fill="#055067"/>
+    <g id="Group_2754" data-name="Group 2754" transform="translate(0 60.248)">
+      <path id="Path_3159" data-name="Path 3159" d="M18.142,164.792A51.927,51.927,0,0,0,.028,189.281,2.736,2.736,0,0,1,0,188.93v-21.4a2.8,2.8,0,0,1,2.176-2.738Z" transform="translate(0 -164.792)" fill="#055067"/>
+      <path id="Path_3160" data-name="Path 3160" d="M245.9,218.129a51.927,51.927,0,0,0,18.114-24.489,2.725,2.725,0,0,1,.028.351v21.4a2.8,2.8,0,0,1-2.176,2.738Z" transform="translate(-224.323 -191.108)" fill="#055067"/>
+    </g>
+    <circle id="Ellipse_161" data-name="Ellipse 161" cx="3.421" cy="3.421" r="3.421" transform="translate(23.757 64.46)" fill="#ff5050"/>
+    <circle id="Ellipse_162" data-name="Ellipse 162" cx="3.421" cy="3.421" r="3.421" transform="translate(28.669 64.46)" fill="#ffbc00"/>
+    <g id="Group_2755" data-name="Group 2755" transform="translate(3.706 66.477)">
+      <path id="Path_3161" data-name="Path 3161" d="M50.271,320.688H43.628a1.4,1.4,0,1,1,0-2.808h6.643a1.4,1.4,0,1,1,0,2.808Z" transform="translate(-42.224 -310.674)" fill="#fff"/>
+      <path id="Path_3162" data-name="Path 3162" d="M56.205,238.576H43.628a1.4,1.4,0,0,1,0-2.808H56.205a1.4,1.4,0,0,1,0,2.808Z" transform="translate(-42.224 -235.768)" fill="#fff"/>
+    </g>
+    <path id="Path_3163" data-name="Path 3163" d="M47.726,402.8H43.612a1.4,1.4,0,1,1,0-2.808h4.114a1.4,1.4,0,1,1,0,2.808Z" transform="translate(-38.504 -319.103)" fill="#8bd5ec"/>
+    <path id="Path_3164" data-name="Path 3164" d="M144.174,402.8H140.06a1.4,1.4,0,1,1,0-2.808h4.114a1.4,1.4,0,1,1,0,2.808Z" transform="translate(-126.487 -319.103)" fill="#daeff6"/>
+    <path id="Path_3165" data-name="Path 3165" d="M240.606,402.8h-4.114a1.4,1.4,0,0,1,0-2.808h4.114a1.4,1.4,0,0,1,0,2.808Z" transform="translate(-214.456 -319.103)" fill="#8bd5ec"/>
+    <path id="Path_3166" data-name="Path 3166" d="M337.038,402.8h-4.114a1.4,1.4,0,0,1,0-2.808h4.114a1.4,1.4,0,0,1,0,2.808Z" transform="translate(-302.425 -319.103)" fill="#daeff6"/>
+  </g>
+</svg>

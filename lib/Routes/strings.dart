@@ -18,4 +18,7 @@ const customerEditBooking = "/customer-edit-booking";
 const vendorWaitingScreen = "/vendor-waiting-screen";
 const decisionScreen = "/decision-screen";
 const deliveryScreen = "/delivery-screen";
+const paymentMethods = "/payment-methods";
+const fundAccount = "/fund-account";
+const transferCash = "/transfer-cash";
 

@@ -44,7 +44,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
               const Header(title: kItemName,subtitle: "kerjfn kjfnjk",),
 
               spacing(),
-              Divider(color: kWhiteColor,thickness: 1.5,),
+              const Divider(color: kWhiteColor,thickness: 1.5,),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -78,7 +78,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
                     ],
                   )),
-              Divider(color: kWhiteColor,thickness: 1.5,),
+              const Divider(color: kWhiteColor,thickness: 1.5,),
               space(),
 
             ],

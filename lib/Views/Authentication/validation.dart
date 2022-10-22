@@ -143,7 +143,7 @@ class Validator {
     if(value!.isEmpty) {
       return "Amount can't be empty";
     }
-    if(int.parse(value) < 100) {
+    if(int.parse(value) < 1000) {
       return "Amount should be less than 100 NGN";
     }
 

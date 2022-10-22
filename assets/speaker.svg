@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
+  <g id="speaker" transform="translate(-11.449 -11)">
+    <circle id="Ellipse_143" data-name="Ellipse 143" cx="12.5" cy="12.5" r="12.5" transform="translate(11.449 11)"/>
+    <path id="Path_3013" data-name="Path 3013" d="M100.661,68.88l-1.08-.2a.29.29,0,0,0-.341.286V70.9a.29.29,0,0,0,.349.282l1.08-.2a.288.288,0,0,0,.236-.284v-1.54a.288.288,0,0,0-.244-.284Z" transform="translate(-70.681 -46.231)" fill="#2f4859"/>
+    <path id="Path_3014" data-name="Path 3014" d="M44.613,48.147H43.045a.6.6,0,0,0-.6.6V50.5a.6.6,0,0,0,.6.6h1.6c7.1.264,8.813,4.763,8.813,4.763V43.38S51.743,47.9,44.613,48.147Z" transform="translate(-25.161 -25.954)" fill="#e1e6e9"/>
+    <g id="Group_2466" data-name="Group 2466" transform="translate(17.289 16.898)">
+      <path id="Path_3015" data-name="Path 3015" d="M45.845,67c-.4.044-.794.075-1.232.089H43.045a.6.6,0,0,0-.6.6v1.756a.6.6,0,0,0,.6.6h1.6c.419.016.818.048,1.2.091Z" transform="translate(-42.45 -61.785)" fill="#f5730b"/>
+      <path id="Path_3016" data-name="Path 3016" d="M97.441,40.72a.452.452,0,0,0-.445.452v12.7a.452.452,0,1,0,.9,0v-12.7a.452.452,0,0,0-.458-.452Z" transform="translate(-86.171 -40.72)" fill="#f5730b"/>
+      <path id="Path_3017" data-name="Path 3017" d="M50.207,79.2H48.75l.508,4.838a.238.238,0,0,0,.236.214h.978a.238.238,0,0,0,.236-.264Z" transform="translate(-47.5 -71.564)" fill="#f5730b"/>
+    </g>
+  </g>
+</svg>

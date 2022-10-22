@@ -21,6 +21,9 @@ import 'package:sure_move/Views/Booking/VendorBooking/deliveryScreen.dart';
 import 'package:sure_move/Views/Booking/VendorBooking/waitingScreen.dart';
 import 'package:sure_move/Views/Commons/homePage.dart';
 import 'package:sure_move/Views/Commons/splashScreen.dart';
+import 'package:sure_move/Views/Funds/CashTransfer/transferCash.dart';
+import 'package:sure_move/Views/Funds/Funding/fundAccount.dart';
+import 'package:sure_move/Views/Funds/PaymentMethod.dart';
 
 class AppRouter {
 
@@ -91,6 +94,15 @@ class AppRouter {
 
         case deliveryScreen:
         return MaterialPageRoute( builder: (_) => const DeliveryScreen());
+
+        case paymentMethods:
+        return MaterialPageRoute( builder: (_) => const PaymentMethods());
+
+        case fundAccount:
+        return MaterialPageRoute( builder: (_) => const FundAccount());
+
+        case transferCash:
+        return MaterialPageRoute( builder: (_) => const TransferCash());
 
 
 
