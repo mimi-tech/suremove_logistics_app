@@ -58,6 +58,7 @@ const String ErrorText = 'Sorry an error occurred, try again';
 const String kEmailExist = 'Sorry this Email already exist';
 const String kLoginError = 'Sorry you have no account with us';
 const String kTransactionPin = 'Please enter your transaction pin';
+const String kBlockUserText = "Do you wish for your account to be blocked? To unblock your account, you will visit any of our office or all +23843434344344";
 
 //Booking
 const String kItemTitle = 'Item details';
@@ -113,3 +114,35 @@ const String kPromo2 = 'Promo Balance';
 const String kEnterAmount = 'Enter Amount';
 const String kEnterAmountHint = 'Not less than NGN 1000';
 const String kTxnDetails = 'Enter your transaction pin';
+
+
+//Dashboard
+const String kToday = 'Today';
+const String kWalletBal = 'Wallet Balance';
+const String kReferrialEarnings = 'PROMOTIONAL EARNINGS';
+const String kLearnMoreText = 'Here a vendor delivers to you a good refilled cylinder that matches your own cylinder regulator. He first inspects your cylinder to make sure its in good condition.If any problem, he will recommend solution which will be added to your order fee and then adds identification sticker on your empty cylinder. He will refill and return it to you on your next order and take his own finished cylinder. /n Or he gives you a branded company cylinder that will not be tampered with, and can only be refilled by the vendor. Any bridge of contract will be paid for according to agreement.';
+const String kMyEarnings = 'TOTAL EARNINGS ';
+const String kNoEarns = 'Sorry you have not earned from us';
+const String kMyEarningsTotal = 'TOTAL EARNINGS ';
+const String kOrderHistory = 'ORDER HISTORY';
+const String kOngoingOrder = 'ONGOING ORDER';
+const String kOrderCount = 'TOTAL ORDER COUNT';
+const String kWithdrawal = 'WITHDRAWALS ';
+const String kAllTrans = 'TRANSACTIONS';
+const String kDeposits = 'ALL DEPOSITS';
+const String kSelect = 'Please Select the quantity of gas and the kg of gas you want to buy';
+const String kDeliverUsed = 'Deliver used ( Good )';
+const String kBrandNew = 'Buy brand new cylinder';
+const String kKG = 'Select kg';
+const String kQuantity = 'view selection';
+const String kSizeQuantity = 'Select size & quantity';
+const String kNoOfCylinders = 'Qty';
+const String kSelectedItem = 'selected Item';
+const String kWeekly = 'Weekly';
+const String kMonthly = 'Monthly';
+const String kYearly = 'Yearly';
+const String kDaily = 'Daily';
+const String kpayment = 'My Orders';
+const String kWithdrawls = 'WITHDRAWALS';
+const String kHistory = 'History';
+const String kAllPayments = 'All payments';

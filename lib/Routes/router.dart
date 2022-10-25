@@ -21,6 +21,13 @@ import 'package:sure_move/Views/Booking/VendorBooking/deliveryScreen.dart';
 import 'package:sure_move/Views/Booking/VendorBooking/waitingScreen.dart';
 import 'package:sure_move/Views/Commons/homePage.dart';
 import 'package:sure_move/Views/Commons/splashScreen.dart';
+import 'package:sure_move/Views/Commons/support.dart';
+import 'package:sure_move/Views/Dashboard/AllPayments/allPaymentTab.dart';
+import 'package:sure_move/Views/Dashboard/Earnings/earngsTab.dart';
+import 'package:sure_move/Views/Dashboard/Orders/orderHistory.dart';
+import 'package:sure_move/Views/Dashboard/Transactions/transactionsTab.dart';
+import 'package:sure_move/Views/Dashboard/home.dart';
+import 'package:sure_move/Views/Dashboard/Earnings/promotionalEarnings.dart';
 import 'package:sure_move/Views/Funds/CashTransfer/transferCash.dart';
 import 'package:sure_move/Views/Funds/Funding/fundAccount.dart';
 import 'package:sure_move/Views/Funds/PaymentMethod.dart';
@@ -103,6 +110,27 @@ class AppRouter {
 
         case transferCash:
         return MaterialPageRoute( builder: (_) => const TransferCash());
+
+        case supportScreen:
+        return MaterialPageRoute( builder: (_) => const SupportScreen());
+
+        case dashboardHome:
+        return MaterialPageRoute( builder: (_) => const DashboardHome());
+
+        case promotionalEarning:
+        return MaterialPageRoute( builder: (_) => const PromotionalEarning());
+
+        case totalEarningsTab:
+        return MaterialPageRoute( builder: (_) => const TotalEarningsTab());
+
+        case transactionTab:
+        return MaterialPageRoute( builder: (_) => const TransactionTab());
+
+        case allPaymentTab:
+        return MaterialPageRoute( builder: (_) => const AllPaymentTab());
+
+        case orderHistory:
+        return MaterialPageRoute( builder: (_) => const OrderHistory());
 
 
 

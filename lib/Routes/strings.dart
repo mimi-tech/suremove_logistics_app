@@ -21,4 +21,11 @@ const deliveryScreen = "/delivery-screen";
 const paymentMethods = "/payment-methods";
 const fundAccount = "/fund-account";
 const transferCash = "/transfer-cash";
+const supportScreen = "/support-screen";
+const dashboardHome = "/dashboard-home-screen";
+const promotionalEarning = "/promotional-earning";
+const totalEarningsTab = "/earning-tab";
+const transactionTab = "/transaction-tab";
+const allPaymentTab = "/allPayment-tab";
+const orderHistory = "/order-history";
 

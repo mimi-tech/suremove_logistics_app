@@ -32,18 +32,26 @@ class CustomTheme {
         ),
         fontFamily: GoogleFonts.oxanium().fontFamily,
 
-        // textButtonTheme: TextButtonThemeData(
-        //   style: ButtonStyle(
-        //     backgroundColor: MaterialStateProperty.all(kNavyColor),
-        //     textStyle: MaterialStateProperty.all(
-        //       TextStyle(
-        //         color: kWhiteColor,
-        //         fontSize: 14.0.sp,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ),
-        //   ),
-        // ),
+       tabBarTheme: TabBarTheme(
+            indicatorSize: TabBarIndicatorSize.tab,
+              indicator: const BoxDecoration(color: kLightDoneColor),
+             labelColor: kWhiteColor,
+             unselectedLabelColor: kCartoonColor,
+             labelStyle:  TextStyle(fontWeight: FontWeight.bold,fontSize: kFontSize14),
+             unselectedLabelStyle:  TextStyle(fontWeight: FontWeight.w500,fontSize: kFontSize14),
+         overlayColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+           if (states.contains(MaterialState.pressed)) {
+             return Colors.blue;
+           } if (states.contains(MaterialState.focused)) {
+             return Colors.orange;
+           } else if (states.contains(MaterialState.hovered)) {
+             return Colors.pinkAccent;
+           }
+
+           return Colors.transparent;
+         }),
+
+       ),
         inputDecorationTheme: kInputDecorationTheme(),
          textTheme:  TextTheme(
            headline1: kHeadLine1Style,
@@ -65,7 +73,7 @@ class CustomTheme {
         errorColor: kRedColor,
         // dialogBackgroundColor: Colors.blue,
 
-        iconTheme: IconThemeData(size: 30.0.sp),
+        iconTheme: IconThemeData(size: 25.0.sp),
         listTileTheme:const ListTileThemeData(textColor: kBlackColor,selectedColor: kOrangeColor),
           popupMenuTheme: PopupMenuThemeData(textStyle: TextStyle(color: kBlackColor,fontSize: kFontSize13,fontWeight: FontWeight.bold))
     );

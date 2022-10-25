@@ -52,10 +52,10 @@ class YesOrNo extends StatelessWidget {
 
       onPressed: tapStudiesButton??(){Navigator.pop(context);},
       style: ButtonStyle(
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0))),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0))),
 
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            EdgeInsets.all(10.sp),
+            EdgeInsets.symmetric(horizontal: 20.0.sp,),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(color??kOrangeColor)),
       child:Text(title.toUpperCase(),

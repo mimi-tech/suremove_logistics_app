@@ -5,6 +5,7 @@ import 'package:sure_move/Commons/colors.dart';
 import 'package:sure_move/Commons/constants.dart';
 import 'package:sure_move/Commons/strings.dart';
 import 'package:sure_move/Routes/strings.dart';
+import 'package:sure_move/Views/Authentication/blockAccount.dart';
 class DrawerPage extends StatefulWidget {
   const DrawerPage({Key? key}) : super(key: key);
 
@@ -36,6 +37,8 @@ class _DrawerPageState extends State<DrawerPage> {
           space(),
 
           ListTile(
+            onTap: (){Navigator.pushNamed(context, dashboardHome);},
+
             leading:SvgPicture.asset('assets/dashBoard.svg'),
            title:  Text(kDashBoard,style: Theme.of(context).textTheme.bodyText2),
           ),
@@ -51,6 +54,7 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
           spacing(),
           ListTile(
+            onTap: (){Navigator.pushNamed(context, vendorWaitingScreen);},
             leading:SvgPicture.asset('assets/vendor_icon.svg'),
             title:  Text(kWork,style: Theme.of(context).textTheme.bodyText2),
           ),
@@ -62,11 +66,18 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
           spacing(),
           ListTile(
+            onTap: (){Navigator.pushNamed(context, supportScreen);},
             leading:SvgPicture.asset('assets/speaker.svg'),
             title: Text(kSupport,style: Theme.of(context).textTheme.bodyText2),
           ),
           spacing(),
            ListTile(
+             onTap: (){
+               showModalBottomSheet(
+                   isScrollControlled: true,
+                   context: context,
+                   builder: (context) => const BlockAccount());
+             },
             leading: Icon(Icons.block,color: kBlackColor,size: 20.0.sp,),
             title: Text(kBlockUser, style: Theme.of(context).textTheme.bodyText2),
           ),
