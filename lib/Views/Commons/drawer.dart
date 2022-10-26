@@ -5,6 +5,7 @@ import 'package:sure_move/Commons/colors.dart';
 import 'package:sure_move/Commons/constants.dart';
 import 'package:sure_move/Commons/strings.dart';
 import 'package:sure_move/Routes/strings.dart';
+import 'package:sure_move/Views/Admin/verifyUser.dart';
 import 'package:sure_move/Views/Authentication/blockAccount.dart';
 class DrawerPage extends StatefulWidget {
   const DrawerPage({Key? key}) : super(key: key);
@@ -49,6 +50,13 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
           spacing(),
           ListTile(
+            onTap: (){
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => const VerifyAdminLoginDetails()
+              );
+            },
             leading:SvgPicture.asset('assets/password.svg'),
             title:  Text(kAdmin,style: Theme.of(context).textTheme.bodyText2),
           ),

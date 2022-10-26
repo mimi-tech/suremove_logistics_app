@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sure_move/Routes/strings.dart';
+import 'package:sure_move/Views/Admin/DrawerComponents/Company/addNewCompany.dart';
+import 'package:sure_move/Views/Admin/DrawerComponents/Company/companyTab.dart';
+import 'package:sure_move/Views/Admin/DrawerComponents/Drivers/driversTab.dart';
+import 'package:sure_move/Views/Admin/DrawerComponents/Drivers/onlineDrivers.dart';
+import 'package:sure_move/Views/Admin/adminTabBar.dart';
+import 'package:sure_move/Views/Admin/home.dart';
 import 'package:sure_move/Views/Authentication/Registration/phoneNumber.dart';
 import 'package:sure_move/Views/Authentication/Registration/screen_1.dart';
 import 'package:sure_move/Views/Authentication/Registration/screen_2.dart';
@@ -131,6 +137,18 @@ class AppRouter {
 
         case orderHistory:
         return MaterialPageRoute( builder: (_) => const OrderHistory());
+
+        case adminHome:
+        return MaterialPageRoute( builder: (_) => const AdminTab());
+
+        case onlineDrivers:
+        return MaterialPageRoute( builder: (_) => const DriversTab());
+
+        case companyTab:
+        return MaterialPageRoute( builder: (_) => const CompanyTab());
+
+        case addNewCompany:
+        return MaterialPageRoute( builder: (_) => const AddNewCompany());
 
 
 

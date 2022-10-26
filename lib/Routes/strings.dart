@@ -28,4 +28,8 @@ const totalEarningsTab = "/earning-tab";
 const transactionTab = "/transaction-tab";
 const allPaymentTab = "/allPayment-tab";
 const orderHistory = "/order-history";
+const adminHome = "/admin-home";
+const onlineDrivers = "/online-drivers";
+const companyTab = "/company-tab";
+const addNewCompany = "/add-new-company";
 

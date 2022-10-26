@@ -13,9 +13,16 @@ class CustomTheme {
         primaryColor: kOrangeColor,
         scaffoldBackgroundColor: Colors.white,
 
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData( // 4
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: kDarkBlue,// 4
           elevation: 5.0,
-
+          selectedIconTheme: IconThemeData(color: Colors.amberAccent, size: 40),
+          selectedItemColor: kYellow,
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+          unselectedIconTheme: IconThemeData(
+            color: kWhiteColor
+          ),
+          unselectedItemColor: kWhiteColor,
         ),
 
         colorScheme: ThemeData().colorScheme.copyWith(
@@ -41,7 +48,7 @@ class CustomTheme {
              unselectedLabelStyle:  TextStyle(fontWeight: FontWeight.w500,fontSize: kFontSize14),
          overlayColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
            if (states.contains(MaterialState.pressed)) {
-             return Colors.blue;
+             return kWhiteColor;
            } if (states.contains(MaterialState.focused)) {
              return Colors.orange;
            } else if (states.contains(MaterialState.hovered)) {
@@ -52,6 +59,8 @@ class CustomTheme {
          }),
 
        ),
+
+
         inputDecorationTheme: kInputDecorationTheme(),
          textTheme:  TextTheme(
            headline1: kHeadLine1Style,

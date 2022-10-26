@@ -146,3 +146,18 @@ const String kpayment = 'My Orders';
 const String kWithdrawls = 'WITHDRAWALS';
 const String kHistory = 'History';
 const String kAllPayments = 'All payments';
+
+
+//Admin
+const String kCompany = 'Company';
+const String kOl2 = 'Online vendors';
+const String kOl4 = 'Offline vendors';
+const String kOl3 = 'Online gas station';
+const String kOff3 = 'Offline gas station';
+
+const String kOff2 = 'Offline Vendors';
+const String kShe = 'Ongoing order';
+const String kOnline = 'Online Drivers';
+const String kOffLine = 'OffLine Drivers';
+const String kSuspendedDrivers = 'Suspended Drivers';
+const String kOnGoing = 'Ongoing Order';

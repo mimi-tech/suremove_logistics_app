@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+import 'package:sure_move/Commons/strings.dart';
+import 'package:sure_move/Views/Admin/DrawerComponents/Drivers/onlineDrivers.dart';
+
+class DriversTab extends StatefulWidget {
+  const DriversTab({Key? key}) : super(key: key);
+
+  @override
+  State<DriversTab> createState() => _DriversTabState();
+}
+
+class _DriversTabState extends State<DriversTab>with TickerProviderStateMixin  {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    //_tabController.animateTo(1);
+  }
+  static const List<Tab> _tabs = [
+    Tab(child:Text("All Drivers")),
+    Tab(child:Text(kOnline)),
+    Tab(child:Text(kOffLine)),
+    Tab(child:Text(kSuspendedDrivers)),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        bottom: TabBar(
+            isScrollable: true,
+            controller: _tabController,
+            tabs:_tabs
+        ),
+        title: const Text("$kAppTitle Drivers"),
+
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          OnlineDrivers(),
+          OnlineDrivers(),
+          OnlineDrivers(),
+          OnlineDrivers(),
+        ],
+      ),
+
+
+    );
+  }
+}
