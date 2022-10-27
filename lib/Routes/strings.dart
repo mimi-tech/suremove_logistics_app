@@ -32,4 +32,6 @@ const adminHome = "/admin-home";
 const onlineDrivers = "/online-drivers";
 const companyTab = "/company-tab";
 const addNewCompany = "/add-new-company";
+const adminBookingTab = "/admin-booking-tab";
+const cancelledBooking = "/cancelled-booking";
 

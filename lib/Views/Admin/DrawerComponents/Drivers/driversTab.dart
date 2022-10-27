@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sure_move/Commons/strings.dart';
+import 'package:sure_move/Views/Admin/DrawerComponents/Drivers/comments.dart';
 import 'package:sure_move/Views/Admin/DrawerComponents/Drivers/onlineDrivers.dart';
 
 class DriversTab extends StatefulWidget {
@@ -15,7 +16,7 @@ class _DriversTabState extends State<DriversTab>with TickerProviderStateMixin  {
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     //_tabController.animateTo(1);
   }
   static const List<Tab> _tabs = [
@@ -23,6 +24,7 @@ class _DriversTabState extends State<DriversTab>with TickerProviderStateMixin  {
     Tab(child:Text(kOnline)),
     Tab(child:Text(kOffLine)),
     Tab(child:Text(kSuspendedDrivers)),
+    Tab(child:Text("Comments")),
   ];
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class _DriversTabState extends State<DriversTab>with TickerProviderStateMixin  {
           OnlineDrivers(),
           OnlineDrivers(),
           OnlineDrivers(),
+          DriversComments(),
         ],
       ),
 

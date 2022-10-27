@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sure_move/Routes/strings.dart';
+import 'package:sure_move/Views/Admin/DrawerComponents/Bookings/adminBookingTab.dart';
+import 'package:sure_move/Views/Admin/DrawerComponents/Bookings/cancelledBooking.dart';
 import 'package:sure_move/Views/Admin/DrawerComponents/Company/addNewCompany.dart';
 import 'package:sure_move/Views/Admin/DrawerComponents/Company/companyTab.dart';
 import 'package:sure_move/Views/Admin/DrawerComponents/Drivers/driversTab.dart';
@@ -148,7 +150,13 @@ class AppRouter {
         return MaterialPageRoute( builder: (_) => const CompanyTab());
 
         case addNewCompany:
-        return MaterialPageRoute( builder: (_) => const AddNewCompany());
+        return MaterialPageRoute( builder: (_) =>  AddNewCompany());
+
+        case adminBookingTab:
+        return MaterialPageRoute( builder: (_) =>  AdminBookingTab());
+
+       case cancelledBooking:
+        return MaterialPageRoute( builder: (_) =>  CancelledBooking());
 
 
 

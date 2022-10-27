@@ -41,9 +41,9 @@ class AdminDrawer extends StatelessWidget {
         ),
 
         ListTile(
-          onTap: (){Navigator.pushNamed(context, kOnGoing);},
+          onTap: (){Navigator.pushNamed(context, adminBookingTab);},
           leading:Icon(Icons.compare),
-          title:  Text(kOnGoing,style: Theme.of(context).textTheme.bodyText2),
+          title:  Text("Bookings",style: Theme.of(context).textTheme.bodyText2),
         ),
 
 
