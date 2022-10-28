@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sure_move/Commons/strings.dart';
+import 'package:sure_move/Routes/strings.dart';
 import 'package:sure_move/Views/Admin/DrawerComponents/Drivers/comments.dart';
 import 'package:sure_move/Views/Admin/DrawerComponents/Drivers/onlineDrivers.dart';
 
@@ -35,7 +37,14 @@ class _DriversTabState extends State<DriversTab>with TickerProviderStateMixin  {
             controller: _tabController,
             tabs:_tabs
         ),
-        title: const Text("$kAppTitle Drivers"),
+        title:  Row(
+          children: [
+            const Flexible(child:  Text("$kAppTitle Driver")),
+            GestureDetector(
+                onTap: (){Navigator.pushNamed(context, addNewCompany);},
+                child: SvgPicture.asset('assets/add_circle.svg',))
+          ],
+        ),
 
       ),
       body: TabBarView(

@@ -11,9 +11,9 @@ class DriversComment extends StatelessWidget {
       height: 400.h,
       margin: EdgeInsets.symmetric(horizontal: kMargin2),
       child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: AdminHeader(title: "Ugo Zenith comments"),
+        const Padding(
+          padding: EdgeInsets.all(18.0),
+          child:  AdminHeader(title: "Ugo Zenith comments"),
         ),
       SizedBox(
         height: 400.h,

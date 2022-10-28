@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sure_move/Commons/strings.dart';
+import 'package:sure_move/Views/Admin/Analysis/today.dart';
+import 'package:sure_move/Views/Admin/Users/allUsers.dart';
 import 'package:sure_move/Views/Admin/Widgets/adminDrawer.dart';
 import 'package:sure_move/Views/Admin/home.dart';
+import 'package:sure_move/Views/Admin/personnel.dart';
+import 'package:sure_move/Views/Admin/search.dart';
 
 class AdminTab extends StatefulWidget {
   const AdminTab({Key? key}) : super(key: key);
@@ -16,20 +20,8 @@ class _AdminTabState extends State<AdminTab> {
 
   static const List<Widget> _pages = <Widget>[
     CallsPage(),
-    Center(
-      child: Icon(
-        Icons.camera,
-        size: 150,
-      ),
-    ),
-    Padding(
-      padding: EdgeInsets.all(16.0),
-      child: TextField(
-        decoration: InputDecoration(
-            labelText: 'Find contact',
-            labelStyle: TextStyle(fontWeight: FontWeight.bold)),
-      ),
-    ),
+     SearchUsers(),
+    AllUsers()
   ];
 
   void _onItemTapped(int index) {
@@ -58,8 +50,8 @@ class _AdminTabState extends State<AdminTab> {
           ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.car_crash_rounded),
-            label: 'Drivers',
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -100,8 +92,8 @@ class CallsPage extends StatelessWidget {
         body: const TabBarView(
           children: [
              AdminHome(),
-             AdminHome(),
-             AdminHome(),
+            TodayAnalysis(),
+            PersonnelLog(),
           ],
         ),
       ),
