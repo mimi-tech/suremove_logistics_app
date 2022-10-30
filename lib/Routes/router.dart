@@ -39,6 +39,9 @@ import 'package:sure_move/Views/Dashboard/Earnings/promotionalEarnings.dart';
 import 'package:sure_move/Views/Funds/CashTransfer/transferCash.dart';
 import 'package:sure_move/Views/Funds/Funding/fundAccount.dart';
 import 'package:sure_move/Views/Funds/PaymentMethod.dart';
+import 'package:sure_move/Views/VendorReg/screen1.dart';
+import 'package:sure_move/Views/VendorReg/screen2.dart';
+import 'package:sure_move/Views/VendorReg/screen3.dart';
 
 class AppRouter {
 
@@ -157,6 +160,15 @@ class AppRouter {
 
        case cancelledBooking:
         return MaterialPageRoute( builder: (_) =>  CancelledBooking());
+
+        case pickCompany:
+        return MaterialPageRoute( builder: (_) =>  PickCompany());
+
+        case licenceScreen:
+        return MaterialPageRoute( builder: (_) =>  LicenceScreen());
+
+        case vendorRegScreen3:
+        return MaterialPageRoute( builder: (_) =>  VendorRegScreen3());
 
 
 

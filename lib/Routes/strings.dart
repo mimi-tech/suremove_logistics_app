@@ -34,4 +34,7 @@ const companyTab = "/company-tab";
 const addNewCompany = "/add-new-company";
 const adminBookingTab = "/admin-booking-tab";
 const cancelledBooking = "/cancelled-booking";
+const pickCompany = "/pick-company";
+const licenceScreen = "/licence-screen";
+const vendorRegScreen3 = "/vendor-reg-screen3";
 

@@ -68,6 +68,13 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
           spacing(),
           ListTile(
+            onTap: (){Navigator.pushNamed(context, pickCompany);},
+            leading:SvgPicture.asset('assets/pick_up.svg'),
+            title:  Text("Become a vendor",style: Theme.of(context).textTheme.bodyText2),
+          ),
+          spacing(),
+
+          ListTile(
             onTap: ()=>Navigator.pushNamed(context, paymentMethods),
             leading:SvgPicture.asset('assets/credit_card.svg'),
             title:  Text(kPaymentMethod,style: Theme.of(context).textTheme.bodyText2),

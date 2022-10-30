@@ -101,6 +101,7 @@ const String kViewProfile = 'View Profile';
 const String kWork = 'Go to work';
 const String kPaymentMethod = 'Payment method';
 const String kSupport = 'Support';
+const String kVendorReg = 'Vendor registration';
 
 //Funds
 const String kCard = 'Card';
@@ -161,3 +162,35 @@ const String kOnline = 'Online Drivers';
 const String kOffLine = 'OffLine Drivers';
 const String kSuspendedDrivers = 'Suspended Drivers';
 const String kOnGoing = 'Ongoing Order';
+
+//Vendor Reg
+const String kYesD = 'Yes I can';
+const String kNoD = "No I can't";
+const String kLicence = "Driver's Licence";
+const String kModeTrans = 'What type of vehicle do you own';
+const String kModeTrans2 = 'Car';
+const String kModeTrans3 = 'Bike';
+const String kModeTrans5 = 'None';
+const String kModeTrans4 = "I don't have a vehicle";
+const String kModeTransError = 'Please pick the mood of delivery gas';
+const String kIssuedDate = 'Issued Date';
+const String kLicenceNumber = 'Licence number';
+const String kExpiringDate = 'Expiring Date';
+const String kScans = 'Quality scans or photos are accepted [not more than 10mb]';
+const String kCuh = 'Cancel Upload';
+const String kSFileError2 = 'Sorry your file is more than 4mb';
+const String kAddPhoto = 'Photo';
+const String kPaymentDetails = 'Payment Details';
+const String kPaymentDetails3 = 'Enter your bank Details';
+
+const String kPaymentDetails2 = 'We need your payment details \n to pay you';
+const String kCancel = 'cancel';
+const String kSuspend = 'Suspend';
+const String kSelectBank = 'Select your bank';
+const String kBvn = 'Enter your BVN for Identity / bank account verification';
+const String kProvideBvn = 'Provide BVN';
+const String kThanks = 'Thank you';
+const String kThanks2 ='Your details have been submitted successfully. To complete this process, kindly come to our office @ ';
+const String kThanks3 = 'check your email for requirement details.';
+
+const String kThanks4 = 'Thank you for requesting to become our vendor. While coming to our office @';
