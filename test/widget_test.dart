@@ -7,9 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sure_move/Routes/router.dart';
-
+import 'package:sure_move/Presentation/Routes/router.dart';
 import 'package:sure_move/main.dart';
+
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
