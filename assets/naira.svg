@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="143.676" height="46" viewBox="0 0 143.676 46">
+  <defs>
+    <filter id="Cash" x="73.676" y="0" width="70" height="46" filterUnits="userSpaceOnUse">
+      <feOffset dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feFlood flood-opacity="0.302"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_2800" data-name="Group 2800" transform="translate(-65.324 -433)">
+    <g transform="matrix(1, 0, 0, 1, 65.32, 433)" filter="url(#Cash)">
+      <text id="Cash-2" data-name="Cash" transform="translate(108.68 34)" fill="#fff" font-size="30" font-family="SegoeUI, Segoe UI"><tspan x="-31.772" y="0">Cash</tspan></text>
+    </g>
+    <g id="money_1_" data-name="money (1)" transform="translate(65.324 445.856)">
+      <path id="Path_3175" data-name="Path 3175" d="M2,32H60.675V57.426H2Z" transform="translate(-2 -32)" fill="#96cc7f"/>
+      <ellipse id="Ellipse_163" data-name="Ellipse 163" cx="10" cy="9.5" rx="10" ry="9.5" transform="translate(19.675 3.144)" fill="#0e9347"/>
+      <g id="Group_2761" data-name="Group 2761" transform="translate(43.028 2.934)">
+        <path id="Path_3178" data-name="Path 3178" d="M57.733,54.558H46V52.6H56.755V36.956H46V35H57.733a.977.977,0,0,1,.978.978v17.6A.977.977,0,0,1,57.733,54.558Z" transform="translate(-45.999 -35)" fill="#0e9347"/>
+      </g>
+      <g id="Group_2762" data-name="Group 2762" transform="translate(2.934 2.934)">
+        <path id="Path_3179" data-name="Path 3179" d="M17.712,54.558H5.978A.978.978,0,0,1,5,53.581v-17.6A.977.977,0,0,1,5.977,35H17.712v1.956H6.956V52.6H17.712Z" transform="translate(-5 -35)" fill="#0e9347"/>
+      </g>
+      <g id="Group_2763" data-name="Group 2763" transform="translate(43.028 16.625)">
+        <path id="Path_3180" data-name="Path 3180" d="M46,49h1.955v1.956H46Z" transform="translate(-45.999 -49)" fill="#78b75b"/>
+      </g>
+      <g id="Group_2764" data-name="Group 2764" transform="translate(46.939 16.625)">
+        <path id="Path_3181" data-name="Path 3181" d="M50,49h1.955v1.956H50Z" transform="translate(-49.999 -49)" fill="#78b75b"/>
+      </g>
+      <g id="Group_2765" data-name="Group 2765" transform="translate(43.028 6.845)">
+        <path id="Path_3182" data-name="Path 3182" d="M46,39h1.955v1.956H46Z" transform="translate(-45.999 -39)" fill="#78b75b"/>
+      </g>
+      <g id="Group_2766" data-name="Group 2766" transform="translate(46.939 6.845)">
+        <path id="Path_3183" data-name="Path 3183" d="M50,39h1.955v1.956H50Z" transform="translate(-49.999 -39)" fill="#78b75b"/>
+      </g>
+      <g id="Group_2767" data-name="Group 2767" transform="translate(9.779 6.845)">
+        <path id="Path_3184" data-name="Path 3184" d="M12,39h1.955v1.956H12Z" transform="translate(-12 -39)" fill="#78b75b"/>
+      </g>
+      <g id="Group_2768" data-name="Group 2768" transform="translate(13.691 6.845)">
+        <path id="Path_3185" data-name="Path 3185" d="M16,39h1.955v1.956H16Z" transform="translate(-16 -39)" fill="#78b75b"/>
+      </g>
+      <g id="Group_2769" data-name="Group 2769" transform="translate(9.779 16.625)">
+        <path id="Path_3186" data-name="Path 3186" d="M12,49h1.955v1.956H12Z" transform="translate(-12 -49)" fill="#78b75b"/>
+      </g>
+      <g id="Group_2770" data-name="Group 2770" transform="translate(13.691 16.625)">
+        <path id="Path_3187" data-name="Path 3187" d="M16,49h1.955v1.956H16Z" transform="translate(-16 -49)" fill="#78b75b"/>
+      </g>
+    </g>
+  </g>
+</svg>

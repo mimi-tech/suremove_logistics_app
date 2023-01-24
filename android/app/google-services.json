@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "758594392187",
+    "project_id": "suremove-6a84a",
+    "storage_bucket": "suremove-6a84a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758594392187:android:8bce8d0a8692658f9292de",
+        "android_client_info": {
+          "package_name": "com.example.sure_move"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "758594392187-ckbkrih4vrb8vqdh0dhepg8a159utfde.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjO1j6SqvzacV7EYwqAWSc7K018D3Y1J0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "758594392187-ckbkrih4vrb8vqdh0dhepg8a159utfde.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
