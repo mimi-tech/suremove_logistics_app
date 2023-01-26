@@ -8,6 +8,7 @@ import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
 import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
+import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
@@ -15,6 +16,8 @@ import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Admin/verifyUser.dart';
 import 'package:sure_move/Presentation/Views/Authentication/blockAccount.dart';
+import 'package:sure_move/Presentation/utils/enums.dart';
+import 'package:sure_move/Providers/driverProvider.dart';
 import 'package:sure_move/Providers/userProvider.dart';
 class DrawerPage extends StatefulWidget {
   const DrawerPage({Key? key}) : super(key: key);
@@ -28,7 +31,7 @@ class _DrawerPageState extends State<DrawerPage> {
   @override
   Widget build(BuildContext context) {
     NewUser user = Provider.of<UserProvider>(context).user;
-
+    DriverModel driver = Provider.of<DriverProvider>(context).driver;
 
     return Drawer(
       child: ListView(
@@ -74,17 +77,27 @@ class _DrawerPageState extends State<DrawerPage> {
             title:  Text(kAdmin,style: Theme.of(context).textTheme.bodyText2),
           ),
           spacing(),
-          ListTile(
-            onTap: (){Navigator.pushNamed(context, vendorWaitingScreen);},
-            leading:SvgPicture.asset('assets/vendor_icon.svg'),
-            title:  Text(kWork,style: Theme.of(context).textTheme.bodyText2),
+         Column(
+            children: [
+              user.accountType != AccountType.driver.name?
+                ListTile(
+                onTap: (){Navigator.pushNamed(context, pickCompany);},
+                leading:SvgPicture.asset('assets/pick_up.svg'),
+                title:  Text("Become a vendor",style: Theme.of(context).textTheme.bodyText2),
+                )
+                  : driver.approved == true?ListTile(
+                onTap: (){Navigator.pushNamed(context, vendorWaitingScreen);},
+                leading:SvgPicture.asset('assets/vendor_icon.svg'),
+                title:  Text(kWork,style: Theme.of(context).textTheme.bodyText2),
+              ):ListTile(
+                onTap: (){Navigator.pushNamed(context, vendorWaitingScreen);},
+                leading:SvgPicture.asset('assets/vendor_icon.svg'),
+                title:  Text(kVendor3,style: Theme.of(context).textTheme.bodyText2),
+              ),
+            ],
           ),
-          spacing(),
-          ListTile(
-            onTap: (){Navigator.pushNamed(context, pickCompany);},
-            leading:SvgPicture.asset('assets/pick_up.svg'),
-            title:  Text("Become a vendor",style: Theme.of(context).textTheme.bodyText2),
-          ),
+
+
           spacing(),
 
           ListTile(

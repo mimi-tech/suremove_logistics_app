@@ -17,7 +17,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+
   var _visible = true;
 
   AnimationController? animationController;
@@ -43,7 +43,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
   @override
   void dispose() {
-    _controller.dispose();
     animationController!.dispose();
     super.dispose();
   }

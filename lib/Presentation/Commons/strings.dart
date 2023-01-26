@@ -99,6 +99,7 @@ const String kChangeProfile = 'Change profile image';
 const String kAdmin = 'Admin';
 const String kPromotion = 'Promotion';
 const String kVendor2 = 'Become A Vendor';
+const String kVendor3 = 'Pending Vendor';
 const String kLogOut = 'Logout';
 const String kBlockUser = 'Block Account';
 const String kViewProfile = 'View Profile';

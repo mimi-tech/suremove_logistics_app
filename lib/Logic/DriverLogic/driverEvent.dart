@@ -22,4 +22,14 @@ class DriverUpdateStatusRequested extends DriverEvent {
   List<Object> get props => [driverId, type];
 }
 
+class DriverBookingDecisionRequested extends DriverEvent {
+  const DriverBookingDecisionRequested(this.driverId, this.customerId, this.type, );
+  final String driverId;
+  final String type;
+  final String customerId;
+
+  @override
+  List<Object> get props => [driverId,customerId,type,];
+}
+
 

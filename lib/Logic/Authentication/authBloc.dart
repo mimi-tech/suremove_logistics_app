@@ -11,6 +11,7 @@ import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Services/apiStatus.dart';
 import 'package:sure_move/Services/authServices.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -234,6 +235,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  dynamic launchTel(phoneNumber) async {
+    try
+    {
+      Uri email = Uri(
+        scheme: 'tel',
+        path: phoneNumber,
+      );
 
+      await launchUrl(email);
+    }
+    catch(e) {
+      throw(e.toString());
+    }
+  }
 
 }

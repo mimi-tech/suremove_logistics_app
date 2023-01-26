@@ -41,6 +41,7 @@ const kGreen2 = Color(0xFF0D6755);
 const kDarkYellow = Color(0xFFF5730B);
 const kSilverAppBarColor = Color(0xFF700000);
 const kLighterBlue = Color(0xFF027BA8);
+const kVendorBg = Color(0xFF045c76);
 
 
 
