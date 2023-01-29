@@ -73,3 +73,19 @@ class CustomerConfirmBookingRequested extends BookingEvent {
   @override
   List<Object> get props => [bookingId,customerAuth,];
 }
+
+class CustomerTransactionRequested extends BookingEvent {
+  const CustomerTransactionRequested(this.email, this.firstname, this.lastname, this.phoneNumber, this.amount,this.context,this.userAuthId,this.type,this.userEmail);
+  final String email;
+  final String firstname;
+  final String lastname;
+  final String phoneNumber;
+  final dynamic amount;
+  final BuildContext context;
+  final dynamic userAuthId;
+  final dynamic type;
+  final dynamic userEmail;
+
+  @override
+  List<Object> get props => [email, firstname,lastname, phoneNumber,amount,context,userAuthId,type,userEmail,];
+}

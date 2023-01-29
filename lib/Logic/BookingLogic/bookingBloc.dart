@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
@@ -7,6 +9,7 @@ import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
 import 'package:sure_move/Models/bookingModel.dart';
+import 'package:sure_move/Models/cardDetailsModel.dart';
 import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
@@ -17,6 +20,7 @@ import 'package:sure_move/Providers/userProvider.dart';
 import 'package:sure_move/Services/apiStatus.dart';
 import 'package:sure_move/Services/bookingServices.dart';
 import 'package:sure_move/Services/driverService.dart';
+import 'package:sure_move/Services/fundsServices.dart';
 import 'package:sure_move/Services/userServices.dart';
 
 
@@ -29,6 +33,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     on<MatchADriverRequested>(_onGettingMatchedDriver);
     on<UpdateBookingRequested>(_onUpdateBookingRequested);
     on<CustomerConfirmBookingRequested>(_onCustomerConfirmBooking);
+    on<CustomerTransactionRequested>(_onCardPaymentMethod);
 
   }
 List<DriverModel> matchedDrivers = <DriverModel>[];
@@ -108,6 +113,110 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       emit(BookingDenied([e.toString()]));
     }
   }
+
+  _onCard(email,amount,accessCode,context) async {
+
+    var cardDetails = await UserPreferences().getCardDetailsNew();
+    if(cardDetails.authorizationCode != ""){
+    var response = await FundsServices.chargeAuthorization(email,amount,cardDetails.authorizationCode);
+    if (response is Success) {
+      return true;
+    }
+
+    if (response is Failure) {
+      return false;
+    }
+  }else{
+      //CHARGE THE CARD
+      Charge charge  = Charge();
+      charge.card = _getCardFromUI(cardDetails);
+      charge
+        ..amount = amount! // In base currency
+        ..email = email
+        ..card = _getCardFromUI(cardDetails)
+      // ..reference = _getReference()
+        ..accessCode = accessCode
+
+        ..putCustomField('Charged From', 'Bulk sms');
+      chargeCard(charge,context);
+    }
+
+  }
+  chargeCard(Charge charge, BuildContext context) async {
+    final plugin = PaystackPlugin();
+    final response = await plugin.chargeCard(context, charge: charge);
+
+    //final reference = response.reference;
+
+    // Checking if the transaction is successful
+    if (response.message == 'Success') {
+      //verify Transaction is successful
+      return true;
+    }else{
+      return false;
+    }
+  }
+  PaymentCard _getCardFromUI(CardDetailsModal cardDetails) {
+
+    return PaymentCard(
+      number: cardDetails.cardNumber,
+      cvc: cardDetails.cvv,
+      expiryMonth: int.parse(cardDetails.expiringMonth!),
+      expiryYear: int.parse(cardDetails.expiringYear!),
+    );
+  }
+
+  _onCardPaymentMethod(CustomerTransactionRequested event, Emitter<BookingState> emit) async {
+
+    emit(UserLoading());
+    var response = await FundsServices.createCustomer(event.email,event.firstname,event.lastname,event.phoneNumber);
+    if (response is Success) {
+      UserPreferences().saveCustomerCode(response.data!['data']['customer_code']);
+      UserPreferences().saveCustomerId(response.data!['data']['id']);
+     //initialize payment
+      var initializeResponse = await FundsServices.initializePayment(event.email,event.amount);
+      if(initializeResponse is Success){
+        var result = await _onCard(event.email,event.amount, initializeResponse.data!["access_code"],event.context);
+        //verify transaction
+        if(result == true){
+        var verifyResponse = await FundsServices.verifySuccessTxn(initializeResponse.data!["data"]["reference"]);
+        if(verifyResponse is Success){
+          var cardData = verifyResponse.data!['data']['authorization'];
+
+          CardDetailsModal cardDetailsModal = CardDetailsModal.fromJson(cardData);
+
+          //Save the user card details with shared pref
+          UserPreferences().cardDetails(cardDetailsModal);
+          UserPreferences().saveCustomerId(verifyResponse.data!['data']['data']['customer']['id']);
+
+          var updateResponse = await FundsServices.updateWallet(event.amount,event.userAuthId,event.type,event.userEmail);
+
+          if(updateResponse is Success){
+            BlocProvider.of<BookingBloc>(event.context).add(MatchADriverRequested("${event.firstname} ${event.lastname}",event.phoneNumber,event.context));
+
+          }
+          if(updateResponse is Failure){
+            emit(BookingDenied([updateResponse.errorResponse.toString()]));
+          }
+
+        }
+        if(verifyResponse is Failure){
+          emit(BookingDenied([verifyResponse.errorResponse.toString()]));
+        }
+      }else{
+          emit(const BookingDenied(["Sorry error occurred with your payment method"]));
+        }
+      }
+      if(initializeResponse is Failure){
+        emit(BookingDenied([initializeResponse.errorResponse.toString()]));
+      }
+    }
+    if(response is Failure){
+      emit(BookingDenied([response.errorResponse.toString()]));
+
+    }
+  }
+
 
   _onGettingMatchedDriver(MatchADriverRequested event, Emitter<BookingState> emit) async {
     try{
@@ -265,5 +374,6 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       emit(BookingDenied([response.errorResponse.toString()]));
     }
   }
+
 
 }

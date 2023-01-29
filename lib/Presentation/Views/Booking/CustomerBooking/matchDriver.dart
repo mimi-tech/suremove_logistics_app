@@ -173,10 +173,32 @@ class _DisplayAmountState extends State<DisplayAmount> {
 
               ],
             )),
-            GeneralButton(title: kBook,tapStudiesButton: (){
+            GeneralButton(title: kBook,tapStudiesButton: () async {
               String fullName = "${user.firstName} ${user.lastName}";
-              BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(fullName,user.phoneNumber,context));
-              Navigator.pushNamed(context, ripplesAnimation);
+               UserPreferences().getPaymentType().then((value) => {
+                if(value != kCard){
+                  BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(fullName,user.phoneNumber,context))
+
+                }else{
+                   BlocProvider.of<BookingBloc>(context).add(CustomerTransactionRequested(
+                   user.email!,
+                   user.firstName!,
+                   user.lastName!,
+                   user.phoneNumber!,
+                   BookingCollections.bookingDetails[0].amount,
+                   context,
+                   "fund",
+                   user.userId,
+                   user.email
+               ))
+
+                },
+               Navigator.pushNamed(context, ripplesAnimation)
+              });
+
+
+
+
              },),
             space()
           ],

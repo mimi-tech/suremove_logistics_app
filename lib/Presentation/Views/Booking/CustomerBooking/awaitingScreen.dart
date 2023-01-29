@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
+import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
@@ -48,7 +48,27 @@ class _CustomerAwaitingScreenState extends State<CustomerAwaitingScreen> {
     timers = Timer.periodic(const Duration(minutes: 5), (timers) {
     NewUser user = Provider.of<UserProvider>(context).user;
     String fullName = "${user.firstName} ${user.lastName}";
-    BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(fullName,user.phoneNumber,context));
+
+    UserPreferences().getPaymentType().then((value) => {
+    if(value != kCard){
+    BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(fullName,user.phoneNumber,context))
+
+    }else{
+    BlocProvider.of<BookingBloc>(context).add(CustomerTransactionRequested(
+    user.email!,
+    user.firstName!,
+    user.lastName!,
+    user.phoneNumber!,
+    BookingCollections.bookingDetails[0].amount,
+    context,
+    "fund",
+    user.userId,
+    user.email
+    ))
+
+    },
+    Navigator.pushNamed(context, ripplesAnimation)
+    });
   });
   }
 

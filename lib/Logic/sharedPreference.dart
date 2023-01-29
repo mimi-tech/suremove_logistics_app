@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sure_move/Models/cardDetailsModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 
@@ -119,7 +120,96 @@ class UserPreferences {
     String userId = prefs.getString("userId") ?? "";
     return userId;
   }
+  void saveCustomerCard(List<String> customerCard)async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('customerCard',customerCard);
+  }
+  void saveCustomerId(int customerId)async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('customerId',customerId);
+  }
+  void saveCustomerActiveCard(String customerActiveCard)async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('customerActiveCard',customerActiveCard);
+  }
 
+  void saveCustomerCode(String customerCode)async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('customerCode',customerCode);
+  }
+
+  Future<int> getCustomerId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int customerId = prefs.getInt("customerId") ?? 0;
+    return customerId;
+  }
+  Future<String> getCustomerCode() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String customerCode = prefs.getString("customerCode") ?? "";
+    return customerCode;
+  }
+
+  Future<List> getCustomerCard() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List customerCard = prefs.getStringList("customerCard") ?? [];
+    return customerCard;
+  }
+
+  Future<String> getCustomerActiveCard() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String customerActiveCard = prefs.getString("customerActiveCard") ?? "";
+    return customerActiveCard;
+  }
+
+  //Save users card details
+  Future<bool> cardDetails(CardDetailsModal cardDetailsModal) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('cardFirstFourDigit',cardDetailsModal.cardFirstFourDigit ?? '');
+    prefs.setString('cardLastFourDigit',cardDetailsModal.cardFirstFourDigit ?? '');
+    prefs.setString('authorizationCode',cardDetailsModal.authorizationCode ?? '');
+    prefs.setString('cardType',cardDetailsModal.cardType ?? '');
+    prefs.setString('cardBrand',cardDetailsModal.cardBrand ?? '');
+    prefs.setString('cardBank',cardDetailsModal.cardBank ?? '');
+    prefs.setString('expiringMonth',cardDetailsModal.expiringMonth ?? '');
+    prefs.setString('expiringYear',cardDetailsModal.expiringYear ?? '');
+    prefs.setString('cardNumber',cardDetailsModal.cardNumber ?? '');
+    prefs.setString('cvv',cardDetailsModal.cvv ?? '');
+
+    return prefs.commit();
+
+  }
+
+
+
+  //fetching the users card details
+  Future<CardDetailsModal> getCardDetailsNew ()  async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String cardFirstFourDigit = prefs.getString("cardFirstFourDigit") ?? "";
+    String cardLastFourDigit = prefs.getString("cardLastFourDigit") ?? "";
+    String authorizationCode = prefs.getString("authorizationCode") ?? "";
+    String cardType = prefs.getString("cardType") ?? "";
+    String cardBrand = prefs.getString("cardBrand") ?? '';
+    String cardBank = prefs.getString("cardBank") ?? '';
+    String expiringMonth = prefs.getString("expiringMonth") ?? '';
+    String expiringYear = prefs.getString("expiringYear") ?? '';
+    String cardNumber = prefs.getString("cardNumber") ?? '';
+    String cvv = prefs.getString("cvv") ?? '';
+    return CardDetailsModal(
+        cardFirstFourDigit: cardFirstFourDigit,
+        cardLastFourDigit: cardLastFourDigit,
+        authorizationCode: authorizationCode,
+        cardType: cardType,
+        cardBrand: cardBrand,
+        cardBank:cardBank,
+        expiringMonth:expiringMonth,
+        expiringYear:expiringYear,
+        cardNumber:cardNumber,
+        cvv:cvv
+    );
+
+  }
 
   void removeUser() async {
 
@@ -142,7 +232,20 @@ class UserPreferences {
     prefs.remove('accountType');
     prefs.remove('txnPin');
     prefs.remove('isOngoingBooking');
-    prefs.remove('isActive');
+    prefs.remove('customerCard');
+    prefs.remove('customerId');
+    prefs.remove('customerActiveCard');
+    prefs.remove('customerCode');
+    prefs.remove('cardFirstFourDigit');
+    prefs.remove('cardLastFourDigit');
+    prefs.remove('authorizationCode');
+    prefs.remove('cardType');
+    prefs.remove('cardBrand');
+    prefs.remove('cardBank');
+    prefs.remove('expiringMonth');
+    prefs.remove('expiringYear');
+    prefs.remove('cardNumber');
+    prefs.remove('cvv');
 
 
 
