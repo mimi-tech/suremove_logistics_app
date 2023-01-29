@@ -10,14 +10,18 @@ class UserLoading extends BookingState {
   @override
   List<Object> get props => [];
 }
-class UsersInitial extends BookingState {
+class BookingInitial extends BookingState {
   @override
   List<Object> get props =>[];
 }
 
-class UserSuccess extends BookingState {
-  // final List<String> success;
-  // const AuthSuccess(this.success);
+class BookingSuccess extends BookingState {
+
+  @override
+  List<Object> get props => [];
+}
+
+class BookingLoading extends BookingState {
 
   @override
   List<Object> get props => [];
@@ -28,9 +32,9 @@ class NotFound extends BookingState {
   List<Object> get props => [];
 }
 
-class UserDenied extends BookingState {
+class BookingDenied extends BookingState {
   final List<String> errors;
-  const UserDenied(this.errors);
+  const BookingDenied(this.errors);
 
   @override
   List<Object> get props => [errors];

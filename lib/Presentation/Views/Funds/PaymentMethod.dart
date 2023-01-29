@@ -48,7 +48,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         body: SingleChildScrollView(
           child:  BlocConsumer<BookingBloc, BookingState>(
     listener: (context, state) {
-    if (state is UserDenied) {
+    if (state is BookingDenied) {
     ScaffoldMsg().errorMsg(context, state.errors[0]);
     }
     if(state is UserPaymentType){

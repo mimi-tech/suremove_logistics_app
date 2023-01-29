@@ -75,10 +75,10 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
         child: BlocConsumer<BookingBloc, BookingState>(
         listener: (context, state) {
 
-    if(state is UserSuccess){
+    if(state is BookingSuccess){
     Navigator.pushNamed(context, connectedVendorPage);
     }
-    if(state is UserDenied){
+    if(state is BookingDenied){
       Navigator.pushNamed(context, displayAmount);
 
       ScaffoldMsg().errorMsg(context, state.errors[0]);

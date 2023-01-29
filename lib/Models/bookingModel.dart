@@ -1,5 +1,6 @@
 
 class BookingModel {
+  dynamic bookingId;
   String? customerAuthId;
   String? driverAuthId;
   String? driverId;
@@ -36,7 +37,7 @@ class BookingModel {
 
 
   BookingModel({
-
+    this.bookingId,
     this.customerAuthId,
    this.driverAuthId,
   this.driverId,
@@ -76,6 +77,7 @@ class BookingModel {
 
   factory BookingModel.fromJson(Map<String,dynamic> responseData){
     return BookingModel(
+      bookingId : responseData['_id'] ?? "",
       customerAuthId : responseData['customerAuthId'] ?? "",
       driverAuthId: responseData['driverAuthId'] ?? "",
       driverId: responseData['driverId'] ?? "",
@@ -114,7 +116,7 @@ class BookingModel {
   }
   Map<String, dynamic> toJson() {
     return {
-
+      "bookingId":bookingId,
       "customerAuthId": customerAuthId,
       "driverAuthId": driverAuthId,
       "driverId":driverId,

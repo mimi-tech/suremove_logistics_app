@@ -8,4 +8,11 @@ class ScaffoldMsg{
       duration: const Duration(seconds: 5),
     ));
   }
+
+  successMsg(context, title){
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(title,style:  Theme.of(context).textTheme.caption!.copyWith(color: kGreen),),
+      duration: const Duration(seconds: 5),
+    ));
+  }
 }

@@ -85,10 +85,14 @@ const String kBook = 'Book';
 const String kDeliveryDetails = 'Delivery details';
 const String kVendor = 'Vendor';
 const String kCancelBooking = "Are you sure you want to cancel this booking?";
+const String kConfirmBooking = "Are you sure our driver have delivered your package?";
+const String kConfirmBooking2 = "Confirm booking";
 const String kOnGoingError = 'Sorry you have an ongoing booking... Wait for the booking to end before you can book for another driver. Thank you.';
 const String kWaitingText = "Please wait for our vendor";
 const String kUpdateBookingWaring = "Updating your booking might change the total amount of your booking. \n Do you wish to continue?";
-
+const String kRating = "Rating";
+const String kRating2 = "Please rate our driver";
+const String kRating3 = "Please give us your feedback about this driver [optional]";
 
 //commons
 const String kYes = 'Yes';

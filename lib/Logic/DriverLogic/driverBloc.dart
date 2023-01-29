@@ -22,12 +22,16 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
   DriversBloc(): super(DriverInitial()) {
     // handle auth init
     on<DriverBookingDecisionRequested>(_onDriverBookingDecision);
+    on<DriverUpdateBookingRequested>(_onUpdateBooking);
+    on<DriverConfirmBookingRequested>(_onDriverConfirmBooking);
+    on<DriverGetABookingRequested>(_onGetABookingStream);
+    on<CustomerRatingDriverRequested>(_onCustomerRatingDriver);
 
   }
 
 
 
-
+  bool check = true;
   onUpdatingDriverStatusRequested(driverId,type,context) async {
     try{
       var response = await DriverServices.updateDriverStatus(driverId,type);
@@ -117,10 +121,66 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
 
       }
       if(response is Failure){
-        print(event.type);
         emit(DriverDenied([response.errorResponse.toString()]));
       }
     }
 
+  _onUpdateBooking(DriverUpdateBookingRequested event, Emitter<DriverState> emit) async {
+    emit(IsBookingLegalLoading());
+    var response = await BookingServices.updateBooking(event.itemNumber,event.itemSize,event.itemSize,event.isLegal,event.bookingId,event.totalAmount,event.amount);
+    if(response is Success){
+      emit(DriverIsLegal());
 
-}
+    }
+    if(response is Failure){
+      emit(DriverDenied([response.errorResponse.toString()]));
+    }
+  }
+
+  _onDriverConfirmBooking(DriverConfirmBookingRequested event, Emitter<DriverState> emit) async {
+    emit(DriverLoading());
+    var response = await DriverServices.driverConfirmBooking(event.driverId,event.companyId);
+    if(response is Success){
+      emit(DriverSuccess());
+
+    }
+    if(response is Failure){
+      emit(DriverDenied([response.errorResponse.toString()]));
+    }
+  }
+
+  Stream<dynamic> _onGetABookingStream(DriverGetABookingRequested event , Emitter<DriverState> emit) async* {
+
+    while (check) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      var response = await BookingServices.getABooking(event.customerAuthId);
+
+      if(response is Success){
+
+          BookingModel booking = BookingModel.fromJson(response.data!["data"]);
+          Provider.of<BookingProvider>(event.context,listen: false).setUser(booking);
+          if(booking.confirmDelivery == true){
+            emit(DeliveryConfirmed());
+            check = false;
+          }
+
+        }
+
+
+      }
+
+
+    }
+
+  _onCustomerRatingDriver(CustomerRatingDriverRequested event, Emitter<DriverState> emit) async {
+    emit(DriverLoading());
+    var response = await DriverServices.ratingDriver(event.message,event.companyID,event.rate,event.customerInfo,event.driverInfo,event.driverId);
+    if(response is Success){
+      emit(DriverSuccess());
+
+    }
+    if(response is Failure){
+      emit(DriverDenied([response.errorResponse.toString()]));
+    }
+  }
+  }

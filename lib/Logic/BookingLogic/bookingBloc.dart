@@ -21,13 +21,14 @@ import 'package:sure_move/Services/userServices.dart';
 
 
 class BookingBloc extends Bloc<BookingEvent, BookingState> {
-  BookingBloc(): super(UsersInitial()) {
+  BookingBloc(): super(BookingInitial()) {
     // handle auth init
 
     on<PaymentMethodType>(onGettingUserPaymentMethod);
     on<CalculateCostRequested>(_onGettingBookingCost);
     on<MatchADriverRequested>(_onGettingMatchedDriver);
     on<UpdateBookingRequested>(_onUpdateBookingRequested);
+    on<CustomerConfirmBookingRequested>(_onCustomerConfirmBooking);
 
   }
 List<DriverModel> matchedDrivers = <DriverModel>[];
@@ -67,7 +68,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       emit(UserPaymentType([userPaymentType]));
 
     }catch(e){
-      emit(UserDenied([e.toString()]));
+      emit(BookingDenied([e.toString()]));
     }
   }
 
@@ -75,7 +76,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
     try{
        UserPreferences().savePaymentType(paymentType);
     }catch(e){
-      emit(UserDenied([e.toString()]));
+      emit(BookingDenied([e.toString()]));
     }
   }
 
@@ -98,13 +99,13 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
           distance: metersToKg,
             timeTaken: "12mins"
         );
-       emit(UserSuccess());
+       emit(BookingSuccess());
       }
       if(response is Failure){
-        emit(UserDenied([response.errorResponse.toString()]));
+        emit(BookingDenied([response.errorResponse.toString()]));
       }
     } catch (e) {
-      emit(UserDenied([e.toString()]));
+      emit(BookingDenied([e.toString()]));
     }
   }
 
@@ -125,11 +126,11 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
         if(response.errorResponse == "Driver not found"){
          emit(NotFound());
         }else{
-          emit(UserDenied([response.errorResponse.toString()]));
+          emit(BookingDenied([response.errorResponse.toString()]));
         }
       }
     } catch (e) {
-      emit(UserDenied([e.toString()]));
+      emit(BookingDenied([e.toString()]));
     }
   }
 
@@ -144,6 +145,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
        "phoneNumber":drivers[count].driverPhoneNumber,
        "phoneNumber":drivers[count].driverPhoneNumber,
        "gender":drivers[count].gender,
+       "rating":drivers[count].rating
      };
      var companyDetails = {
        "id":drivers[count].companyId,
@@ -166,7 +168,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
         Provider.of<BookingProvider>(event.context,listen: false).setUser(booking);
         matchedDrivers.clear();
         matchedDrivers.add(drivers[count]);
-        emit(UserSuccess());
+        emit(BookingSuccess());
       }
       if(bookingStatus is Failure){
         count = count + 1;
@@ -176,7 +178,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
     }
 
     if(createBookingResponse is Failure){
-      emit(UserDenied([createBookingResponse.errorResponse.toString()]));
+      emit(BookingDenied([createBookingResponse.errorResponse.toString()]));
     }
   }else{
       emit(NotFound());
@@ -223,18 +225,18 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
               totalAmount:  data,
               item: items
           );
-          emit(UserSuccess());
+          emit(BookingSuccess());
         }
         if(res is Failure){
-          emit(UserDenied([res.errorResponse.toString()]));
+          emit(BookingDenied([res.errorResponse.toString()]));
         }
       }
      
       if(response is Failure){
-        emit(UserDenied([response.errorResponse.toString()]));
+        emit(BookingDenied([response.errorResponse.toString()]));
       }
     } catch (e) {
-      emit(UserDenied([e.toString()]));
+      emit(BookingDenied([e.toString()]));
     }
   }
 
@@ -252,5 +254,16 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
     }
   }
 
+  _onCustomerConfirmBooking(CustomerConfirmBookingRequested event, Emitter<BookingState> emit) async {
+    emit(BookingLoading());
+    var response = await BookingServices.customerConfirmBooking(event.bookingId,event.customerAuth);
+    if(response is Success){
+      emit(BookingSuccess());
+
+    }
+    if(response is Failure){
+      emit(BookingDenied([response.errorResponse.toString()]));
+    }
+  }
 
 }

@@ -10,6 +10,11 @@ class DriverLoading extends DriverState {
   @override
   List<Object> get props => [];
 }
+
+class IsBookingLegalLoading extends DriverState {
+  @override
+  List<Object> get props => [];
+}
 class DriverInitial extends DriverState {
   @override
   List<Object> get props =>[];
@@ -18,6 +23,12 @@ class DriverInitial extends DriverState {
 class DriverSuccess extends DriverState {
   // final List<String> success;
   // const AuthSuccess(this.success);
+
+  @override
+  List<Object> get props => [];
+}
+
+class DriverIsLegal extends DriverState {
 
   @override
   List<Object> get props => [];
@@ -37,3 +48,7 @@ class DriverDenied extends DriverState {
 }
 
 
+class DeliveryConfirmed extends DriverState {
+  @override
+  List<Object> get props => [];
+}

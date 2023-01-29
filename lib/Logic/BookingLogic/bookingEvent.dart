@@ -65,3 +65,11 @@ class CancelBookingRequested extends BookingEvent {
   List<Object> get props => [message];
 }
 
+class CustomerConfirmBookingRequested extends BookingEvent {
+  const CustomerConfirmBookingRequested(this.bookingId, this.customerAuth, );
+  final String bookingId;
+  final String customerAuth;
+
+  @override
+  List<Object> get props => [bookingId,customerAuth,];
+}

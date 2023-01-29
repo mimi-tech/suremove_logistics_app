@@ -266,4 +266,43 @@ class BookingServices{
       return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
     }
   }
-}
+
+
+  static Future<Object> customerConfirmBooking( bookingId,customerAuth) async {
+    try {
+
+      var body = jsonEncode({
+        "bookingId":bookingId,
+        "customerAuth":customerAuth
+      });
+      var url = Uri.parse("$apiUrl/booking/customer-confirm-booking");
+      String token = await UserPreferences().getToken();
+      Response response = await https.post(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
+      final Map<String, dynamic> jsonDecoded = json.decode(response.body);
+      if (jsonDecoded['status'] == true) {
+
+
+        return Success(response: response,data: jsonDecoded);
+      }
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
+    } on HttpException {
+      return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
+    } on FormatException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
+    } on SocketException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
+    } on TimeoutException{
+      return Failure(code: TIME_OUT, errorResponse: "Time out error");
+    }
+
+    catch (e) {
+      return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
+    }
+
+  }
+
+
+  }
+
+
+

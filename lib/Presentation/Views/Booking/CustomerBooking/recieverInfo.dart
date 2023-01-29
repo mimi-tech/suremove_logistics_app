@@ -50,10 +50,10 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
         body:BlocConsumer<BookingBloc, BookingState>(
         listener: (context, state) {
 
-          if(state is UserSuccess){
+          if(state is BookingSuccess){
             Navigator.pushNamed(context, displayAmount);
           }
-          if(state is UserDenied){
+          if(state is BookingDenied){
             ScaffoldMsg().errorMsg(context, state.errors[0]);
           }
         },
