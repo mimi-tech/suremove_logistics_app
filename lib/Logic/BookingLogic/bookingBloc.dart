@@ -4,7 +4,6 @@ import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
-import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
 import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
@@ -12,7 +11,7 @@ import 'package:sure_move/Models/bookingModel.dart';
 import 'package:sure_move/Models/cardDetailsModel.dart';
 import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
-import 'package:sure_move/Presentation/Routes/strings.dart';
+
 import 'package:sure_move/Presentation/utils/enums.dart';
 import 'package:sure_move/Providers/bookingProviders.dart';
 import 'package:sure_move/Providers/driverProvider.dart';
@@ -34,10 +33,13 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     on<UpdateBookingRequested>(_onUpdateBookingRequested);
     on<CustomerConfirmBookingRequested>(_onCustomerConfirmBooking);
     on<CustomerTransactionRequested>(_onCardPaymentMethod);
+    on<UserAddCardRequested>(_onAddCard);
+    on<UserRemoveCardRequested>(_onRemoveCard);
+    on<CustomerGetABookingRequested>(_onGetABookingStream);
 
   }
 List<DriverModel> matchedDrivers = <DriverModel>[];
-
+  bool check = true;
   onGettingUserRequested(context) async {
     try{
       //get the users details from the storage
@@ -104,7 +106,14 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
           distance: metersToKg,
             timeTaken: "12mins"
         );
-       emit(BookingSuccess());
+        //check if user has a payment method
+        var result = await UserPreferences().getPaymentType();
+        if(result == "" || result == null){
+          emit(BookingNoPayment());
+        }else{
+          emit(BookingSuccess());
+        }
+
       }
       if(response is Failure){
         emit(BookingDenied([response.errorResponse.toString()]));
@@ -112,6 +121,30 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
     } catch (e) {
       emit(BookingDenied([e.toString()]));
     }
+  }
+  _onRemoveCard(UserRemoveCardRequested event, Emitter<BookingState> emit)  {
+    try{
+       UserPreferences().removeCard();
+       emit(CardRemoved());
+    }catch(e){
+      emit(BookingDenied([e.toString()]));
+    }
+  }
+
+  _onAddCard(UserAddCardRequested event, Emitter<BookingState> emit) async {
+    Map<String,dynamic> cardData = {
+      "cardNumber":event.cardNumber,
+      "exp_month":event.exp_month,
+      "exp_year":event.exp_year,
+      "cvv":event.cvv,
+      "bin":event.bin,
+      "last4":event.last4,
+    };
+    CardDetailsModal cardDetailsModal = CardDetailsModal.fromJson(cardData);
+
+    //Save the user card details with shared pref
+    await UserPreferences().cardDetails(cardDetailsModal);
+     emit(AddCard());
   }
 
   _onCard(email,amount,accessCode,context) async {
@@ -144,7 +177,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
   }
   chargeCard(Charge charge, BuildContext context) async {
     final plugin = PaystackPlugin();
-    final response = await plugin.chargeCard(context, charge: charge);
+    final response = await plugin.chargeCard( context, charge: charge);
 
     //final reference = response.reference;
 
@@ -169,6 +202,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
   _onCardPaymentMethod(CustomerTransactionRequested event, Emitter<BookingState> emit) async {
 
     emit(UserLoading());
+    var user = await UserPreferences().getUserId();
     var response = await FundsServices.createCustomer(event.email,event.firstname,event.lastname,event.phoneNumber);
     if (response is Success) {
       UserPreferences().saveCustomerCode(response.data!['data']['customer_code']);
@@ -189,30 +223,34 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
           UserPreferences().cardDetails(cardDetailsModal);
           UserPreferences().saveCustomerId(verifyResponse.data!['data']['data']['customer']['id']);
 
-          var updateResponse = await FundsServices.updateWallet(event.amount,event.userAuthId,event.type,event.userEmail);
+          var updateResponse = await FundsServices.updateWallet(event.amount,user,"fund",event.email);
 
           if(updateResponse is Success){
-            BlocProvider.of<BookingBloc>(event.context).add(MatchADriverRequested("${event.firstname} ${event.lastname}",event.phoneNumber,event.context));
-
+         emit(PaymentSuccessful());
           }
           if(updateResponse is Failure){
             emit(BookingDenied([updateResponse.errorResponse.toString()]));
+
           }
 
         }
         if(verifyResponse is Failure){
           emit(BookingDenied([verifyResponse.errorResponse.toString()]));
+
         }
       }else{
           emit(const BookingDenied(["Sorry error occurred with your payment method"]));
+
         }
       }
       if(initializeResponse is Failure){
         emit(BookingDenied([initializeResponse.errorResponse.toString()]));
+
       }
     }
     if(response is Failure){
       emit(BookingDenied([response.errorResponse.toString()]));
+
 
     }
   }
@@ -224,32 +262,33 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       var response = await BookingServices.matchADriver(event.fullName,event.phoneNumber);
       if (response is Success) {
         final List<dynamic> responseData = response.data!["data"];
+
         final drivers = responseData.map((json) => DriverModel.fromJson(json)).toList();
-        //DriverModel drivers = DriverModel.fromJson(response.data!["data"]);
-
-
-        sendSignalToDriver(event,emit,drivers);
+       await sendSignalToDriver(event,emit,drivers);
 
       }
       if(response is Failure){
         if(response.errorResponse == "Driver not found"){
          emit(NotFound());
         }else{
+
           emit(BookingDenied([response.errorResponse.toString()]));
+          print("denied");
         }
       }
     } catch (e) {
+
       emit(BookingDenied([e.toString()]));
     }
   }
 
-  Future<void> sendSignalToDriver(MatchADriverRequested event, Emitter<BookingState> emit, List<DriverModel> drivers) async {
+  sendSignalToDriver(MatchADriverRequested event, Emitter<BookingState> emit, List<DriverModel> drivers) async {
     int count = 0;
     if(drivers.length >= count){
     //connect to the first driver
      var driverInfo = {
       "id":drivers[count].driverId,
-       "name":drivers[count].firstName + drivers[count].lastName,
+       "name":drivers[count].firstName + " " + drivers[count].lastName,
        "profilePicture":drivers[count].profileImageUrl,
        "phoneNumber":drivers[count].driverPhoneNumber,
        "phoneNumber":drivers[count].driverPhoneNumber,
@@ -270,7 +309,8 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
 
     if(createBookingResponse is Success){
       //wait for 5 minutes to check if the driver accepted the booking
-      await Future.delayed(const Duration(minutes: 5));
+      print("waiting");
+      await Future.delayed(const Duration(seconds: 10));
       var bookingStatus = await BookingServices.driverConnectionStatus(drivers[count].driverId);
       if (bookingStatus is Success) {
         BookingModel booking = BookingModel.fromJson(createBookingResponse.data!["data"]);
@@ -281,15 +321,17 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       }
       if(bookingStatus is Failure){
         count = count + 1;
-        sendSignalToDriver(event,emit,drivers);
+       await sendSignalToDriver(event,emit,drivers);
 
       }
     }
 
     if(createBookingResponse is Failure){
+
       emit(BookingDenied([createBookingResponse.errorResponse.toString()]));
     }
   }else{
+      print("Non picked");
       emit(NotFound());
     }
   }
@@ -311,17 +353,14 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       if (response is Success) {
         var data = response.data!["data"];
         var res = await BookingServices.updateBooking(
-            event.itemSize,
-            event.itemNumber,
-            event.itemName,
+            event.item,
             event.isLegal,
             event.bookingId,
             data,
             data
         );
         if (res is Success) {
-          //final List<dynamic> responseData = res.data!["data"];
-         // final booking = responseData.map((json) => BookingModel.fromJson(json)).toList();
+
           BookingModel booking = BookingModel.fromJson(res.data!["data"]);
           Provider.of<BookingProvider>(event.context,listen: false).setUser(booking);
           var items = {
@@ -371,9 +410,33 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
 
     }
     if(response is Failure){
+      print("Error confirming booking ${response.errorResponse}");
       emit(BookingDenied([response.errorResponse.toString()]));
     }
   }
 
 
+
+  _onGetABookingStream(CustomerGetABookingRequested event, Emitter<BookingState> emit ) async {
+     emit(BookingLoading());
+      var response = await BookingServices.getABooking(event.customerAuthId);
+
+      if(response is Success){
+        print("good");
+        BookingModel booking = BookingModel.fromJson(response.data!["data"]);
+            if(booking.isLegal == true) {
+
+             emit(BookingIsLegal([booking]));
+             check = false;
+            }else{
+              emit(BookingInitial());
+            }
+        }
+if(response is Failure){
+  emit(BookingInitial());
+  print("Fail $check");
 }
+
+
+    }
+  }

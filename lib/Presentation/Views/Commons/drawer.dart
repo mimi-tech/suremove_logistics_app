@@ -3,11 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
-import 'package:sure_move/Logic/sharedPreference.dart';
-import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
 import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
@@ -44,7 +41,7 @@ class _DrawerPageState extends State<DrawerPage> {
            SizedBox(width: 30.w,),
               Column(
                 children: [
-                  Text(user == null?"jfj":user.gender.toString(),style: Theme.of(context).textTheme.bodyText1),
+                  Text(user == null?"":user.firstName.toString(),style: Theme.of(context).textTheme.bodyText1),
                   Text(kViewProfile,style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kRadioColor),),
 
                 ],

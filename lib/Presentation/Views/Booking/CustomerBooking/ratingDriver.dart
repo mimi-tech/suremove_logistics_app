@@ -34,7 +34,7 @@ class _RatingDriverState extends State<RatingDriver> {
     dynamic driver = booking.driverInfo;
     dynamic company = booking.companyDetails;
     return Scaffold(
-        appBar: AppBar(title:  Text(kRating.toUpperCase()),),
+        appBar: AppBar(title:  Text(kRating.toUpperCase()),automaticallyImplyLeading: false,),
         body:BlocConsumer<DriversBloc, DriverState>(
         listener: (context, state) {
 
@@ -101,14 +101,14 @@ class _RatingDriverState extends State<RatingDriver> {
                   var customerInfo = {
                     "id": booking.customerAuthId,
                     "name": "${user.firstName} ${user.lastName}",
-                    "profilePicture": user.profileImageUrl,
+                    "profileImageUrl": user.profileImageUrl,
                     "phoneNumber": user.phoneNumber,
                     "gender": user.gender
                   };
                   var driverInfo = {
                     "id": booking.driverId,
                     "name": driver["name"],
-                    "profilePicture": driver["profilePicture"],
+                    "profileImageUrl": driver["profilePicture"],
                     "phoneNumber": driver["phoneNumber"],
                     "gender": driver["gender"],
                     "companyId": company["id"],
@@ -116,10 +116,11 @@ class _RatingDriverState extends State<RatingDriver> {
                     "companyOwner": company["owner"]
                   };
                   var message = [{
-                    "id": booking.driverId,
+                    "id": booking.driverId.toString(),
                     "name": driver["name"],
-                    "profilePicture": driver["profilePicture"],
+                    "profileImageUrl": driver["profilePicture"],
                     "phoneNumber": driver["phoneNumber"],
+                    "gender": driver["gender"],
                     "message":_feedback.text.trim(),
                   }];
                  _feedback.text.isNotEmpty? BlocProvider.of<DriversBloc>(context).add(CustomerRatingDriverRequested(

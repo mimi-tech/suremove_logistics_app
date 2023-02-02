@@ -34,24 +34,21 @@ class DriverBookingDecisionRequested extends DriverEvent {
 
 class DriverUpdateBookingRequested extends DriverEvent {
   const DriverUpdateBookingRequested(
-      this.itemNumber,
-      this.itemSize,
-      this.itemName,
+      this.item,
       this.isLegal,
       this.bookingId,
       this.totalAmount,
       this.amount
       );
-  final dynamic itemNumber;
-  final dynamic itemSize;
-  final dynamic itemName;
+
+  final Object item;
   final dynamic isLegal;
   final dynamic bookingId;
   final dynamic totalAmount;
   final dynamic amount;
 
   @override
-  List<Object> get props => [itemNumber, itemSize, itemName, isLegal,bookingId,totalAmount,amount];
+  List<Object> get props => [item, isLegal,bookingId,totalAmount,amount];
 }
 
 class DriverConfirmBookingRequested extends DriverEvent {
@@ -76,7 +73,7 @@ class CustomerRatingDriverRequested extends DriverEvent {
   const CustomerRatingDriverRequested(this.message, this.companyID,this.rate,this.customerInfo, this.driverInfo, this.driverId );
   final List message;
   final String companyID;
-  final String rate;
+  final dynamic rate;
   final Object customerInfo;
   final Object driverInfo;
   final String driverId;

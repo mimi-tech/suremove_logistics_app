@@ -4,6 +4,7 @@ import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
+import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
@@ -24,6 +25,8 @@ class _ItemDetailsState extends State<ItemDetails> {
   String? itemName;
   String? itemSize;
   String? itemNumber;
+  @override
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +104,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   decoration: const InputDecoration(
-                    hintText: "Size (kg)",
+                    hintText: "Weight (kg)",
 
                   ),
                   onSaved: (String? value) {

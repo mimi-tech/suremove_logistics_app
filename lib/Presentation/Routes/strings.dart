@@ -40,4 +40,6 @@ const vendorRegScreen3 = "/vendor-reg-screen3";
 const verifyEmailCode = "/verify-email-code";
 const permissionDeniedScreen = "/permission-denied-screen";
 const customerAwaitingScreen = "/customer-awaiting-screen";
+const saveCard = "/save-card-screen";
+const ratingDriver = "/rating-driver";
 

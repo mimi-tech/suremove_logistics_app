@@ -43,7 +43,7 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
   @override
   Widget build(BuildContext context) {
     NewUser user = Provider.of<UserProvider>(context).user;
-    _senderName.text = user.firstName!.toString();
+    _senderName.text = "${user.firstName!} ${user.lastName}";
     _senderPhoneNumber.text = user.phoneNumber!.toString();
     return Scaffold(
         appBar: AppBar(title: Text(kItemDeliveryLocation.toUpperCase())),
@@ -52,6 +52,9 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
 
           if(state is BookingSuccess){
             Navigator.pushNamed(context, displayAmount);
+          }
+          if(state is BookingNoPayment){
+            Navigator.pushNamed(context, paymentMethods);
           }
           if(state is BookingDenied){
             ScaffoldMsg().errorMsg(context, state.errors[0]);
@@ -131,7 +134,6 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
                         const Text(kReceiverName),
                         TextFormField(
                           controller: _receiverName,
-                          autocorrect: true,
                           autofocus: true,
                           cursorColor: (kOrangeColor),
                           keyboardType: TextInputType.text,
@@ -149,8 +151,7 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
                         spacing(),
                         const Text(kReceiverPhoneNumber),
                         TextFormField(
-                          controller: _senderPhoneNumber,
-                          autocorrect: true,
+                          controller: _receiverPhoneNumber,
                           autofocus: true,
                           cursorColor: (kOrangeColor),
                           keyboardType: TextInputType.phone,
@@ -225,15 +226,14 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
                       "name" : user.firstName! + user.lastName.toString(),
                       "profilePicture":user.profileImageUrl,
                       "phoneNumber":user.phoneNumber,
-                      "address":BookingConstants().customerSourceAddress,
+                      "address":BookingCollections.bookingDetails[0].sourceAddress,
                       "gender":user.gender
                     };
                     var receiver = {
                       "name" : _receiverName.text,
-                      "profilePicture":"",
                       "phoneNumber":_receiverPhoneNumber.text,
                       "address":destinationAddress,
-                      "gender":_gender
+                      "gender":_gender.name
                     };
                     BookingCollections().customerBookingDetailsJson(
                       receiver: receiver,

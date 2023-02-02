@@ -127,7 +127,7 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
 
   _onUpdateBooking(DriverUpdateBookingRequested event, Emitter<DriverState> emit) async {
     emit(IsBookingLegalLoading());
-    var response = await BookingServices.updateBooking(event.itemNumber,event.itemSize,event.itemSize,event.isLegal,event.bookingId,event.totalAmount,event.amount);
+    var response = await BookingServices.updateBooking(event.item,event.isLegal,event.bookingId,event.totalAmount,event.amount);
     if(response is Success){
       emit(DriverIsLegal());
 
@@ -180,6 +180,8 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
 
     }
     if(response is Failure){
+      print(response.errorResponse);
+      print(event.driverId);
       emit(DriverDenied([response.errorResponse.toString()]));
     }
   }

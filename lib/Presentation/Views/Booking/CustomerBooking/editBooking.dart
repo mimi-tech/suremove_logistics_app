@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
+import 'package:sure_move/Models/bookingModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
@@ -13,6 +15,7 @@ import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
 import 'package:sure_move/Presentation/utils/generalDialog.dart';
+import 'package:sure_move/Providers/bookingProviders.dart';
 
 class CustomerEditBooking extends StatefulWidget {
   const CustomerEditBooking({Key? key}) : super(key: key);
@@ -32,6 +35,11 @@ class _CustomerEditBookingState extends State<CustomerEditBooking> {
   String? itemNumber;
   @override
   Widget build(BuildContext context) {
+    BookingModel booking = Provider.of<BookingProvider>(context).user;
+    dynamic item =  booking.item;
+    _itemName.text = item["name"];
+    _itemSize.text = item["size"].toString();
+    _itemNumber.text = item["number"].toString();
     return Scaffold(
         appBar: AppBar(title: Text("Edit Booking".toUpperCase())),
         body: SingleChildScrollView(
@@ -40,15 +48,14 @@ class _CustomerEditBookingState extends State<CustomerEditBooking> {
 
     if(state is BookingSuccess){
     Navigator.pushNamed(context, connectedVendorPage);
+    ScaffoldMsg().successMsg(context, "Booking edited successfully");
     }
     if(state is BookingDenied){
-    Navigator.pushNamed(context, displayAmount);
+   // Navigator.pushNamed(context, connectedVendorPage);
 
     ScaffoldMsg().errorMsg(context, state.errors[0]);
     }
-    if(state is NotFound){
-    Navigator.pushNamed(context, customerAwaitingScreen);
-    }
+
     },
     builder: (context, state) {
 
@@ -133,7 +140,9 @@ class _CustomerEditBookingState extends State<CustomerEditBooking> {
                     ],
                   ),
                 ),
+                const Text(kUpdatingNote,style: TextStyle(color: kRedColor),),
                 space(),
+
                 GeneralButton(title: "Update booking", tapStudiesButton: (){
                   GeneralDialog.showGeneralDialog(
                       content: kUpdateBookingWaring,
@@ -141,17 +150,23 @@ class _CustomerEditBookingState extends State<CustomerEditBooking> {
                       header: "Update booking".toUpperCase(),
                       tapFunction: (){
                         Navigator.pop(context);
+                        var item = {
+                         "size": _itemSize.text.trim(),
+                          "number":_itemNumber.text.trim(),
+                         "name": _itemName.text.trim(),
+                        };
                         BlocProvider.of<BookingBloc>(context).add(UpdateBookingRequested(
+                          item,
                           _itemSize.text.trim(),
-                          _itemNumber.text.trim(),
+                         _itemNumber.text.trim(),
                           _itemName.text.trim(),
                           false,
-                          "",
+                          booking.bookingId,
                           context
 
                         ));
                       });
-                  Navigator.pushNamed(context, connectedVendorPage);
+
                 }),
               ],
             ),

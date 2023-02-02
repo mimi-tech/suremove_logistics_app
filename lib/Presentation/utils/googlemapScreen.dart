@@ -33,7 +33,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         mapType: MapType.normal,
         initialCameraPosition: googlePlex,
         markers: _createMarker(),
-        trafficEnabled: true,
+        //trafficEnabled: true,
         //liteModeEnabled: true,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);

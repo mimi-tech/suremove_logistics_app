@@ -11,8 +11,11 @@ import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
+import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
+import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/verifyTxn.dart';
+import 'package:sure_move/Presentation/Views/Funds/saveCard.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
 import 'package:sure_move/Presentation/utils/googlemapScreen.dart';
 import 'package:sure_move/Providers/userProvider.dart';
@@ -27,6 +30,7 @@ class _DisplayAmountState extends State<DisplayAmount> {
   dynamic lat;
   dynamic lng;
   dynamic userPaymentType;
+  dynamic cardIsValid;
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -36,8 +40,11 @@ class _DisplayAmountState extends State<DisplayAmount> {
   getPaymentType() async{
 
        var result =  await UserPreferences().getPaymentType();
-     setState(() {
+        var cardDetails = await UserPreferences().getCardDetailsNew();
+       cardIsValid = cardDetails.expiringYear;
+           setState(() {
        userPaymentType = result;
+
      });
   }
   @override
@@ -48,6 +55,7 @@ class _DisplayAmountState extends State<DisplayAmount> {
       lat = values.sourceLatitude;
       lng = values.sourceLogitude;
     }
+
     return Scaffold(
         body: Column(
           children: [
@@ -173,35 +181,34 @@ class _DisplayAmountState extends State<DisplayAmount> {
 
               ],
             )),
-            GeneralButton(title: kBook,tapStudiesButton: () async {
-              String fullName = "${user.firstName} ${user.lastName}";
-               UserPreferences().getPaymentType().then((value) => {
-                if(value != kCard){
-                  BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(fullName,user.phoneNumber,context))
+            GeneralButton(title: kBook,tapStudiesButton: () {
+              if (userPaymentType== kCard)  {
+                if (cardIsValid == "" || cardIsValid == null) {
+                  //move to add card
 
-                }else{
-                   BlocProvider.of<BookingBloc>(context).add(CustomerTransactionRequested(
-                   user.email!,
-                   user.firstName!,
-                   user.lastName!,
-                   user.phoneNumber!,
-                   BookingCollections.bookingDetails[0].amount,
-                   context,
-                   "fund",
-                   user.userId,
-                   user.email
-               ))
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) => const SaveCard()
+                  );
+                  ScaffoldMsg().successMsg(context, "Please enter your card");
+                } else {
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) => const VerifyCustomerTxn()
+                  );
+                }
+              }else{
+                showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) => const VerifyCustomerTxn()
+                );
+              }
+            }
 
-                },
-               Navigator.pushNamed(context, ripplesAnimation)
-              });
-
-
-
-
-             },),
-            space()
-          ],
+            )],
         )
     );
   }

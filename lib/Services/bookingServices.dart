@@ -45,28 +45,33 @@ class BookingServices{
 
   static Future<Object> matchADriver(String fullName, String phoneNumber) async {
     try {
+      var paymentType = await UserPreferences().getPaymentType();
+
       var results;
       results = BookingCollections.bookingDetails[0].item;
       var items = {
-        "size":results["itemSize"],
-        "number":results["count"],
-        "name":results["name"]
+        "size":results["itemSize"].toString(),
+        "number":results["itemCount"],
+        "name":results["itemName"].toString()
       };
       var body = jsonEncode({
       "latitude": BookingCollections.bookingDetails[0].sourceLatitude,
-      "longitude": BookingCollections.bookingDetails[0].destinationLatitude,
+      "longitude": BookingCollections.bookingDetails[0].sourceLogitude,
       "amount": BookingCollections.bookingDetails[0].amount,
       "customerName": fullName,
       "sourceAddress": BookingCollections.bookingDetails[0].sourceAddress,
       "destinationAddress": BookingCollections.bookingDetails[0].destinationAddress,
       "phoneNumber": phoneNumber,
       "item": items,
+      "paymentMethod":  paymentType.toLowerCase(),
 
       });
+
       var url = Uri.parse("$apiUrl/drivers/match-driver");
       String token = await UserPreferences().getToken();
       Response response = await https.post(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
       final Map<String, dynamic> jsonDecoded = json.decode(response.body);
+
       if (jsonDecoded['status'] == true) {
         return Success(response: response,data: jsonDecoded);
       }
@@ -82,7 +87,10 @@ class BookingServices{
     }
 
     catch (e) {
+
       return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
+
+
     }
 
 }
@@ -90,11 +98,18 @@ class BookingServices{
 
   static Future<Object> createBookingCollection(Object driverInfo, Object companyDetails, String driverId, String driverAuthId) async {
     try {
-
+      var paymentType = await UserPreferences().getPaymentType();
       var items = {
-        "name":result["itemName"],
-        "number":result["itemNumber"],
-        "size":result["size"],
+        "size":result["itemSize"].toString(),
+        "number":result["itemCount"],
+        "name":result["itemName"].toString(),
+
+      };
+      var receiver = {
+        "name" : "Prince John",
+        "phoneNumber":"+23498454543",
+        "address":"Orlu Rd Amakaohia Akwakuma",
+        "gender":"Male"
       };
       var body = jsonEncode({
         "sourceLatitude":BookingCollections.bookingDetails[0].sourceLatitude,
@@ -102,7 +117,7 @@ class BookingServices{
         "destinationLatitude":BookingCollections.bookingDetails[0].destinationLatitude,
         "destinationLogitude":BookingCollections.bookingDetails[0].destinationLogitude,
         "item":items,
-        "receiver":BookingCollections.bookingDetails[0].receiver,
+        "receiver":receiver,//BookingCollections.bookingDetails[0].receiver,
         "sender":BookingCollections.bookingDetails[0].sender,
         "driverInfo":driverInfo,
         "amount":BookingCollections.bookingDetails[0].amount,
@@ -114,7 +129,7 @@ class BookingServices{
         "timeTaken":BookingCollections.bookingDetails[0].timeTaken,
         "country":BookingCollections.bookingDetails[0].country,
         "state":BookingCollections.bookingDetails[0].state,
-        "methodOfPayment":BookingCollections.bookingDetails[0].methodOfPayment,
+        "methodOfPayment":paymentType.toString().toLowerCase(),
         "driverId":driverId,
         "driverAuthId":driverAuthId,
       });
@@ -127,6 +142,8 @@ class BookingServices{
 
         return Success(response: response,data: jsonDecoded);
       }
+
+      print("Error in creating booking ${jsonDecoded['message']}");
       return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
     } on HttpException {
       return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
@@ -139,6 +156,7 @@ class BookingServices{
     }
 
     catch (e) {
+      print("Error in creating booking $e");
       return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
     }
 
@@ -147,7 +165,7 @@ class BookingServices{
 
   static Future<Object> driverConnectionStatus(String driverId) async {
     try {
-      var url = Uri.parse("$apiUrl/drivers/match-driver?driverId=$driverId");
+      var url = Uri.parse("$apiUrl/drivers/get-driver-booking-connection?driverId=$driverId&type=accept");
       String token = await UserPreferences().getToken();
       Response response = await https.get(url, headers: {'Content-Type': 'application/json','authorization':token });
       final Map<String, dynamic> jsonDecoded = json.decode(response.body);
@@ -172,13 +190,11 @@ class BookingServices{
   }
 
 
-  static Future<Object> updateBooking( size, number,name,isLegal,bookingId,totalAmount, amount) async {
+  static Future<Object> updateBooking( item,isLegal,bookingId,totalAmount, amount) async {
     try {
 
       var body = jsonEncode({
-        "size":size,
-        "number":number,
-        "name":name,
+        "item":item,
         "isLegal":isLegal,
         "bookingId":bookingId,
         "totalAmount":totalAmount,

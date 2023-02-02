@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
+import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
+import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
+import 'package:sure_move/Logic/sharedPreference.dart';
+import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
+import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/Widgets/curvePainter.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/Widgets/curveWave.dart';
+import 'package:sure_move/Providers/userProvider.dart';
 
 class RipplesAnimation extends StatefulWidget {
   const RipplesAnimation({Key? key, this.size = 80.0, this.color = kSeaGreen,
@@ -23,9 +30,11 @@ class RipplesAnimation extends StatefulWidget {
 
 class _RipplesAnimationState extends State<RipplesAnimation> with TickerProviderStateMixin {
   late AnimationController _controller;
+  var result;
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync:this,
       value: 0.1,
@@ -34,9 +43,47 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
     )..repeat();
   }
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    getDriver();
+  }
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  getDriver(){
+    NewUser user = Provider.of<UserProvider>(context).user;
+    UserPreferences().getPaymentType().then((value) => result = value);
+    if (result == kCard) {
+
+      BlocProvider.of<BookingBloc>(context).add(
+          CustomerTransactionRequested(
+              user.email!,
+              user.firstName!,
+              user.lastName!,
+              user.phoneNumber!,
+              BookingCollections.bookingDetails[0].amount,
+              context,
+              user.userId,
+              "funds",
+              user.email
+          ));
+    } else {
+      String fullName = "${user.firstName} ${user.lastName}";
+      BlocProvider.of<BookingBloc>(context).add(
+          MatchADriverRequested(
+            fullName,
+            user.phoneNumber,
+            context,
+            user.email!,
+            user.firstName!,
+            user.lastName!,
+            BookingCollections.bookingDetails[0].amount,
+          ));
+    }
   }
   Widget _button() {
     return Center(
@@ -59,7 +106,7 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
                 curve: const CurveWave(),
               ),
             ),
-            child: SvgPicture.asset('assets/assets/pick_up.svg'),
+            child: SvgPicture.asset('assets/pick_up.svg'),
           ),
         ),
       ),
@@ -68,20 +115,32 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
+    NewUser user = Provider.of<UserProvider>(context).user;
     return Scaffold(
 
-      body: WillPopScope(
-        onWillPop: () => Future.value(false),
-        child: BlocConsumer<BookingBloc, BookingState>(
-        listener: (context, state) {
+      body: BlocConsumer<BookingBloc, BookingState>(
+      listener: (context, state) {
 
     if(state is BookingSuccess){
-    Navigator.pushNamed(context, connectedVendorPage);
+   Navigator.pushNamedAndRemoveUntil(context, connectedVendorPage, (route) => false);
     }
+     if(state is PaymentSuccessful){
+       BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(
+       "${user.firstName} ${user.lastName}",
+       user.phoneNumber,
+       context,
+       user.email!,
+       user.firstName!,
+       user.lastName!,
+       BookingCollections.bookingDetails[0].amount,
+       ));
+     }
     if(state is BookingDenied){
-      Navigator.pushNamed(context, displayAmount);
 
+       print("booking denied");
+       Navigator.pushReplacementNamed(context, displayAmount);
       ScaffoldMsg().errorMsg(context, state.errors[0]);
+
     }
     if(state is NotFound){
     Navigator.pushNamed(context, customerAwaitingScreen);
@@ -90,29 +149,31 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
     builder: (context, state) {
 
     return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
 
-            Container(
+          GestureDetector(
+            onTap: (){Navigator.pushReplacementNamed(context, displayAmount);},
+            child: Container(
                 alignment: Alignment.center,
                 child: Icon(Icons.speaker_phone, size: 44,color: kOrangeColor,)),
+          ),
 
-            Center(
-              child: CustomPaint(
-                painter: CirclePainter(
-                  _controller,
-                  color: widget.color,
-                ),
-                child: SizedBox(
-                  width: widget.size * 4.125,
-                  height: widget.size * 4.125,
-                  child: _button(),
-                ),
+          Center(
+            child: CustomPaint(
+              painter: CirclePainter(
+                _controller,
+                color: widget.color,
+              ),
+              child: SizedBox(
+                width: widget.size * 4.125,
+                height: widget.size * 4.125,
+                child: _button(),
               ),
             ),
-          ],
-        );
-      }),
-    ));
+          ),
+        ],
+      );
+      }));
   }
 }

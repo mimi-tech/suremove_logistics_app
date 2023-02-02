@@ -102,7 +102,7 @@ class DriverServices{
 
   static Future<Object> getADriverBookingConnection(driverId) async {
           try {
-          var url = Uri.parse("$apiUrl/drivers/get-driver-booking-connection?driverId=$driverId");
+          var url = Uri.parse("$apiUrl/drivers/get-driver-booking-connection?driverId=$driverId&type=connection");
           String token = await UserPreferences().getToken();
           Response response = await https.get(url, headers: {'Content-Type': 'application/json','authorization':token });
           final Map<String, dynamic> jsonDecoded = json.decode(response.body);
@@ -199,7 +199,7 @@ class DriverServices{
       });
       var url = Uri.parse("$apiUrl/drivers/rate-a-driver");
       String token = await UserPreferences().getToken();
-      Response response = await https.post(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
+      Response response = await https.put(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
       final Map<String, dynamic> jsonDecoded = json.decode(response.body);
       if (jsonDecoded['status'] == true) {
 

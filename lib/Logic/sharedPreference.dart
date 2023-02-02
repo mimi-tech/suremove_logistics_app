@@ -232,6 +232,30 @@ class UserPreferences {
     prefs.remove('accountType');
     prefs.remove('txnPin');
     prefs.remove('isOngoingBooking');
+    // prefs.remove('customerCard');
+    // prefs.remove('customerId');
+    // prefs.remove('customerActiveCard');
+    // prefs.remove('customerCode');
+    // prefs.remove('cardFirstFourDigit');
+    // prefs.remove('cardLastFourDigit');
+    // prefs.remove('authorizationCode');
+    // prefs.remove('cardType');
+    // prefs.remove('cardBrand');
+    // prefs.remove('cardBank');
+    // prefs.remove('expiringMonth');
+    // prefs.remove('expiringYear');
+    // prefs.remove('cardNumber');
+    // prefs.remove('cvv');
+
+
+
+
+  }
+
+  void removeCard() async {
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     prefs.remove('customerCard');
     prefs.remove('customerId');
     prefs.remove('customerActiveCard');

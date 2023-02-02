@@ -38,7 +38,7 @@ class _CustomerAwaitingScreenState extends State<CustomerAwaitingScreen> {
         _progressValue =  _progressValue + 0.002;
       });
       if (_progressValue.toStringAsFixed(1) == '1.0') {
-        Navigator.pushNamed(context, homePage);
+        Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
         ScaffoldMsg().errorMsg(context, "Sorry we didn't get a driver for you");
       }
     });
@@ -49,26 +49,18 @@ class _CustomerAwaitingScreenState extends State<CustomerAwaitingScreen> {
     NewUser user = Provider.of<UserProvider>(context).user;
     String fullName = "${user.firstName} ${user.lastName}";
 
-    UserPreferences().getPaymentType().then((value) => {
-    if(value != kCard){
-    BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(fullName,user.phoneNumber,context))
 
-    }else{
-    BlocProvider.of<BookingBloc>(context).add(CustomerTransactionRequested(
-    user.email!,
-    user.firstName!,
-    user.lastName!,
-    user.phoneNumber!,
-    BookingCollections.bookingDetails[0].amount,
-    context,
-    "fund",
-    user.userId,
-    user.email
-    ))
+    BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(
+      fullName,
+      user.phoneNumber,
+      context,
+      user.email!,
+      user.firstName!,
+      user.lastName!,
+      BookingCollections.bookingDetails[0].amount,
+    ));
 
-    },
-    Navigator.pushNamed(context, ripplesAnimation)
-    });
+
   });
   }
 
@@ -137,7 +129,7 @@ class _CustomerAwaitingScreenState extends State<CustomerAwaitingScreen> {
           Container(
               color: kRadioColor,
               child: IconButton(onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
               }, icon: const Icon(Icons.close))),
 
 

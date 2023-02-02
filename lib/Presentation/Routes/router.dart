@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/forgotPassword/verifyEmailCode.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/awaitingScreen.dart';
+import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/ratingDriver.dart';
+import 'package:sure_move/Presentation/Views/Funds/saveCard.dart';
 import 'package:sure_move/Presentation/Views/Rejections/permissionDenied.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/screen1.dart';
 import 'package:sure_move/Presentation/Views/Admin/DrawerComponents/Bookings/adminBookingTab.dart';
@@ -180,6 +182,12 @@ class AppRouter {
 
         case customerAwaitingScreen:
         return MaterialPageRoute( builder: (_) =>  CustomerAwaitingScreen());
+
+        case saveCard:
+        return MaterialPageRoute( builder: (_) => const SaveCard());
+
+        case ratingDriver:
+        return MaterialPageRoute( builder: (_) => const RatingDriver());
 
 
 

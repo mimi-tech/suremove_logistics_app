@@ -86,7 +86,7 @@ class DriverModel {
       currentLocation: responseData['currentLocation'] ?? "",
       currentLocationLat: responseData['currentLocationLat'] ?? "",
       currentLocationLog: responseData['currentLocationLog'] ?? "",
-      loc: responseData['loc'] ?? [],
+      loc: responseData['loc'] ?? {},
       lincense: responseData['lincense'] ?? {},
       owner: responseData['owner'] ?? true,
       suspended: responseData['suspended'] ?? false,

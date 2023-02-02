@@ -60,10 +60,13 @@ class LegalBookingConfirmation extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 YesOrNo(title: kNo,tapStudiesButton: (){
+                  var items = {
+                    "size": item["size"],
+                    "number":item["number"],
+                    "name": item["name"],
+                  };
                   BlocProvider.of<DriversBloc>(context).add(DriverUpdateBookingRequested(
-                      item["number"],
-                      item["size"],
-                      item["name"],
+                      items,
                       false,
                       booking.bookingId,
                       booking.totalAmount,
@@ -71,10 +74,13 @@ class LegalBookingConfirmation extends StatelessWidget {
                   ));
                 },color: kRadioColor ,),
                 YesOrNo(title: kYes,tapStudiesButton: (){
+                  var items = {
+                    "size": item["size"],
+                    "number":item["number"],
+                    "name": item["name"],
+                  };
                   BlocProvider.of<DriversBloc>(context).add(DriverUpdateBookingRequested(
-                      item["number"],
-                      item["size"],
-                      item["name"],
+                      items,
                       true,
                       booking.bookingId,
                       booking.totalAmount,

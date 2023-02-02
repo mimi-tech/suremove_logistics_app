@@ -23,6 +23,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+
+
     NewUser user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       floatingActionButton: Container(
@@ -37,11 +39,11 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(15.0),
             ),
             onPressed: (){
-              if(!user.isOngoingBooking! ){
+              if(user == null && !user.isOngoingBooking! ){
                 ScaffoldMsg().errorMsg(context, kOnGoingError);
               }else{
-                Navigator.pushNamed(context, customerEditBooking);
-                //Navigator.pushNamed(context, displayAmount);
+
+                Navigator.pushNamed(context, itemDetails);
               }
               },
             child: Center(child: Text("Book".toUpperCase(),style: Theme.of(context).textTheme.overline,))),

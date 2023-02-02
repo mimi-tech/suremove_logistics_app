@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sure_move/Models/bookingModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
+import 'package:sure_move/Presentation/Commons/dimens.dart';
 import 'package:sure_move/Providers/bookingProviders.dart';
 
 
@@ -111,6 +112,7 @@ class _RoutingMapState extends State<RoutingMap> {
                 child: Card(child:Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
                         textAlign: TextAlign.center,
@@ -120,7 +122,7 @@ class _RoutingMapState extends State<RoutingMap> {
                             children: <TextSpan>[
                               TextSpan(
                                 text: booking.timeTaken.toString(),
-                                style: Theme.of(context).textTheme.caption!.copyWith(color: kGreen),
+                                style: Theme.of(context).textTheme.caption!.copyWith(color: kGreen,fontSize: kFontSize12),
                               ),
 
 
@@ -135,8 +137,8 @@ class _RoutingMapState extends State<RoutingMap> {
                             style: Theme.of(context).textTheme.bodyText2,
                             children: <TextSpan>[
                               TextSpan(
-                                text: booking.distance.toString(),
-                                style: Theme.of(context).textTheme.caption!.copyWith(color: kGreen),
+                                text: "${booking.distance.round().toString()} km",
+                                style: Theme.of(context).textTheme.caption!.copyWith(color: kGreen,fontSize: kFontSize12),
                               ),
 
 

@@ -30,9 +30,12 @@ class _ReasonToCancelBookingState extends State<ReasonToCancelBooking> {
           margin: EdgeInsets.symmetric(horizontal: kMargin),
           child: Column(
               children: [
-                space(),
+                Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.cancel))),
+                spacing(),
                 const  LogoDesign(),
-                space(),
+                spacing(),
                 const Text(kCancelHeading),
 
                 Form(
@@ -50,12 +53,12 @@ class _ReasonToCancelBookingState extends State<ReasonToCancelBooking> {
                         cursorColor: (kOrangeColor),
                         keyboardType: TextInputType.text,
                         maxLines: null,
-                        maxLength: 30,
+                        maxLength: 100,
                         textCapitalization: TextCapitalization.sentences,
                         style: Theme.of(context).textTheme.bodyText1,
                         validator: Validator.validateMessage,
                         decoration: const InputDecoration(
-                          hintText: kEmail,
+                          hintText: "Typing...",
 
                         ),
                         onSaved: (String? value) {
@@ -70,8 +73,6 @@ class _ReasonToCancelBookingState extends State<ReasonToCancelBooking> {
                 ),
                 spacing(),
 
-                spacing(),
-
                 GeneralButton(tapStudiesButton: () async {
                   final form = _formKey.currentState;
 
@@ -83,11 +84,13 @@ class _ReasonToCancelBookingState extends State<ReasonToCancelBooking> {
                       currentFocus.unfocus();
                     }
                     setState(() {
-                      loading != loading;
+                      loading = !loading;
                     });
                     var result =  await BookingBloc().onCancelBookingRequested(_message.text.trim());
                     if(result == true){
-                      Navigator.pushNamed(context, homePage);
+
+                      ScaffoldMsg().successMsg(context, "Your booking have been cancelled");
+                       Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
                     }else{
                       ScaffoldMsg().errorMsg(context, result.toString());
                       Navigator.pop(context);

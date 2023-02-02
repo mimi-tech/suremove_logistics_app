@@ -6,13 +6,16 @@ import 'package:sure_move/Logic/Authentication/authState.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
+import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
 import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
+import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Funds/CashTransfer/verifyUser.dart';
 import 'package:sure_move/Presentation/Views/Funds/Funding/amountScreen.dart';
+import 'package:sure_move/Presentation/Views/Funds/saveCard.dart';
 import 'package:sure_move/Presentation/utils/generalAppbar.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
 class PaymentMethods extends StatefulWidget {
@@ -25,6 +28,9 @@ class PaymentMethods extends StatefulWidget {
 class _PaymentMethodsState extends State<PaymentMethods> {
   double padding = 15.0.sp;
   Widget spaceLine()=>SizedBox(height: MediaQuery.of(context).size.height * 0.045,);
+  dynamic firstDigits;
+  dynamic lastDigits;
+
 @override
   void initState() {
     // TODO: implement initState
@@ -35,26 +41,44 @@ class _PaymentMethodsState extends State<PaymentMethods> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     BlocProvider.of<BookingBloc>(context).add(PaymentMethodType());
+    UserPreferences().getCardDetailsNew().then((value) => {
+      firstDigits = value.cardFirstFourDigit,
+      lastDigits = value.cardLastFourDigit
+    });
     super.didChangeDependencies();
+
   }
 
 
   @override
   Widget build(BuildContext context) {
-
+     UserPreferences().getCardDetailsNew().then((value) => {
+       firstDigits = value.cardFirstFourDigit,
+       lastDigits = value.cardLastFourDigit
+     });
     var paymentType;
+
     return Scaffold(
         appBar: const GeneralAppbar(title: kPaymentMethod,),
         body: SingleChildScrollView(
           child:  BlocConsumer<BookingBloc, BookingState>(
-    listener: (context, state) {
+    listener: (context, state) async {
     if (state is BookingDenied) {
     ScaffoldMsg().errorMsg(context, state.errors[0]);
     }
     if(state is UserPaymentType){
       paymentType = state.paymentType[0];
-
     }
+    if(state is CardRemoved){
+      firstDigits = "";
+      firstDigits = "";
+      }
+    if(state is AddCard){
+      var result = await UserPreferences().getCardDetailsNew();
+      firstDigits = result.cardFirstFourDigit;
+      lastDigits = result.cardLastFourDigit;
+    }
+
     },
     builder: (context, state) {
     return Column(
@@ -95,8 +119,24 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                          )
                        ],
                      ),
+                     firstDigits == ""?Text(""): Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                       children: [
+
+                         Text("${firstDigits} xxxx xxxx ${lastDigits}"),
+                         IconButton(onPressed: (){
+                           BlocProvider.of<BookingBloc>(context).add(UserRemoveCardRequested(""));
+                         }, icon: Icon(Icons.cancel))
+                       ],
+                     ),
                      spaceLine(),
-                     FundsGeneralButton(title:kCard2 ,tapStudiesButton: (){},color: kWhiteColor,textColor: kBlackColor,)
+                     FundsGeneralButton(title:kCard2 ,tapStudiesButton: (){
+                       showModalBottomSheet(
+                           isScrollControlled: true,
+                           context: context,
+                           builder: (context) => const SaveCard()
+                       );
+                     },color: kWhiteColor,textColor: kBlackColor,)
                    ],
                  ),
                ),

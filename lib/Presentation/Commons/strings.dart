@@ -63,7 +63,7 @@ const String kBlockUserText = "Do you wish for your account to be blocked? To un
 //Booking
 const String kItemTitle = 'Item details';
 const String kItemDetails = 'Please put in details item description';
-const String kItemSize = 'Item size';
+const String kItemSize = 'Item weight';
 const String kItemNumber = 'Item count';
 const String kItemName = 'Item name';
 const String kItemDeliveryLocation = 'Item  delivery location';
@@ -93,7 +93,7 @@ const String kUpdateBookingWaring = "Updating your booking might change the tota
 const String kRating = "Rating";
 const String kRating2 = "Please rate our driver";
 const String kRating3 = "Please give us your feedback about this driver [optional]";
-
+const String kUpdatingNote = "Note: Editing the item count and item size will change the delivery amount.";
 //commons
 const String kYes = 'Yes';
 const String kNo = 'No';

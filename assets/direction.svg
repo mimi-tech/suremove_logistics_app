@@ -10,7 +10,7 @@
   </defs>
   <g id="Group_2649" data-name="Group 2649" transform="translate(-176.883 -393)">
     <path id="Rectangle_1955" data-name="Rectangle 1955" d="M0,0H111a20,20,0,0,1,20,20v6a20,20,0,0,1-20,20H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(180 393)" fill="#045c76"/>
-    <text id="Direction" transform="translate(217 424)" fill="#fff" font-size="20" font-family="SegoeUI-Bold, Segoe UI" font-weight="700"><tspan x="0" y="0">Direction</tspan></text>
+    <text id="Direction" transform="translate(217 424)" fill="#fff" font-size="20" font-family="SegoeUI-Bold, Segoe UI" font-weight="700"><tspan x="0" y="0">Refresh</tspan></text>
     <g transform="matrix(1, 0, 0, 1, 176.88, 393)" filter="url(#message)">
       <path id="message-2" data-name="message" d="M11,0a10.98,10.98,0,0,1,9.895,15.781L22,22l-6.219-1.105A11,11,0,1,1,11,0Zm4.813,12.375a.688.688,0,1,0-.688-.688A.688.688,0,0,0,15.813,12.375Zm-4.813,0a.688.688,0,1,0-.688-.688A.688.688,0,0,0,11,12.375Zm-4.813,0a.688.688,0,1,0-.688-.688A.688.688,0,0,0,6.188,12.375Z" transform="translate(9 14)" fill="#fff"/>
     </g>

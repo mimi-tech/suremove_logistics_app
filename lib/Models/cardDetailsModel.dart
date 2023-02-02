@@ -27,16 +27,16 @@ class CardDetailsModal {
 
   factory CardDetailsModal.fromJson(Map<String,dynamic> responseData){
     return CardDetailsModal(
-      cardFirstFourDigit: responseData['bin']??"",
-      cardLastFourDigit: responseData['last4']??"",
-      authorizationCode : responseData['authorization_code']??"",
-      cardType: responseData['card_type']??"",
-      cardBrand: responseData['brand']??"",
-      cardBank: responseData['bank']??"",
-      expiringMonth: responseData['exp_month']??"",
-      expiringYear: responseData['exp_year']??"",
-      cardNumber: responseData['cardNumber']??"",
-      cvv: responseData['cvv']??"",
+      cardFirstFourDigit: responseData['bin'],
+      cardLastFourDigit: responseData['last4'],
+      authorizationCode : responseData['authorization_code'],
+      cardType: responseData['card_type'],
+      cardBrand: responseData['brand'],
+      cardBank: responseData['bank'],
+      expiringMonth: responseData['exp_month'],
+      expiringYear: responseData['exp_year'],
+      cardNumber: responseData['cardNumber'],
+      cvv: responseData['cvv'],
     );
   }
 

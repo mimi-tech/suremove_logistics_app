@@ -35,17 +35,21 @@ class CalculateCostRequested extends BookingEvent {
 }
 
 class MatchADriverRequested extends BookingEvent {
-  const MatchADriverRequested(this.fullName, this.phoneNumber,this.context);
+  const MatchADriverRequested(this.fullName, this.phoneNumber,this.context,this.email, this.firstname, this.lastname, this.amount,);
   final dynamic fullName;
   final dynamic phoneNumber;
   final BuildContext context;
-
+  final String email;
+  final String firstname;
+  final String lastname;
+  final dynamic amount;
   @override
-  List<Object> get props => [fullName, phoneNumber,context];
+  List<Object> get props => [fullName, phoneNumber,context,email, firstname,lastname,amount];
 }
 
 class UpdateBookingRequested extends BookingEvent {
-  const UpdateBookingRequested(this.itemNumber, this.itemSize, this.itemName, this.isLegal, this.bookingId, this.context);
+  const UpdateBookingRequested( this.item,this.itemNumber, this.itemSize, this.itemName, this.isLegal, this.bookingId, this.context);
+  final Object item;
   final dynamic itemNumber;
   final dynamic itemSize;
   final dynamic itemName;
@@ -53,8 +57,9 @@ class UpdateBookingRequested extends BookingEvent {
   final dynamic bookingId;
   final BuildContext context;
 
+
   @override
-  List<Object> get props => [itemNumber, itemSize, itemName, isLegal,bookingId, context];
+  List<Object> get props => [item,itemNumber, itemSize, itemName, isLegal,bookingId, context];
 }
 
 class CancelBookingRequested extends BookingEvent {
@@ -88,4 +93,36 @@ class CustomerTransactionRequested extends BookingEvent {
 
   @override
   List<Object> get props => [email, firstname,lastname, phoneNumber,amount,context,userAuthId,type,userEmail,];
+}
+
+
+class UserAddCardRequested extends BookingEvent {
+  const UserAddCardRequested(this.cardNumber, this.exp_month, this.exp_year, this.cvv, this.bin,this.last4);
+  final String cardNumber;
+  final String exp_month;
+  final String exp_year;
+  final String cvv;
+  final dynamic bin;
+  final dynamic last4;
+
+
+  @override
+  List<Object> get props => [cardNumber, exp_month,exp_year, cvv,bin,last4];
+}
+
+class UserRemoveCardRequested extends BookingEvent {
+  const UserRemoveCardRequested(this.token,);
+  final String token;
+
+  @override
+  List<Object> get props => [token];
+}
+
+class CustomerGetABookingRequested extends BookingEvent {
+  const CustomerGetABookingRequested(this.customerAuthId );
+  final String customerAuthId;
+
+
+  @override
+  List<Object> get props => [customerAuthId];
 }
