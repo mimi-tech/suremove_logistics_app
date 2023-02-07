@@ -45,6 +45,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
       firstDigits = value.cardFirstFourDigit,
       lastDigits = value.cardLastFourDigit
     });
+
     super.didChangeDependencies();
 
   }
@@ -52,9 +53,11 @@ class _PaymentMethodsState extends State<PaymentMethods> {
 
   @override
   Widget build(BuildContext context) {
+
      UserPreferences().getCardDetailsNew().then((value) => {
        firstDigits = value.cardFirstFourDigit,
-       lastDigits = value.cardLastFourDigit
+       lastDigits = value.cardLastFourDigit,
+
      });
     var paymentType;
 

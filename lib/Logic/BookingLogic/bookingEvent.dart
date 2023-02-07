@@ -48,18 +48,19 @@ class MatchADriverRequested extends BookingEvent {
 }
 
 class UpdateBookingRequested extends BookingEvent {
-  const UpdateBookingRequested( this.item,this.itemNumber, this.itemSize, this.itemName, this.isLegal, this.bookingId, this.context);
+  const UpdateBookingRequested( this.item,this.itemNumber, this.itemSize, this.itemName, this.weight, this.isLegal, this.bookingId, this.context);
   final Object item;
   final dynamic itemNumber;
   final dynamic itemSize;
   final dynamic itemName;
+  final dynamic weight;
   final dynamic isLegal;
   final dynamic bookingId;
   final BuildContext context;
 
 
   @override
-  List<Object> get props => [item,itemNumber, itemSize, itemName, isLegal,bookingId, context];
+  List<Object> get props => [item,itemNumber, itemSize, itemName,weight, isLegal,bookingId, context];
 }
 
 class CancelBookingRequested extends BookingEvent {

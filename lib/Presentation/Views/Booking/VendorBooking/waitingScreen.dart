@@ -25,31 +25,26 @@ class VendorWaitingScreen extends StatefulWidget {
 class _VendorWaitingScreenState extends State<VendorWaitingScreen> {
 
   Timer? timer;
- @override
-  void didChangeDependencies() {
+
+  @override
+  void initState() {
     // TODO: implement initState
-    super.didChangeDependencies();
-   getLocation();
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
+    getLocation();
+    });
+  }
+  getLocation() async {
+    DriverModel driver = Provider.of<DriverProvider>(context,listen: false).driver;
+      if(driver.onlineStatus!){
+      var result = await DriversBloc().onStreamingDriverLocation(driver.driverId,context);
+
+      if (result != false) {
+        Provider.of<DriverProvider>(context,listen: false).setDriver(result);
+      }
+
   }
 
-  getLocation(){
-    DriverModel driver = Provider.of<DriverProvider>(context).driver;
-     if(driver.onlineStatus!){
-    timer = Timer.periodic(const Duration(minutes: 15), (timer) async {
-      var result = await DriversBloc().onStreamingDriverLocation(driver.driverId,context);
-      if (result == true) {
-        setState(() {});
-      } else {
-        ScaffoldMsg().errorMsg(context, result.toString());
-        //timer.cancel();
-      }
-    });
-  }else{
-       if(timer != null){
-         timer!.cancel();
-       }
-
-     }
  }
   @override
   void dispose() {
@@ -61,7 +56,7 @@ class _VendorWaitingScreenState extends State<VendorWaitingScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    DriverModel driver = Provider.of<DriverProvider>(context).driver;
+    DriverModel driver = Provider.of<DriverProvider>(context,listen: false).driver;
     bool showOnOff = driver.onlineStatus!;
     //print(driver.driverId);
     return Scaffold(
@@ -91,6 +86,7 @@ class _VendorWaitingScreenState extends State<VendorWaitingScreen> {
                     setState(() {
                       showOnOff = val;
                     });
+
                   }
 
                 },
@@ -112,7 +108,6 @@ class _VendorWaitingScreenState extends State<VendorWaitingScreen> {
           context, decisionScreen, (route) => false);
     });
 
-           print("hhhhhhhhhh${snapshot.data}");
          }
           return Column(
               children: [
@@ -153,7 +148,7 @@ class _VendorWaitingScreenState extends State<VendorWaitingScreen> {
                       Text("${driver.firstName}\n${driver.lastName}",style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kLightDoneColor),),
 
                       SizedBox(
-                        width: 100.w,
+                        width: 80.w,
                         child: ElevatedButton(
                           onPressed: (){},
                           style: ButtonStyle(
@@ -170,7 +165,7 @@ class _VendorWaitingScreenState extends State<VendorWaitingScreen> {
                           child: Row(
                             children: [
                               Icon(Icons.star,size: 20.0.sp,),
-                               Text("${driver.rating}"),
+                               Text("${driver.rating.toDouble()}"),
                             ],
                           ),
 

@@ -16,6 +16,7 @@ import 'package:sure_move/Presentation/Commons/dimens.dart';
 import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
+import 'package:sure_move/Presentation/Views/Booking/VendorBooking/legalBookingConfirmation.dart';
 import 'package:sure_move/Presentation/utils/enums.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
 import 'package:sure_move/Presentation/utils/naira.dart';
@@ -29,21 +30,69 @@ class DecisionScreen extends StatefulWidget {
 }
 
 class _DecisionScreenState extends State<DecisionScreen> {
-  Widget space(){return SizedBox(height: 8.0.h,);}
+  Widget space(){return SizedBox(height: 3.0.h,);}
 
   @override
   Widget build(BuildContext context) {
     DriverModel driver = Provider.of<DriverProvider>(context).driver;
     BookingModel booking = Provider.of<BookingProvider>(context).user;
+    dynamic item = booking.item;
     dynamic sender = booking.sender!;
     return Scaffold(body: BlocConsumer<DriversBloc, DriverState>(
         listener: (context, state) {
 
           if(state is DriverSuccess){
-            Navigator.pushNamed(context, deliveryScreen);
+            Navigator.pushNamedAndRemoveUntil(context, deliveryScreen, (route) => false);
+            showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                isDismissible: false,
+                builder: (context) => const LegalBookingConfirmation()
+            );
           }
           if(state is NotFound){
-            Navigator.pushReplacementNamed(context, vendorWaitingScreen);
+
+            var customerInfo = {
+              "id":sender["id"],
+              "name":sender["name"],
+              "profilePicture":sender["profilePicture"],
+              "phoneNumber":sender["phoneNumber"],
+              "amount":booking.totalAmount,
+            };
+            var companyInfo = {
+              "id":driver.companyId,
+              "name":driver.companyName,
+            };
+            var bookingDetails = {
+              "size":item["size"],
+              "number":item["number"],
+              "name":item["name"],
+              "weight":item["weight"],
+              "sourceAddress":booking.sourceAddress,
+              "destinationAddress":booking.destinationAddress,
+
+            };
+            BlocProvider.of<DriversBloc>(context).add(DriverBookingRejectionRequested(
+              driver.driverId,
+              driver.firstName,
+              driver.lastName,
+              driver.driverEmail,
+              driver.companyId,
+                customerInfo,
+                driver.driverPhoneNumber,
+              driver.profileImageUrl,
+
+              booking.totalAmount,
+                companyInfo,
+                bookingDetails
+            ));
+
+
+          }
+
+          if(state is DriverRejectedBooking){
+
+            Navigator.pushNamedAndRemoveUntil(context, vendorWaitingScreen, (route) => false);
           }
 
           if(state is DriverDenied){
@@ -77,12 +126,12 @@ class _DecisionScreenState extends State<DecisionScreen> {
                               RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
-                                    text: "Delivery ".toUpperCase(),
-                                    style: Theme.of(context).textTheme.caption,
+                                    text: "PickUp ".toUpperCase(),
+                                    style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.normal),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: kVendor.toUpperCase(),
-                                        style: Theme.of(context).textTheme.caption,
+                                        text: "point".toUpperCase(),
+                                        style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.normal),
                                       ),
 
 
@@ -95,13 +144,14 @@ class _DecisionScreenState extends State<DecisionScreen> {
 
                         ),
                         space(),
-                        Text(booking.sourceAddress.toString(),style: Theme.of(context).textTheme.overline!.copyWith(fontSize: kFontSize13),),
-                        Text(booking.destinationAddress.toString(),style: Theme.of(context).textTheme.overline!.copyWith(fontSize: kFontSize13),),
+                        Text(booking.sourceAddress.toString(),style: Theme.of(context).textTheme.overline!.copyWith(fontSize: kFontSize12,fontWeight: FontWeight.normal),),
+                        Text("Delivery point",style: Theme.of(context).textTheme.headline4,),
+                        Text(booking.destinationAddress.toString(),style: Theme.of(context).textTheme.overline!.copyWith(fontSize: kFontSize12,fontWeight: FontWeight.normal),),
 
                         space(),
-                         Text("${booking.timeTaken} (${booking.distance}Km)",style: const TextStyle(color: kYellow,fontWeight: FontWeight.bold),),
+                         Text("${booking.timeTaken} (${booking.distance.round()}Km)",style:  TextStyle(color: kYellow,fontWeight: FontWeight.normal,fontSize: kFontSize12 ),),
                         space(),
-                        Text("${driver.firstName}\n${driver.lastName}",style: Theme.of(context).textTheme.overline,),
+                        Text("${driver.firstName}\n${driver.lastName}",style: Theme.of(context).textTheme.overline!.copyWith(fontSize: kFontSize12,fontWeight: FontWeight.normal)),
 
                       ],
                     ),

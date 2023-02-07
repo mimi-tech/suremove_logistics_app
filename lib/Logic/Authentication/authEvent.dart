@@ -103,10 +103,21 @@ class AuthUpdatePasswordRequested extends AuthEvent {
 }
 
 class AuthSendEmailVerificationCode extends AuthEvent {
-  const AuthSendEmailVerificationCode(this.email);
+  const AuthSendEmailVerificationCode(this.email,this.newEmailAddress);
   final String email;
+  final dynamic newEmailAddress;
 
 
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [email,newEmailAddress];
 }
+
+class AuthUpdatePhoneNumberRequested extends AuthEvent {
+  const AuthUpdatePhoneNumberRequested(this.newPhoneNumber);
+  final String newPhoneNumber;
+
+
+  @override
+  List<Object> get props => [newPhoneNumber];
+}
+class AuthVerifyEmailCode extends AuthEvent {}

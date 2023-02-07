@@ -46,7 +46,7 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    getDriver();
+    //getDriver();
   }
   @override
   void dispose() {
@@ -54,37 +54,8 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
     super.dispose();
   }
 
-  getDriver(){
-    NewUser user = Provider.of<UserProvider>(context).user;
-    UserPreferences().getPaymentType().then((value) => result = value);
-    if (result == kCard) {
 
-      BlocProvider.of<BookingBloc>(context).add(
-          CustomerTransactionRequested(
-              user.email!,
-              user.firstName!,
-              user.lastName!,
-              user.phoneNumber!,
-              BookingCollections.bookingDetails[0].amount,
-              context,
-              user.userId,
-              "funds",
-              user.email
-          ));
-    } else {
-      String fullName = "${user.firstName} ${user.lastName}";
-      BlocProvider.of<BookingBloc>(context).add(
-          MatchADriverRequested(
-            fullName,
-            user.phoneNumber,
-            context,
-            user.email!,
-            user.firstName!,
-            user.lastName!,
-            BookingCollections.bookingDetails[0].amount,
-          ));
-    }
-  }
+
   Widget _button() {
     return Center(
       child: ClipRRect(
@@ -136,14 +107,13 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
        ));
      }
     if(state is BookingDenied){
-
-       print("booking denied");
        Navigator.pushReplacementNamed(context, displayAmount);
       ScaffoldMsg().errorMsg(context, state.errors[0]);
 
     }
     if(state is NotFound){
-    Navigator.pushNamed(context, customerAwaitingScreen);
+      Navigator.pushNamedAndRemoveUntil(context, customerAwaitingScreen, (route) => false);
+
     }
     },
     builder: (context, state) {

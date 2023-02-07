@@ -22,6 +22,12 @@ class BookingSuccess extends BookingState {
   List<Object> get props => [];
 }
 
+class BookingCostCalculated extends BookingState {
+
+  @override
+  List<Object> get props => [];
+}
+
 class BookingNoPayment extends BookingState {
 
   @override

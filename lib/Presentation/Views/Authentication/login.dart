@@ -35,7 +35,8 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMsg().errorMsg(context, state.errors[0]);
       }
       if(state is AuthSuccess){
-       Navigator.pushNamed(context, homePage);
+       
+       Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
       }
     },
     builder: (context, state) {

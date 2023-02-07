@@ -4,6 +4,10 @@ import 'package:sure_move/Presentation/Views/Authentication/forgotPassword/verif
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/awaitingScreen.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/ratingDriver.dart';
 import 'package:sure_move/Presentation/Views/Funds/saveCard.dart';
+import 'package:sure_move/Presentation/Views/Profile/confirmMobileNumber.dart';
+import 'package:sure_move/Presentation/Views/Profile/profileTabview.dart';
+import 'package:sure_move/Presentation/Views/Profile/userData.dart';
+import 'package:sure_move/Presentation/Views/Profile/verifyEmailOtp.dart';
 import 'package:sure_move/Presentation/Views/Rejections/permissionDenied.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/screen1.dart';
 import 'package:sure_move/Presentation/Views/Admin/DrawerComponents/Bookings/adminBookingTab.dart';
@@ -188,6 +192,15 @@ class AppRouter {
 
         case ratingDriver:
         return MaterialPageRoute( builder: (_) => const RatingDriver());
+
+        case usersData:
+        return MaterialPageRoute( builder: (_) => const ProfileTabs());
+
+        case verifyUpdatedMobileNumber:
+        return MaterialPageRoute( builder: (_) => const VerifyUpdatedMobileNumber());
+
+        case verifyEmailOTP:
+        return MaterialPageRoute( builder: (_) => const VerifyEmailOTP());
 
 
 

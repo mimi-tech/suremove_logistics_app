@@ -16,7 +16,7 @@ class Validator {
     if(value!.isEmpty) {
       return "First name can't be empty";
     }
-    if(value.length < 6) {
+    if(value.length < 2) {
       return "First name is too short";
     }
 
@@ -27,7 +27,7 @@ class Validator {
     if(value!.isEmpty) {
       return "Last name can't be empty";
     }
-    if(value.length < 6) {
+    if(value.length < 2) {
       return "Last name is too short";
     }
 
@@ -59,11 +59,18 @@ class Validator {
 
   static String? validateItemSize(String? value) {
     if(value!.isEmpty) {
-      return "Item number can't be empty";
+      return "Item size can't be empty";
     }
-    if(int.parse(value) > 50) {
-      return "Item size can't be more than 50kg";
+
+
+    return null;
+  }
+
+  static String? validateItemWeight(String? value) {
+    if(value!.isEmpty) {
+      return "Item weight can't be empty";
     }
+
 
     return null;
   }

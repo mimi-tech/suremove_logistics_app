@@ -1,4 +1,4 @@
-const String kAppTitle = 'SURE MOVE LOGISTICS';
+const String kAppTitle = 'SUREMOVE LOGISTICS';
 const String kMobileTitle = 'Enter your mobile number correctly';
 const String kMobileTitle2 = 'Enter correctly the mobile number you used during registration';
 
@@ -14,6 +14,7 @@ const String kGeneratePin = 'Please click on generate admin PIN below to create 
 const String kGeneratePin2 = "You have successfully generated a PIN for ";
 const String kPasswordError = 'Please enter your password';
 const String kMobileError = 'Please enter your phone number';
+const String kMobileError2 = 'Please enter your new phone number';
 const String kEmailError = 'Please enter your Email address';
 const String kEmailError5 = 'Please enter admin email';
 
@@ -29,6 +30,8 @@ const String kResendPin = 'Did not receive any code ';
 const String kResendPin2 = 'Resend';
 const String kEmail = 'Enter your email';
 const String kEmail2 = 'Email';
+const String kEmail3 = 'Old Email';
+const String kEmail4 = 'Enter new Email';
 const String kUsername = 'Enter your username';
 const String kUsername2 = 'Username';
 
@@ -63,7 +66,10 @@ const String kBlockUserText = "Do you wish for your account to be blocked? To un
 //Booking
 const String kItemTitle = 'Item details';
 const String kItemDetails = 'Please put in details item description';
-const String kItemSize = 'Item weight';
+const String kItemSize = 'Item size';
+const String kItemSize2 = 'Please select your item size range';
+const String kItemWeight2 = 'Please select your item weight range';
+const String kItemWeight = 'Item weight';
 const String kItemNumber = 'Item count';
 const String kItemName = 'Item name';
 const String kItemDeliveryLocation = 'Item  delivery location';
@@ -94,6 +100,7 @@ const String kRating = "Rating";
 const String kRating2 = "Please rate our driver";
 const String kRating3 = "Please give us your feedback about this driver [optional]";
 const String kUpdatingNote = "Note: Editing the item count and item size will change the delivery amount.";
+const String kAppreciation = "Thank you for using our services";
 //commons
 const String kYes = 'Yes';
 const String kNo = 'No';

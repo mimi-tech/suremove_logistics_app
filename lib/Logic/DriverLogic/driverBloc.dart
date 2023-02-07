@@ -26,12 +26,9 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
     on<DriverConfirmBookingRequested>(_onDriverConfirmBooking);
     on<DriverGetABookingRequested>(_onGetABookingStream);
     on<CustomerRatingDriverRequested>(_onCustomerRatingDriver);
+    on<DriverBookingRejectionRequested>(_onDriverBookingRejectionRequested);
 
   }
-
-
-
-  bool check = true;
   onUpdatingDriverStatusRequested(driverId,type,context) async {
     try{
       var response = await DriverServices.updateDriverStatus(driverId,type);
@@ -52,6 +49,7 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
 
   onStreamingDriverLocation(driversId,context)  async {
     try{
+
       var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
           List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
 
@@ -69,17 +67,17 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
           if (response is Success) {
 
             DriverModel driver = DriverModel.fromJson(response.data!["data"]);
-            Provider.of<DriverProvider>(context,listen: false).setDriver(driver);
-            return true;
+
+            return driver;
           }
           if(response is Failure){
-            return response.errorResponse.toString();
+            return false;
           }
 
 
     } catch (e) {
 
-      return e;
+      return false;
 
     }
 
@@ -116,6 +114,7 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
         if(event.type == DecisionType.accept.name){
           emit(DriverSuccess());
         }else{
+          //TODO:call the endpoint for rejected booking
           emit(NotFound());
         }
 
@@ -149,27 +148,17 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
     }
   }
 
-  Stream<dynamic> _onGetABookingStream(DriverGetABookingRequested event , Emitter<DriverState> emit) async* {
-
-    while (check) {
-      await Future.delayed(const Duration(milliseconds: 500));
+   _onGetABookingStream(DriverGetABookingRequested event , Emitter<DriverState> emit) async {
+    emit(DriverLoading());
       var response = await BookingServices.getABooking(event.customerAuthId);
-
       if(response is Success){
-
-          BookingModel booking = BookingModel.fromJson(response.data!["data"]);
-          Provider.of<BookingProvider>(event.context,listen: false).setUser(booking);
+        BookingModel booking = BookingModel.fromJson(response.data!["data"]);
           if(booking.confirmDelivery == true){
-            emit(DeliveryConfirmed());
-            check = false;
+            emit(DeliveryConfirmed([booking]));
+
           }
 
         }
-
-
-      }
-
-
     }
 
   _onCustomerRatingDriver(CustomerRatingDriverRequested event, Emitter<DriverState> emit) async {
@@ -180,9 +169,35 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
 
     }
     if(response is Failure){
-      print(response.errorResponse);
-      print(event.driverId);
       emit(DriverDenied([response.errorResponse.toString()]));
+    }
+  }
+
+  _onDriverBookingRejectionRequested(DriverBookingRejectionRequested event, Emitter<DriverState> emit) async {
+    try{
+    emit(DriverLoading());
+    var response = await DriverServices.driverBookingRejections(
+      event.driverId,
+      event.firstName,
+      event.lastName,
+      event.email,
+      event.companyId,
+      event.customerInfo,
+      event.phoneNumber,
+      event.profilePicture,
+      event.amount,
+      event.companyInfo,
+      event.bookingDetails
+    );
+    if(response is Success){
+      emit(DriverRejectedBooking());
+
+    }
+    if(response is Failure){
+      emit(DriverDenied([response.errorResponse.toString()]));
+    }
+  }catch(e){
+      emit(DriverDenied([e.toString()]));
     }
   }
   }

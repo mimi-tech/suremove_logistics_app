@@ -17,6 +17,7 @@ class LegalBookingConfirmation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String errorText = "";
     BookingModel booking = Provider.of<BookingProvider>(context).user;
     dynamic item = booking.item;
     return SingleChildScrollView(
@@ -24,10 +25,12 @@ class LegalBookingConfirmation extends StatelessWidget {
         listener: (context, state) {
 
       if(state is DriverIsLegal){
+
       Navigator.pop(context);
+
       }
       if(state is DriverDenied){
-        ScaffoldMsg().errorMsg(context, state.errors[0]);
+        errorText = state.errors[0];
       }
 
     },
@@ -44,11 +47,11 @@ class LegalBookingConfirmation extends StatelessWidget {
           textAlign: TextAlign.center,
           text: TextSpan(
               text: "Note: ",
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.bodyText2,
               children: <TextSpan>[
                 TextSpan(
                   text: "Selecting Yes while this item is not legal calls for a penalty",
-                  style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.red),
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kDarkBlue),
                 ),
 
 
@@ -64,6 +67,7 @@ class LegalBookingConfirmation extends StatelessWidget {
                     "size": item["size"],
                     "number":item["number"],
                     "name": item["name"],
+                    "weight":item["weight"]
                   };
                   BlocProvider.of<DriversBloc>(context).add(DriverUpdateBookingRequested(
                       items,
@@ -78,6 +82,7 @@ class LegalBookingConfirmation extends StatelessWidget {
                     "size": item["size"],
                     "number":item["number"],
                     "name": item["name"],
+                    "weight":item["weight"]
                   };
                   BlocProvider.of<DriversBloc>(context).add(DriverUpdateBookingRequested(
                       items,
@@ -89,7 +94,9 @@ class LegalBookingConfirmation extends StatelessWidget {
 
                 } ,),
               ],
-            )
+            ),
+            spacing(),
+            (state is DriverDenied)? Text(errorText,style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.red)):Text("")
 
           ],
         ),

@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
+
 import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
 import 'package:sure_move/Logic/sharedPreference.dart';
-import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
-import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
-import 'package:sure_move/Models/userModel.dart';
+
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
-import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/verifyTxn.dart';
 import 'package:sure_move/Presentation/Views/Funds/saveCard.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
-import 'package:sure_move/Presentation/utils/googlemapScreen.dart';
-import 'package:sure_move/Providers/userProvider.dart';
+
 class DisplayAmount extends StatefulWidget {
   const DisplayAmount({Key? key}) : super(key: key);
 
@@ -30,31 +25,17 @@ class _DisplayAmountState extends State<DisplayAmount> {
   dynamic lat;
   dynamic lng;
   dynamic userPaymentType;
-  dynamic cardIsValid;
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    getPaymentType();
-    super.didChangeDependencies();
-  }
-  getPaymentType() async{
 
-       var result =  await UserPreferences().getPaymentType();
-        var cardDetails = await UserPreferences().getCardDetailsNew();
-       cardIsValid = cardDetails.expiringYear;
-           setState(() {
-       userPaymentType = result;
 
-     });
-  }
+
   @override
   Widget build(BuildContext context) {
-    NewUser user = Provider.of<UserProvider>(context).user;
-    getPaymentType();
+
     for(var values in BookingCollections.bookingDetails){
       lat = values.sourceLatitude;
       lng = values.sourceLogitude;
     }
+    UserPreferences().getPaymentType().then((value) => userPaymentType = value);
 
     return Scaffold(
         body: Column(
@@ -64,7 +45,7 @@ class _DisplayAmountState extends State<DisplayAmount> {
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
-                  child: GoogleMapScreen(latitude: lat,longitude: lng),
+                  child: Text("jk")//GoogleMapScreen(latitude: lat,longitude: lng),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
@@ -181,9 +162,11 @@ class _DisplayAmountState extends State<DisplayAmount> {
 
               ],
             )),
-            GeneralButton(title: kBook,tapStudiesButton: () {
-              if (userPaymentType== kCard)  {
-                if (cardIsValid == "" || cardIsValid == null) {
+            GeneralButton(title: kBook,tapStudiesButton: () async {
+              var cardDetails = await UserPreferences().getCardDetailsNew();
+              var paymentType = await UserPreferences().getPaymentType();
+              if (paymentType == kCard)  {
+                if (cardDetails.expiringYear == "" || cardDetails.expiringYear  == null) {
                   //move to add card
 
                   showModalBottomSheet(
@@ -191,8 +174,9 @@ class _DisplayAmountState extends State<DisplayAmount> {
                       context: context,
                       builder: (context) => const SaveCard()
                   );
-                  ScaffoldMsg().successMsg(context, "Please enter your card");
+
                 } else {
+
                   showModalBottomSheet(
                       isScrollControlled: true,
                       context: context,
@@ -200,6 +184,8 @@ class _DisplayAmountState extends State<DisplayAmount> {
                   );
                 }
               }else{
+
+
                 showModalBottomSheet(
                     isScrollControlled: true,
                     context: context,
@@ -208,7 +194,9 @@ class _DisplayAmountState extends State<DisplayAmount> {
               }
             }
 
-            )],
+            ),
+          space()
+          ],
         )
     );
   }

@@ -33,8 +33,16 @@ class AuthLoading extends AuthState {
 
 
 class AuthSuccess extends AuthState {
-  // final List<String> success;
-  // const AuthSuccess(this.success);
+  final List<String>? success;
+  const AuthSuccess(this.success);
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdatePhoneNumberSuccess extends AuthState {
+  final List<String>? success;
+  const UpdatePhoneNumberSuccess(this.success);
 
   @override
   List<Object> get props => [];

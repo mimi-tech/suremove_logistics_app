@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
@@ -13,6 +14,7 @@ import 'package:sure_move/Presentation/Views/Commons/drawer.dart';
 import 'package:sure_move/Presentation/Views/Widgets/drawerHandle.dart';
 import 'package:sure_move/Presentation/utils/logo.dart';
 import 'package:sure_move/Providers/userProvider.dart';
+import 'package:sure_move/Services/apiConstants.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -23,7 +25,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-
 
     NewUser user = Provider.of<UserProvider>(context).user;
     return Scaffold(
@@ -38,11 +39,10 @@ class _HomePageState extends State<HomePage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
-            onPressed: (){
+            onPressed: () async {
               if(user == null && !user.isOngoingBooking! ){
                 ScaffoldMsg().errorMsg(context, kOnGoingError);
               }else{
-
                 Navigator.pushNamed(context, itemDetails);
               }
               },

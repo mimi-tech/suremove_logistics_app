@@ -42,4 +42,7 @@ const permissionDeniedScreen = "/permission-denied-screen";
 const customerAwaitingScreen = "/customer-awaiting-screen";
 const saveCard = "/save-card-screen";
 const ratingDriver = "/rating-driver";
+const usersData = "/user-data";
+const verifyUpdatedMobileNumber = "/verify-updated-mobile-number";
+const verifyEmailOTP = "/verify-email-otp";
 

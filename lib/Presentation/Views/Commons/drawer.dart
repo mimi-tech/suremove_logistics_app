@@ -9,11 +9,13 @@ import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
+import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Admin/verifyUser.dart';
 import 'package:sure_move/Presentation/Views/Authentication/blockAccount.dart';
 import 'package:sure_move/Presentation/utils/enums.dart';
+import 'package:sure_move/Presentation/utils/profilePicture.dart';
 import 'package:sure_move/Providers/driverProvider.dart';
 import 'package:sure_move/Providers/userProvider.dart';
 class DrawerPage extends StatefulWidget {
@@ -37,12 +39,25 @@ class _DrawerPageState extends State<DrawerPage> {
           Row(
             children: [
               SizedBox(width: 10.w,),
-      SvgPicture.asset('assets/user.svg'),
+      GestureDetector(
+          onTap: ()=>Navigator.pushNamed(context, usersData),
+          child: ProfilePicture(image: user.profileImageUrl,)),
            SizedBox(width: 30.w,),
               Column(
                 children: [
                   Text(user == null?"":user.firstName.toString(),style: Theme.of(context).textTheme.bodyText1),
                   Text(kViewProfile,style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kRadioColor),),
+                  user.isEmailVerified == true?Row(
+                    children: [
+                      Text("Verified",style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kGreen2),),
+                      Icon(Icons.check,color: kGreen2,size: 15.sp,),
+                    ],
+                  ):
+                  GestureDetector(
+                      onTap: (){ BlocProvider.of<AuthBloc>(context).add(AuthVerifyEmailCode());
+                      ScaffoldMsg().successMsg(context, "In progress");
+                        },
+                      child: Text("Verify account",style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kRedColor),)),
 
                 ],
               )

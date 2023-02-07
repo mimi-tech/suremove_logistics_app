@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:sure_move/Models/bookingModel.dart';
 
 abstract class DriverState extends Equatable {
   const DriverState([List props = const []]): super();
@@ -34,6 +35,12 @@ class DriverIsLegal extends DriverState {
   List<Object> get props => [];
 }
 
+class DriverRejectedBooking extends DriverState {
+
+  @override
+  List<Object> get props => [];
+}
+
 class NotFound extends DriverState {
   @override
   List<Object> get props => [];
@@ -49,6 +56,8 @@ class DriverDenied extends DriverState {
 
 
 class DeliveryConfirmed extends DriverState {
+  final List<BookingModel> data;
+  const DeliveryConfirmed(this.data);
   @override
   List<Object> get props => [];
 }

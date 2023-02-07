@@ -1,8 +1,9 @@
 class Success{
   int? code;
   Object? response;
+  String? message;
   Map<String, dynamic>? data;
-  Success({this.code, this.response, this.data});
+  Success({this.code, this.response, this.data,this.message});
 }
 
 class Success2{

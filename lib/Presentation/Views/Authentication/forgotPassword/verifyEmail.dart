@@ -89,7 +89,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     if (!currentFocus.hasPrimaryFocus) {
                       currentFocus.unfocus();
                     }
-                    BlocProvider.of<AuthBloc>(context).add(AuthSendEmailVerificationCode(_email.text));
+                    BlocProvider.of<AuthBloc>(context).add(AuthSendEmailVerificationCode(_email.text,null));
                   }
                 },title: kVerify,)
 

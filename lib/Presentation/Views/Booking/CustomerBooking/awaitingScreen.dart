@@ -33,6 +33,7 @@ class _CustomerAwaitingScreenState extends State<CustomerAwaitingScreen> {
   @override
   void initState() {
     super.initState();
+    NewUser user = Provider.of<UserProvider>(context, listen: false).user;
     timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       setState(() {
         _progressValue =  _progressValue + 0.002;
@@ -42,11 +43,11 @@ class _CustomerAwaitingScreenState extends State<CustomerAwaitingScreen> {
         ScaffoldMsg().errorMsg(context, "Sorry we didn't get a driver for you");
       }
     });
-    getADriver();
+    getADriver(user);
   }
-  getADriver(){
-    timers = Timer.periodic(const Duration(minutes: 5), (timers) {
-    NewUser user = Provider.of<UserProvider>(context).user;
+  getADriver(NewUser user ){
+    timers = Timer.periodic(const Duration(minutes: 2), (timers) {
+
     String fullName = "${user.firstName} ${user.lastName}";
 
 
@@ -74,16 +75,29 @@ class _CustomerAwaitingScreenState extends State<CustomerAwaitingScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    NewUser user = Provider.of<UserProvider>(context).user;
     return Scaffold(body: WillPopScope(
       onWillPop: () => Future.value(false),
       child: BlocConsumer<BookingBloc, BookingState>(
       listener: (context, state) {
 
     if(state is BookingSuccess){
-    Navigator.pushNamed(context, connectedVendorPage);
+      Navigator.pushNamedAndRemoveUntil(context, connectedVendorPage, (route) => false);
+    }
+
+    if(state is NotFound){
+      BlocProvider.of<BookingBloc>(context).add(MatchADriverRequested(
+        "${user.firstName} ${user.lastName}",
+        user.phoneNumber,
+        context,
+        user.email!,
+        user.firstName!,
+        user.lastName!,
+        BookingCollections.bookingDetails[0].amount,
+      ));
     }
     if(state is BookingDenied){
-    Navigator.pushNamed(context, displayAmount);
+      Navigator.pushReplacementNamed(context, displayAmount);
 
     ScaffoldMsg().errorMsg(context, state.errors[0]);
     }

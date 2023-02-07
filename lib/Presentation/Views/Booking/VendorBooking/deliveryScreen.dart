@@ -27,25 +27,8 @@ class DeliveryScreen extends StatefulWidget {
 }
 
 class _DeliveryScreenState extends State<DeliveryScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        isDismissible: false,
-        builder: (context) => const LegalBookingConfirmation()
-    );
-  }
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    BookingModel booking = Provider.of<BookingProvider>(context).user;
-    BlocProvider.of<DriversBloc>(context).add(DriverGetABookingRequested(booking.customerAuthId.toString(),context));
 
-  }
+
   @override
   Widget build(BuildContext context) {
     BookingModel booking = Provider.of<BookingProvider>(context).user;
@@ -65,6 +48,10 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
         ScaffoldMsg().errorMsg(context, state.errors[0]);
       }
 
+      if(state is DeliveryConfirmed){
+        Provider.of<BookingProvider>(context,listen: false).setUser(state.data[0]);
+      }
+
     },
     builder: (context, state) {
 
@@ -82,7 +69,11 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                   InkWell(
                       onTap: (){AuthBloc().launchTel(sender["phoneNumber"]);},
                       child: SvgPicture.asset('assets/call.svg')),
-                  SvgPicture.asset('assets/direction.svg'),
+                  InkWell(
+                      onTap: (){
+                        BlocProvider.of<DriversBloc>(context).add(DriverGetABookingRequested(booking.customerAuthId.toString(),context));
+                        },
+                      child: SvgPicture.asset('assets/direction.svg')),
                 ],
               ),
 
@@ -141,7 +132,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
               const Divider(color: kWhiteColor,thickness: 1.5,),
               spacing(),
 
-            (state is DeliveryConfirmed)? GeneralButton(tapStudiesButton: (){
+            booking.confirmDelivery == true? GeneralButton(tapStudiesButton: (){
              dynamic company = booking.companyDetails;
              BlocProvider.of<DriversBloc>(context).add(DriverConfirmBookingRequested(
                  booking.driverId.toString(),

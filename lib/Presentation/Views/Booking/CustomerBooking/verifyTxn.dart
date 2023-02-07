@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
@@ -14,6 +15,7 @@ import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
+import 'package:sure_move/Presentation/utils/secrets.dart';
 import 'package:sure_move/Providers/userProvider.dart';
 class VerifyCustomerTxn extends StatefulWidget {
   const VerifyCustomerTxn({Key? key}) : super(key: key);
@@ -23,6 +25,13 @@ class VerifyCustomerTxn extends StatefulWidget {
 }
 
 class _VerifyCustomerTxnState extends State<VerifyCustomerTxn> {
+  @override
+  void initState() {
+    PaystackPlugin().initialize(publicKey: testPublicKey);
+    print("initialized");
+    super.initState();
+  }
+  @override
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
   String errorText = "Invalid Transaction";
@@ -70,9 +79,12 @@ class _VerifyCustomerTxnState extends State<VerifyCustomerTxn> {
       ),
       pinAnimationType: PinAnimationType.slide,
       onCompleted: (String value){
-        setState(() {
-          showError = !showError;
-        });
+        if(_pinPutController.text != user.txnPin){
+          setState(() {
+            showError = !showError;
+          });
+        }
+
       },
       onChanged: (String value){
         setState(() {
@@ -101,9 +113,43 @@ class _VerifyCustomerTxnState extends State<VerifyCustomerTxn> {
 
 
             if(_pinPutController.text == user.txnPin){
-            Navigator.pushNamed(context, ripplesAnimation);
+                        print(user.email);
+                        UserPreferences().getPaymentType().then((value) => result = value);
+                        if (result == kCard) {
+                        print("yes its card");
+                        BlocProvider.of<BookingBloc>(context).add(
+                        CustomerTransactionRequested(
+                        user.email!,
+                        user.firstName!,
+                        user.lastName!,
+                        user.phoneNumber!,
+                        BookingCollections.bookingDetails[0].amount,
+                        context,
+                        user.userId,
+                        "funds",
+                        user.email
+                        ));
+                        Navigator.pushNamedAndRemoveUntil(context, ripplesAnimation, (route) => false);
+                        } else {
+                          print("No not card");
+                        String fullName = "${user.firstName} ${user.lastName}";
+                        BlocProvider.of<BookingBloc>(context).add(
+                        MatchADriverRequested(
+                        fullName,
+                        user.phoneNumber,
+                        context,
+                        user.email!,
+                        user.firstName!,
+                        user.lastName!,
+                        BookingCollections.bookingDetails[0].amount,
+                        ));
+                          Navigator.pushNamedAndRemoveUntil(context, ripplesAnimation, (route) => false);
+
+                        }
+                        }
+
             }
-          }
+
 
             ),
 

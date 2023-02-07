@@ -52,7 +52,8 @@ class BookingServices{
       var items = {
         "size":results["itemSize"].toString(),
         "number":results["itemCount"],
-        "name":results["itemName"].toString()
+        "name":results["itemName"].toString(),
+        "weight":result["weight"]
       };
       var body = jsonEncode({
       "latitude": BookingCollections.bookingDetails[0].sourceLatitude,
@@ -103,21 +104,22 @@ class BookingServices{
         "size":result["itemSize"].toString(),
         "number":result["itemCount"],
         "name":result["itemName"].toString(),
+        "weight":result["weight"]
 
       };
-      var receiver = {
-        "name" : "Prince John",
-        "phoneNumber":"+23498454543",
-        "address":"Orlu Rd Amakaohia Akwakuma",
-        "gender":"Male"
-      };
+      // var receiver = {
+      //   "name" : "Prince John",
+      //   "phoneNumber":"+23498454543",
+      //   "address":"Orlu Rd Amakaohia Akwakuma",
+      //   "gender":"Male"
+      // };
       var body = jsonEncode({
         "sourceLatitude":BookingCollections.bookingDetails[0].sourceLatitude,
         "sourceLogitude":BookingCollections.bookingDetails[0].sourceLogitude,
         "destinationLatitude":BookingCollections.bookingDetails[0].destinationLatitude,
         "destinationLogitude":BookingCollections.bookingDetails[0].destinationLogitude,
         "item":items,
-        "receiver":receiver,//BookingCollections.bookingDetails[0].receiver,
+        "receiver":BookingCollections.bookingDetails[0].receiver,
         "sender":BookingCollections.bookingDetails[0].sender,
         "driverInfo":driverInfo,
         "amount":BookingCollections.bookingDetails[0].amount,
@@ -143,7 +145,6 @@ class BookingServices{
         return Success(response: response,data: jsonDecoded);
       }
 
-      print("Error in creating booking ${jsonDecoded['message']}");
       return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
     } on HttpException {
       return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
@@ -156,7 +157,6 @@ class BookingServices{
     }
 
     catch (e) {
-      print("Error in creating booking $e");
       return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
     }
 
@@ -317,8 +317,34 @@ class BookingServices{
 
   }
 
+  static Future<Object> getBookingRequirements() async {
+    try {
+      String token = await UserPreferences().getToken();
+      var url = Uri.parse("$apiUrl/commons/get-commons?page=1");
 
+      Response response = await https.get(url, headers: {'Content-Type': 'application/json','authorization':token });
+      final Map<String, dynamic> jsonDecoded = json.decode(response.body);
+
+      if (jsonDecoded['status'] == true) {
+        return Success(response: response,data: jsonDecoded);
+      }
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
+    } on HttpException {
+      return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
+    } on FormatException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
+    } on SocketException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
+    } on TimeoutException{
+      return Failure(code: TIME_OUT, errorResponse: "Time out error");
+    }
+
+    catch (e) {
+      return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
+    }
   }
+}
+
 
 
 

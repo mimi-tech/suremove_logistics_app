@@ -10,12 +10,12 @@ import 'package:http/http.dart';
 import 'package:sure_move/Services/apiStatus.dart';
 class FundsServices{
   static dynamic apiUrl = APIConstants.payStack;
-
+  static dynamic sureMoveApiUrl = APIConstants.baseUrl;
 
   //create customer
   static Future<Object> createCustomer(String phoneNumber,String email,String firstname, String lastname) async {
   try {
-
+    print("hhhh$email");
   var body = json.encode({
   'email': email,
   'first_name': firstname,
@@ -23,7 +23,7 @@ class FundsServices{
   'phone':phoneNumber,
   });
   var url = Uri.parse("$apiUrl/customer");
-  Response response = await https.post(url, headers: {'Authorization': "Bearer $testSecretKey"},body: body);
+  Response response = await https.post(url, headers: {'Content-Type': 'application/json','Authorization': "Bearer $testSecretKey"},body: body);
   if (response.statusCode == 200) {
   final Map<String, dynamic> responseData = json.decode(response.body);
 
@@ -34,6 +34,7 @@ class FundsServices{
   } on HttpException {
     return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
   } on FormatException {
+
     return Failure(code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
   } on SocketException {
     return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
@@ -42,6 +43,7 @@ class FundsServices{
   }
 
   catch (e) {
+    print("22222 $e");
     return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
   }
   }
@@ -95,6 +97,7 @@ class FundsServices{
   } on HttpException {
     return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
   } on FormatException {
+    print("its here2");
     return Failure(code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
   } on SocketException {
     return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
@@ -212,7 +215,7 @@ class FundsServices{
       "userEmail":userEmail
     });
     try {
-      var url = Uri.parse("$apiUrl/users/update-wallet");
+      var url = Uri.parse("$sureMoveApiUrl/users/update-wallet");
       String token = await UserPreferences().getToken();
       Response response = await https.put(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
       final Map<String, dynamic> jsonDecoded = json.decode(response.body);

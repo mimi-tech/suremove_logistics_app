@@ -83,3 +83,37 @@ class CustomerRatingDriverRequested extends DriverEvent {
 }
 
 
+class DriverBookingRejectionRequested extends DriverEvent {
+  const DriverBookingRejectionRequested(
+      this.driverId,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.companyId,
+      this.customerInfo,
+      this.phoneNumber,
+      this.profilePicture,
+      this.amount,
+      this.companyInfo,
+      this.bookingDetails
+
+
+      );
+
+  final String driverId;
+  final String firstName;
+  final String lastName;
+  final String email;
+  final String companyId;
+  final Object customerInfo;
+  final String phoneNumber;
+  final String profilePicture;
+  final dynamic amount;
+  final Object companyInfo;
+  final Object bookingDetails;
+
+  @override
+  List<Object> get props => [driverId,firstName,
+    lastName,email,companyId,customerInfo,phoneNumber,profilePicture,amount,companyInfo,bookingDetails];
+}
+

@@ -50,7 +50,7 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
         body:BlocConsumer<BookingBloc, BookingState>(
         listener: (context, state) {
 
-          if(state is BookingSuccess){
+          if(state is BookingCostCalculated){
             Navigator.pushNamed(context, displayAmount);
           }
           if(state is BookingNoPayment){

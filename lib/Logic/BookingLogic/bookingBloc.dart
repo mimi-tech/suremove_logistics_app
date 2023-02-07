@@ -8,11 +8,14 @@ import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
 import 'package:sure_move/Models/bookingModel.dart';
+import 'package:sure_move/Models/bookingRequirmentsModel.dart';
 import 'package:sure_move/Models/cardDetailsModel.dart';
 import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
+import 'package:sure_move/Presentation/Commons/strings.dart';
 
 import 'package:sure_move/Presentation/utils/enums.dart';
+import 'package:sure_move/Presentation/utils/secrets.dart';
 import 'package:sure_move/Providers/bookingProviders.dart';
 import 'package:sure_move/Providers/driverProvider.dart';
 import 'package:sure_move/Providers/userProvider.dart';
@@ -40,33 +43,23 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   }
 List<DriverModel> matchedDrivers = <DriverModel>[];
   bool check = true;
-  onGettingUserRequested(context) async {
-    try{
-      //get the users details from the storage
-      var response = await UserServices.getAUser();
-      if (response is Success) {
-        NewUser authUser = NewUser.fromJson(response.data!["data"]);
-        UserPreferences().saveUser(authUser);
-        Provider.of<UserProvider>(context,listen: false).setUser(authUser);
-        if(authUser.accountType == AccountType.driver.name){
-          var result = await DriverServices.getADriver(authUser.userId);
-          if(result is Success){
-            DriverModel driver = DriverModel.fromJson(result.data!["data"]);
+  int count = 0;
+  onBookingRequirementsRequested(context) async {
 
-            Provider.of<DriverProvider>(context,listen: false).setDriver(driver);
-          }
-          if(result is Failure){
-            throw(result.errorResponse.toString());
-          }
-        }
+      //get the users details from the storage
+      var response = await BookingServices.getBookingRequirements();
+      if (response is Success) {
+
+        BookingRequirementsModel requirements = BookingRequirementsModel.fromJson(response.data!["data"][0]);
+        Provider.of<BookingProvider>(context,listen: false).setRequirements(requirements);
+
       }
       if(response is Failure){
-      throw(response.errorResponse.toString());
+        throw(response.errorResponse.toString());
       }
-    } catch (e) {
-   throw(e.toString());
-    }
+
   }
+
 
   onGettingUserPaymentMethod(PaymentMethodType event, Emitter<BookingState> emit) async {
     try{
@@ -111,7 +104,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
         if(result == "" || result == null){
           emit(BookingNoPayment());
         }else{
-          emit(BookingSuccess());
+          emit(BookingCostCalculated());
         }
 
       }
@@ -132,7 +125,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
   }
 
   _onAddCard(UserAddCardRequested event, Emitter<BookingState> emit) async {
-    Map<String,dynamic> cardData = {
+    var cardData = {
       "cardNumber":event.cardNumber,
       "exp_month":event.exp_month,
       "exp_year":event.exp_year,
@@ -147,49 +140,63 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
      emit(AddCard());
   }
 
-  _onCard(email,amount,accessCode,context) async {
-
+  _onCard(email,amount,accessCode,context, Emitter<BookingState> emit) async {
+try{
+     String newAmount = "${amount}00";
+     amount = int.parse(newAmount);
     var cardDetails = await UserPreferences().getCardDetailsNew();
     if(cardDetails.authorizationCode != ""){
+      print("authorization is avaliable");
     var response = await FundsServices.chargeAuthorization(email,amount,cardDetails.authorizationCode);
     if (response is Success) {
       return true;
     }
 
     if (response is Failure) {
-      return false;
+      emit(BookingDenied([response.errorResponse.toString()]));
     }
   }else{
+      print("No authorization is not avaliable");
       //CHARGE THE CARD
       Charge charge  = Charge();
-      charge.card = _getCardFromUI(cardDetails);
+      charge.card = _getCardFromUI(cardDetails,emit);
       charge
         ..amount = amount! // In base currency
         ..email = email
-        ..card = _getCardFromUI(cardDetails)
+        ..card = _getCardFromUI(cardDetails,emit)
       // ..reference = _getReference()
         ..accessCode = accessCode
 
-        ..putCustomField('Charged From', 'Bulk sms');
-      chargeCard(charge,context);
+        ..putCustomField('Charged From', kAppTitle);
+      chargeCard(charge,context,emit);
     }
 
+  }catch(e){
+  emit(BookingDenied([e.toString()]));
+  print("bbbbb$e");
+  return e;
   }
-  chargeCard(Charge charge, BuildContext context) async {
+
+  }
+  chargeCard(Charge charge, BuildContext context, Emitter<BookingState> emit) async {
+
     final plugin = PaystackPlugin();
+    await plugin.initialize(publicKey: testPublicKey);
     final response = await plugin.chargeCard( context, charge: charge);
 
     //final reference = response.reference;
-
+    print("charge successsful ${response}");
     // Checking if the transaction is successful
     if (response.message == 'Success') {
       //verify Transaction is successful
+      print("charge successsful ${response.status}");
       return true;
     }else{
-      return false;
+      print("charge not successsful ${response.status}");
+      emit(BookingDenied([response.message.toString()]));
     }
   }
-  PaymentCard _getCardFromUI(CardDetailsModal cardDetails) {
+  PaymentCard _getCardFromUI(CardDetailsModal cardDetails,Emitter<BookingState> emit) {
 
     return PaymentCard(
       number: cardDetails.cardNumber,
@@ -197,58 +204,64 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       expiryMonth: int.parse(cardDetails.expiringMonth!),
       expiryYear: int.parse(cardDetails.expiringYear!),
     );
+
   }
 
   _onCardPaymentMethod(CustomerTransactionRequested event, Emitter<BookingState> emit) async {
 
     emit(UserLoading());
-    var user = await UserPreferences().getUserId();
-    var response = await FundsServices.createCustomer(event.email,event.firstname,event.lastname,event.phoneNumber);
+    var userId = await UserPreferences().getUserId();
+    var response = await FundsServices.createCustomer(event.phoneNumber,event.email,event.firstname,event.lastname);
     if (response is Success) {
+      print("create customer successful");
       UserPreferences().saveCustomerCode(response.data!['data']['customer_code']);
       UserPreferences().saveCustomerId(response.data!['data']['id']);
      //initialize payment
       var initializeResponse = await FundsServices.initializePayment(event.email,event.amount);
       if(initializeResponse is Success){
-        var result = await _onCard(event.email,event.amount, initializeResponse.data!["access_code"],event.context);
-        //verify transaction
-        if(result == true){
+        print("initiaze succuss");
+        await _onCard(event.email,event.amount, initializeResponse.data!["access_code"],event.context,emit);
+
+
         var verifyResponse = await FundsServices.verifySuccessTxn(initializeResponse.data!["data"]["reference"]);
         if(verifyResponse is Success){
+          print("yes its true");
           var cardData = verifyResponse.data!['data']['authorization'];
 
           CardDetailsModal cardDetailsModal = CardDetailsModal.fromJson(cardData);
 
           //Save the user card details with shared pref
           UserPreferences().cardDetails(cardDetailsModal);
-          UserPreferences().saveCustomerId(verifyResponse.data!['data']['data']['customer']['id']);
+          UserPreferences().saveCustomerId(verifyResponse.data!['data']['customer']['id']);
 
-          var updateResponse = await FundsServices.updateWallet(event.amount,user,"fund",event.email);
+          var updateResponse = await FundsServices.updateWallet(event.amount,userId,"fund",event.email);
 
           if(updateResponse is Success){
+            print("update wallet successful");
          emit(PaymentSuccessful());
           }
           if(updateResponse is Failure){
+            print("1111${updateResponse.errorResponse}");
             emit(BookingDenied([updateResponse.errorResponse.toString()]));
 
           }
 
         }
         if(verifyResponse is Failure){
+          print("33333${verifyResponse.errorResponse}");
           emit(BookingDenied([verifyResponse.errorResponse.toString()]));
 
         }
-      }else{
-          emit(const BookingDenied(["Sorry error occurred with your payment method"]));
 
-        }
       }
       if(initializeResponse is Failure){
+        print("88888${initializeResponse.errorResponse}");
         emit(BookingDenied([initializeResponse.errorResponse.toString()]));
 
       }
     }
     if(response is Failure){
+      print("99999${response.errorResponse}");
       emit(BookingDenied([response.errorResponse.toString()]));
 
 
@@ -283,14 +296,15 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
   }
 
   sendSignalToDriver(MatchADriverRequested event, Emitter<BookingState> emit, List<DriverModel> drivers) async {
-    int count = 0;
-    if(drivers.length >= count){
+
+    print("xxxxx${drivers.length}");
+    print("xxxxx111${count}");
+    if(drivers.length > count){
     //connect to the first driver
      var driverInfo = {
       "id":drivers[count].driverId,
        "name":drivers[count].firstName + " " + drivers[count].lastName,
        "profilePicture":drivers[count].profileImageUrl,
-       "phoneNumber":drivers[count].driverPhoneNumber,
        "phoneNumber":drivers[count].driverPhoneNumber,
        "gender":drivers[count].gender,
        "rating":drivers[count].rating
@@ -320,6 +334,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
         emit(BookingSuccess());
       }
       if(bookingStatus is Failure){
+        print("driver did not answer");
         count = count + 1;
        await sendSignalToDriver(event,emit,drivers);
 
@@ -331,7 +346,8 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       emit(BookingDenied([createBookingResponse.errorResponse.toString()]));
     }
   }else{
-      print("Non picked");
+      print("Non picked 9999999");
+      count = 0;
       emit(NotFound());
     }
   }
@@ -340,7 +356,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
 
   _onUpdateBookingRequested(UpdateBookingRequested event, Emitter<BookingState> emit) async {
     try{
-      emit(UserLoading());
+      emit(BookingLoading());
       //calculate cost to update the amount
       double distanceInMeters = Geolocator.distanceBetween(
         BookingCollections.bookingDetails[0].sourceLatitude,
@@ -367,6 +383,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
             "itemName":event.itemName,
             "itemCount":int.parse(event.itemNumber),
             "itemSize":int.parse(event.itemSize),
+            "weight":event.weight
           };
           BookingCollections().customerBookingDetailsJson(
               amount: data,

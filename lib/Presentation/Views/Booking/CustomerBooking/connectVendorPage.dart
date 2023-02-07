@@ -8,6 +8,7 @@ import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
+import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Models/bookingModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
@@ -30,12 +31,11 @@ class ConnectedVendorPage extends StatefulWidget {
 
 class _ConnectedVendorPageState extends State<ConnectedVendorPage> {
  Widget space(){return SizedBox(height: 8.0.h,);}
-
+var r;
   @override
   Widget build(BuildContext context) {
     BookingModel booking = Provider.of<BookingProvider>(context).user;
     dynamic driver = booking.driverInfo;
-
     return Scaffold(
         body: WillPopScope(
           onWillPop: () => Future.value(false),
@@ -44,6 +44,7 @@ class _ConnectedVendorPageState extends State<ConnectedVendorPage> {
 
     if(state is BookingSuccess){
     Navigator.pushNamedAndRemoveUntil(context, ratingDriver, (route) => false);
+    ScaffoldMsg().successMsg(context, kAppreciation);
     }
     if(state is BookingDenied){
     ScaffoldMsg().errorMsg(context, state.errors[0]);
@@ -156,7 +157,10 @@ class _ConnectedVendorPageState extends State<ConnectedVendorPage> {
                                   [
 
                                     PopupMenuItem(child: GestureDetector(
-                                        onTap: ()=>Navigator.pushNamed(context, customerEditBooking),
+                                   onTap: (){
+                                          Navigator.pop(context);
+                                          Navigator.pushNamed(context, customerEditBooking);
+                                          },
                                         child: const Text("Edit booking")),),
                                      PopupMenuItem(child:  GestureDetector(
                                         onTap: (){

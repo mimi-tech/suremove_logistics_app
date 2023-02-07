@@ -3,14 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
 import 'package:sure_move/Logic/Authentication/authState.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
 import 'package:sure_move/Logic/sharedPreference.dart';
+import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
+import 'package:sure_move/Presentation/utils/enums.dart';
+import 'package:sure_move/Providers/driverProvider.dart';
+import 'package:sure_move/Providers/userProvider.dart';
 import 'package:sure_move/Services/apiStatus.dart';
 import 'package:sure_move/Services/authServices.dart';
+import 'package:sure_move/Services/driverService.dart';
+import 'package:sure_move/Services/userServices.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -26,11 +33,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRegisterRequested>(_onAuthRegisterRequested);
     on<AuthUpdatePasswordRequested>(_onAuthUpdatePasswordRequested);
     on<AuthSendEmailVerificationCode>(_onAuthSendEmailVerificationCode);
+    on<AuthUpdatePhoneNumberRequested>(_onAuthUpdatePhoneNumber);
+    on<AuthVerifyEmailCode>(_onAuthVerifyEmailCode);
   }
 
   FirebaseAuth auth = FirebaseAuth.instance;
   Duration duration = const Duration(seconds: 1);
-
+   static String? emailCode;
   getLocation(Emitter<AuthState> emit) async{
     try{
     bool serviceEnabled;
@@ -118,7 +127,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
          UserPreferences().saveToken(response.data!["token"]);
         UserPreferences().saveAuthId(response.data!["data"]['id']);
 
-       emit(AuthSuccess());
+       emit(const AuthSuccess([]));
         emit(AuthGetUser());
       }
       if(response is Failure){
@@ -129,6 +138,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthDenied([kError]));
     }
   }
+
+  onGettingUserRequested(context) async {
+    try{
+      //get the users details from the storage
+      var response = await UserServices.getAUser();
+      if (response is Success) {
+        NewUser authUser = NewUser.fromJson(response.data!["data"]);
+        UserPreferences().saveUser(authUser);
+        Provider.of<UserProvider>(context,listen: false).setUser(authUser);
+        if(authUser.accountType == AccountType.driver.name){
+          var result = await DriverServices.getADriver(authUser.userId);
+          if(result is Success){
+            DriverModel driver = DriverModel.fromJson(result.data!["data"]);
+
+            Provider.of<DriverProvider>(context,listen: false).setDriver(driver);
+          }
+          if(result is Failure){
+            throw(result.errorResponse.toString());
+          }
+        }
+      }
+      if(response is Failure){
+        throw(response.errorResponse.toString());
+      }
+    } catch (e) {
+      throw(e.toString());
+    }
+  }
+
 
   Future<FutureOr<void>> _sendOtpRequested(SendOtpRequested event, Emitter<AuthState> emit,) async {
     try{
@@ -158,7 +196,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 // Create a PhoneAuthCredential with the code
       PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: event.verificationId, smsCode: event.otp);
       await auth.signInWithCredential(credential);
-      emit(AuthSuccess());
+      emit(const AuthSuccess([]));
     } on FirebaseAuthException catch (e) {
       emit( AuthDenied([e.message.toString()]));
     }
@@ -188,7 +226,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           UserPreferences().saveUser(authUser);
           UserPreferences().saveToken(response.data!["token"]);
           UserPreferences().saveAuthId(response.data!["data"]['id']);
-          emit(AuthSuccess());
+          emit(const AuthSuccess([]));
         }
         if(response is Failure){
           emit(AuthDenied([response.errorResponse.toString()]));
@@ -207,9 +245,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try{
       emit(AuthLoading());
       //get the users details from the storage
-      var response = await AuthServices.sendEmailVerificationCode(event.email);
+      var response = await AuthServices.sendEmailVerificationCode(emailAddress: event.email,newEmailAddress: event.newEmailAddress);
       if (response is Success) {
-        emit(AuthSuccess());
+        emailCode = response.data!["code"];
+        emit(const AuthSuccess([]));
       }
       if(response is Failure){
         emit(AuthDenied([response.errorResponse.toString()]));
@@ -225,7 +264,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       //get the users details from the storage
       var response = await AuthServices.updatePassword(event.password);
       if (response is Success) {
-        emit(AuthSuccess());
+        emit(const AuthSuccess([]));
       }
       if(response is Failure){
         emit(AuthDenied([response.errorResponse.toString()]));
@@ -250,4 +289,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  Future<FutureOr<void>> _onAuthUpdatePhoneNumber(AuthUpdatePhoneNumberRequested event, Emitter<AuthState> emit) async {
+    try{
+      emit(AuthLoading());
+      //get the users details from the storage
+      var response = await AuthServices.updatePhoneNumber(event.newPhoneNumber);
+      if (response is Success) {
+        emit(UpdatePhoneNumberSuccess([response.data!["message"]]));
+        emit(AuthGetUser());
+      }
+      if(response is Failure){
+        emit(AuthDenied([response.errorResponse.toString()]));
+      }
+    } catch (e) {
+      emit(const AuthDenied([kError]));
+    }
+  }
+
+
+  Future<FutureOr<void>> _onAuthVerifyEmailCode(AuthVerifyEmailCode event, Emitter<AuthState> emit) async {
+    try{
+      emit(AuthLoading());
+      //get the users details from the storage
+      var response = await AuthServices.verifyEmailVerificationCode();
+      if (response is Success) {
+        emit( AuthSuccess([response.data!["message"].toString()]));
+      }
+      if(response is Failure){
+        emit(AuthDenied([response.errorResponse.toString()]));
+      }
+    } catch (e) {
+      emit(const AuthDenied([kError]));
+    }
+  }
 }
