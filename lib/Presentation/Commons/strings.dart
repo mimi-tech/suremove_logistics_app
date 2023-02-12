@@ -105,7 +105,7 @@ const String kAppreciation = "Thank you for using our services";
 const String kYes = 'Yes';
 const String kNo = 'No';
 const String kDashBoard = 'Dashboard';
-const String kMessage = 'Message';
+const String kMessage = 'Notifications';
 const String kChangeProfile = 'Change profile image';
 const String kAdmin = 'Admin';
 const String kPromotion = 'Promotion';
@@ -113,11 +113,13 @@ const String kVendor2 = 'Become A Vendor';
 const String kVendor3 = 'Pending Vendor';
 const String kLogOut = 'Logout';
 const String kBlockUser = 'Block Account';
+const String kDeactivateUser = 'Deactivate Account';
 const String kViewProfile = 'View Profile';
 const String kWork = 'Go to work';
 const String kPaymentMethod = 'Payment method';
 const String kSupport = 'Support';
 const String kVendorReg = 'Vendor registration';
+const String kPenalty = "We noticed that your account has been de-activated due to some malicious actions found with your account. Please visit our office or write to our support and we will get back to you within 2 working days. Thank you.";
 
 //Funds
 const String kCard = 'Card';
@@ -131,6 +133,7 @@ const String kPromo2 = 'Promo Balance';
 const String kEnterAmount = 'Enter Amount';
 const String kEnterAmountHint = 'Not less than NGN 1000';
 const String kTxnDetails = 'Enter your transaction pin';
+const String kTxnError = 'Sorry incorrect pin';
 
 
 //Dashboard
@@ -198,7 +201,7 @@ const String kSFileError2 = 'Sorry your file is more than 4mb';
 const String kAddPhoto = 'Photo';
 const String kPaymentDetails = 'Payment Details';
 const String kPaymentDetails3 = 'Enter your bank Details';
-
+const String kCreateDriverAccount = "Create driver account";
 const String kPaymentDetails2 = 'We need your payment details \n to pay you';
 const String kCancel = 'cancel';
 const String kCancelHeading = 'Please give us your reason for cancelling your booking.\nYour satisfaction is of our highest priority';
@@ -209,9 +212,9 @@ const String kProvideBvn = 'Provide BVN';
 const String kThanks = 'Thank you';
 const String kThanks2 ='Your details have been submitted successfully. To complete this process, kindly come to our office @ ';
 const String kThanks3 = 'check your email for requirement details.';
-
+const String kVerifyEmail  =  "A code has been sent to your email, Please enter the code correctly";
 const String kThanks4 = 'Thank you for requesting to become our vendor. While coming to our office @';
-
+const kSelectCompanyError = "Please select a company";
 
 //API Strings
 const String kError = "Unknown error, please try again";

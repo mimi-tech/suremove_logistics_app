@@ -31,6 +31,7 @@ class DriverModel {
   dynamic weeklyCount;
   dynamic dailyCount;
   dynamic dateAdded;
+  bool? isActive;
 
 
 
@@ -66,6 +67,7 @@ class DriverModel {
     this.weeklyCount,
     this.dailyCount,
     this.dateAdded,
+    this.isActive,
   });
   // now create converter
 
@@ -92,6 +94,7 @@ class DriverModel {
       suspended: responseData['suspended'] ?? false,
       approved: responseData['approved'] ?? false,
       onlineStatus: responseData['onlineStatus'] ?? false,
+      isActive: responseData['isActive'] ?? true,
       companyName: responseData['companyName'] ?? "",
       rating: responseData['rating'] ?? 1.0,
       country: responseData['country'] ?? "",
@@ -138,6 +141,7 @@ class DriverModel {
       "weeklyCount":weeklyCount,
       "dailyCount":dailyCount,
       "dateAdded":dateAdded,
+      "isActive":isActive
 
 
     };

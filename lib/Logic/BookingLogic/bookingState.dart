@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:sure_move/Models/bookingModel.dart';
+import 'package:sure_move/Models/userModel.dart';
 
 abstract class BookingState extends Equatable {
   const BookingState([List props = const []]): super();

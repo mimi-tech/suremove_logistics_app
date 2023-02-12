@@ -16,6 +16,8 @@ class NewUser {
   dynamic txnPin;
   bool? isOngoingBooking;
   bool? isActive;
+  bool? blocked;
+  dynamic promoBalance;
 
   NewUser({
 
@@ -35,6 +37,8 @@ class NewUser {
     this.txnPin,
     this.isOngoingBooking,
     this.isActive,
+    this.blocked,
+    this.promoBalance
 
 
 
@@ -59,6 +63,8 @@ class NewUser {
       txnPin: responseData['txnPin'] ?? "",
       isOngoingBooking: responseData['isOngoingBooking'] ?? false,
       isActive: responseData['inActive'] ?? true,
+      blocked: responseData['blocked'] ?? false,
+      promoBalance: responseData['promoBalance'] ?? 0,
 
     );
   }
@@ -80,6 +86,8 @@ class NewUser {
       "accountType":accountType,
       "txnPin":txnPin,
       "isOngoingBooking":isOngoingBooking,
-
+      "isActive":isActive,
+      "blocked":blocked,
+      "promoBalance":promoBalance
     };
   }}

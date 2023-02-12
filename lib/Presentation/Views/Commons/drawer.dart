@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
+import 'package:sure_move/Logic/UsersLogic/userBloc.dart';
 import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
@@ -54,8 +55,8 @@ class _DrawerPageState extends State<DrawerPage> {
                     ],
                   ):
                   GestureDetector(
-                      onTap: (){ BlocProvider.of<AuthBloc>(context).add(AuthVerifyEmailCode());
-                      ScaffoldMsg().successMsg(context, "In progress");
+                      onTap: (){
+                        Navigator.pushNamed(context, usersData);
                         },
                       child: Text("Verify account",style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kRedColor),)),
 
@@ -73,7 +74,11 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
            spacing(),
            ListTile(
-            leading:Icon(Icons.mail,color: kBlackColor,size: 20.0.sp,),
+             onTap: (){
+              Navigator.pushNamed(context, notificationScreen);
+
+             },
+            leading:Icon(Icons.notifications,color: kBlackColor,size: 25.0.sp,),
             title: Text(kMessage,style: Theme.of(context).textTheme.bodyText2),
           ),
           spacing(),
@@ -93,16 +98,16 @@ class _DrawerPageState extends State<DrawerPage> {
             children: [
               user.accountType != AccountType.driver.name?
                 ListTile(
-                onTap: (){Navigator.pushNamed(context, pickCompany);},
+                onTap: (){Navigator.pushNamed(context, captureDriver);},
                 leading:SvgPicture.asset('assets/pick_up.svg'),
                 title:  Text("Become a vendor",style: Theme.of(context).textTheme.bodyText2),
                 )
-                  : driver.approved == true?ListTile(
+                  : driver.approved == true && driver.isActive == true?ListTile(
                 onTap: (){Navigator.pushNamed(context, vendorWaitingScreen);},
                 leading:SvgPicture.asset('assets/vendor_icon.svg'),
                 title:  Text(kWork,style: Theme.of(context).textTheme.bodyText2),
               ):ListTile(
-                onTap: (){Navigator.pushNamed(context, vendorWaitingScreen);},
+                onTap: (){Navigator.pushNamed(context, penaltyScreen);},
                 leading:SvgPicture.asset('assets/vendor_icon.svg'),
                 title:  Text(kVendor3,style: Theme.of(context).textTheme.bodyText2),
               ),
@@ -132,7 +137,7 @@ class _DrawerPageState extends State<DrawerPage> {
                    builder: (context) => const BlockAccount());
              },
             leading: Icon(Icons.block,color: kBlackColor,size: 20.0.sp,),
-            title: Text(kBlockUser, style: Theme.of(context).textTheme.bodyText2),
+            title: Text(kDeactivateUser, style: Theme.of(context).textTheme.bodyText2),
           ),
           spacing(),
            ListTile(

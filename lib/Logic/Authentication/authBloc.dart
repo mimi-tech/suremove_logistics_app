@@ -10,6 +10,7 @@ import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
 import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
+import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/utils/enums.dart';
 import 'package:sure_move/Providers/driverProvider.dart';
@@ -39,7 +40,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FirebaseAuth auth = FirebaseAuth.instance;
   Duration duration = const Duration(seconds: 1);
-   static String? emailCode;
+
   getLocation(Emitter<AuthState> emit) async{
     try{
     bool serviceEnabled;
@@ -176,17 +177,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         verificationCompleted: (PhoneAuthCredential credential) async {
           await auth.signInWithCredential(credential);
           emit(AuthGeneral());
-
-        },
+          },
         verificationFailed: (FirebaseAuthException e) { AuthDenied([e.message!.toString()]);},
         codeSent: (String verificationId, int? resendToken) {
           emit(AuthCodeSent([verificationId]));
         },
-        timeout: const Duration(seconds: 120),
-        codeAutoRetrievalTimeout: (String verificationId) {},
+        timeout: const Duration(seconds: 60),
+        codeAutoRetrievalTimeout: (String verificationId) {print("timeout");},
       );
-    }on  FirebaseAuthException catch (e) {
-      emit( AuthDenied([e.message.toString()]));
+    }catch (e) {
+      emit( AuthDenied([e.toString()]));
     }
   }
 
@@ -247,13 +247,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       //get the users details from the storage
       var response = await AuthServices.sendEmailVerificationCode(emailAddress: event.email,newEmailAddress: event.newEmailAddress);
       if (response is Success) {
-        emailCode = response.data!["code"];
+        print("9999");
+        GeneralConstants().emailCode = response.data!["code"];
         emit(const AuthSuccess([]));
       }
       if(response is Failure){
+        print("yyyy");
         emit(AuthDenied([response.errorResponse.toString()]));
       }
     } catch (e) {
+      print("oooo");
       emit(const AuthDenied([kError]));
     }
   }
@@ -314,6 +317,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       var response = await AuthServices.verifyEmailVerificationCode();
       if (response is Success) {
         emit( AuthSuccess([response.data!["message"].toString()]));
+
       }
       if(response is Failure){
         emit(AuthDenied([response.errorResponse.toString()]));

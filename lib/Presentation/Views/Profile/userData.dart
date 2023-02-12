@@ -5,8 +5,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
+import 'package:sure_move/Logic/Authentication/authBloc.dart';
+import 'package:sure_move/Logic/Authentication/authEvent.dart';
 import 'package:sure_move/Logic/UsersLogic/userBloc.dart';
 import 'package:sure_move/Logic/UsersLogic/userEvent.dart';
 import 'package:sure_move/Logic/UsersLogic/userState.dart';
@@ -74,21 +77,27 @@ class _UsersDataState extends State<UsersData> {
         ScaffoldMsg().errorMsg(context, state.errors[0]);
       }
       if(state is FileUploadedSuccess){
+
         BlocProvider.of<UserBloc>(context).add(UserUpdateProfileRequested(
             user.email!,
             _username.text.trim(),
-            user.profileImageUrl!,
+            state.data[1],
             _fName.text,
             _lName.text,
             _gender.name
         ));
       }
     if(state is UserSuccess){
-      BlocProvider.of<UserBloc>(context).add(UserUploadFileRequested(pickedFile!));
+
+      BlocProvider.of<UserBloc>(context).add(UserUploadFileRequested(pickedFile!.path));
     }
     if(state is UserImageDeletedDenied){
-      BlocProvider.of<UserBloc>(context).add(UserUploadFileRequested(pickedFile!));
-      ScaffoldMsg().errorMsg(context, state.errors[0]);
+      BlocProvider.of<UserBloc>(context).add(UserUploadFileRequested(pickedFile!.path));
+      //ScaffoldMsg().errorMsg(context, state.errors[0]);
+    }
+    if(state is UserVerifySuccess){
+      Provider.of<UserProvider>(context,listen: false).setUser(state.data!);
+      ScaffoldMsg().successMsg(context, state.message);
     }
     },
     builder: (context, state) {
@@ -101,7 +110,17 @@ class _UsersDataState extends State<UsersData> {
               child: Column(
                 children: [
                   spacing(),
-                  pickedFile == null? ProfilePicture(image: user.profileImageUrl,):Image.file(pickedFile!),
+                  pickedFile == null? ProfilePicture(image: user.profileImageUrl,)
+                      :CircleAvatar(
+                    radius: 60,
+                      backgroundColor: Colors.transparent,
+                      child: ClipOval(
+                          child: Image.file(pickedFile!,
+                          height: 200.h,
+                            width: 200.w,
+
+                            fit: BoxFit.cover,
+                          ))),
 
 
                   //user.accountType == AccountType.driver.name?Text("")
@@ -109,6 +128,7 @@ class _UsersDataState extends State<UsersData> {
                       onTap: () async {
                      var result = await  UserBloc().pickFile();
                       if(result != null){
+
                         setState(() {
                           pickedFile = result;
                         });
@@ -125,6 +145,23 @@ class _UsersDataState extends State<UsersData> {
                           });},
                           child: Text("Cancel",style: Theme.of(context).textTheme.bodyText2,))),
                   spacing(),
+
+
+
+                  user.isEmailVerified == true?Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Verified",style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kGreen2),),
+                        Icon(Icons.check,color: kGreen2,size: 15.sp,),
+                      ],
+                    ),
+                  ):
+                  GestureDetector(
+                      onTap: (){ BlocProvider.of<UserBloc>(context).add(UserVerifyEmailCode());
+
+                      },
+                      child: Center(child: Text("Verify account",style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kRedColor),))),
 
                   Form(
                     key: _formKey,

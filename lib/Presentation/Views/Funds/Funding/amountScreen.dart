@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sure_move/Logic/UsersLogic/userBloc.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
+import 'package:sure_move/Presentation/Views/Funds/Funding/fundAccount.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
 class AmountScreen extends StatefulWidget {
   const AmountScreen({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class AmountScreen extends StatefulWidget {
 class _AmountScreenState extends State<AmountScreen> {
   final TextEditingController _amount = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? amount;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -62,7 +65,7 @@ class _AmountScreenState extends State<AmountScreen> {
 
                     ),
                     onSaved: (String? value) {
-
+                    amount = value;
                     },
                   ),
 
@@ -75,7 +78,18 @@ class _AmountScreenState extends State<AmountScreen> {
             ),
 
             FundsGeneralButton(tapStudiesButton: (){
-              Navigator.pushNamed(context, fundAccount);
+                final form = _formKey.currentState;
+
+                if (form!.validate()) {
+                  UserBloc().amount = _amount.text.trim();
+
+                  form.save();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FundAccount(amount:_amount.text.trim())),
+                  );
+                }
+
             },title: kNextBtn,)
 
           ],

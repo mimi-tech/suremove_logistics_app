@@ -9,6 +9,7 @@ class CardDetailsModal {
   String? expiringYear;
   String? cardNumber;
   String? cvv;
+  String? formattedCardNumber;
 
   CardDetailsModal({
     this.cardFirstFourDigit,
@@ -21,6 +22,7 @@ class CardDetailsModal {
     this.expiringYear,
     this.cardNumber,
     this.cvv,
+    this.formattedCardNumber
   });
 
   // now create converter
@@ -37,6 +39,7 @@ class CardDetailsModal {
       expiringYear: responseData['exp_year'],
       cardNumber: responseData['cardNumber'],
       cvv: responseData['cvv'],
+      formattedCardNumber: responseData['formattedCardNumber'],
     );
   }
 
@@ -52,6 +55,7 @@ class CardDetailsModal {
       "expiringYear": expiringYear,
       "cardNumber": cardNumber,
       "cvv": cvv,
+      "formattedCardNumber":formattedCardNumber
     };
   }
 }

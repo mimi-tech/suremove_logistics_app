@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:place_picker/place_picker.dart';
+import 'package:sure_move/Logic/ProviderViewModel/userNotifier.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
+import 'package:sure_move/Presentation/utils/secrets.dart';
 class VendorRegScreen3 extends StatefulWidget {
   const VendorRegScreen3({Key? key}) : super(key: key);
 
@@ -39,22 +42,30 @@ class _VendorRegScreen3State extends State<VendorRegScreen3> {
             Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: TextFormField(
-                  controller: _address,
-                  autocorrect: true,
-                  autofocus: true,
-                  cursorColor: (kOrangeColor),
-                  keyboardType: TextInputType.text,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  validator: Validator.validateField,
-                  decoration: const InputDecoration(
-                    hintText: "",
+            child: GestureDetector(
+              onTap: () async {
+                var result = await UserNotifier().onPickLocation(context);
+                _address.text = result;
+              },
+              child: AbsorbPointer(
+                child: TextFormField(
+                      controller: _address,
+                      autocorrect: true,
+                      autofocus: true,
+                      cursorColor: (kOrangeColor),
+                      keyboardType: TextInputType.text,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      validator: Validator.validateField,
+                      decoration: const InputDecoration(
+                        hintText: "",
 
-                  ),
-                  onSaved: (String? value) {
-                    address = value!;
-                  },
-                ),
+                      ),
+                      onSaved: (String? value) {
+                        address = value!;
+                      },
+                    ),
+              ),
+            ),
         ),
 
             space(),

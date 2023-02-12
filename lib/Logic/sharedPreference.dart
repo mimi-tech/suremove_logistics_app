@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sure_move/Models/cardDetailsModel.dart';
+import 'package:sure_move/Models/notificationModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 
@@ -26,6 +29,7 @@ class UserPreferences {
     prefs.setString('txnPin',user.txnPin ?? "");
     prefs.setBool('isOngoingBooking',user.isOngoingBooking ?? false);
     prefs.setBool('isActive',user.isActive ?? true);
+    prefs.setBool('blocked',user.blocked ?? true);
 
 
 
@@ -58,6 +62,7 @@ class UserPreferences {
     String txnPin = prefs.getString("txnPin") ?? "";
     bool isOngoingBooking = prefs.getBool("isOngoingBooking") ?? false;
     bool isActive = prefs.getBool("isActive") ?? true;
+    bool blocked = prefs.getBool("blocked") ?? false;
 
 
 
@@ -78,7 +83,8 @@ class UserPreferences {
       accountType:accountType,
       txnPin: txnPin,
         isOngoingBooking:isOngoingBooking,
-        isActive:isActive
+        isActive:isActive,
+        blocked:blocked
 
 
     );
@@ -175,6 +181,7 @@ class UserPreferences {
     prefs.setString('expiringYear',cardDetailsModal.expiringYear ?? '');
     prefs.setString('cardNumber',cardDetailsModal.cardNumber ?? '');
     prefs.setString('cvv',cardDetailsModal.cvv ?? '');
+    prefs.setString('formattedCardNumber',cardDetailsModal.formattedCardNumber ?? '');
 
     return prefs.commit();
 
@@ -196,6 +203,7 @@ class UserPreferences {
     String expiringYear = prefs.getString("expiringYear") ?? '';
     String cardNumber = prefs.getString("cardNumber") ?? '';
     String cvv = prefs.getString("cvv") ?? '';
+    String formattedCardNumber = prefs.getString("formattedCardNumber") ?? '';
     return CardDetailsModal(
         cardFirstFourDigit: cardFirstFourDigit,
         cardLastFourDigit: cardLastFourDigit,
@@ -206,9 +214,112 @@ class UserPreferences {
         expiringMonth:expiringMonth,
         expiringYear:expiringYear,
         cardNumber:cardNumber,
-        cvv:cvv
+        cvv:cvv,
+        formattedCardNumber:formattedCardNumber
     );
 
+  }
+
+  saveNotification(List<NotificationModel> formData, key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> saveFormString = [];
+
+    var response = await UserPreferences().getMessages(key);
+    final pendingMessages = response.map((json) => NotificationModel.fromJson(json)).toList();
+
+    if(response.isNotEmpty){
+        //check if form is already saved
+
+       bool check = false;
+        for (var item in formData) {
+          check = false;
+          for (var element in pendingMessages) {
+            if(item.message == element.message){
+              check = true;
+              saveFormString.add(jsonEncode(element));
+              break;
+            }
+          }
+          if(check == false){
+            saveFormString.add(jsonEncode(item));
+          }
+        }
+
+
+      }else{
+
+      for (var element in formData) {
+
+        saveFormString.add(jsonEncode(element));
+      }
+    }
+
+      prefs.setStringList(key, saveFormString);
+    }
+
+
+  updateNotification( key, message) async {
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> saveFormString = [];
+    var response = await UserPreferences().getMessages(key);
+    final pendingMessages = response.map((json) => NotificationModel.fromJson(json)).toList();
+
+    if(response.isNotEmpty){
+      //check if form is already saved
+
+        for (var element in pendingMessages) {
+          if(message == element.message){
+
+            element.read = true;
+            saveFormString.add(jsonEncode(element));
+          }else{
+
+            saveFormString.add(jsonEncode(element));
+          }
+        }
+        prefs.setStringList(key, saveFormString);
+    }
+
+
+  }
+  deleteNotification( key, message) async {
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> saveFormString = [];
+    var response = await UserPreferences().getMessages(key);
+    final pendingMessages = response.map((json) => NotificationModel.fromJson(json)).toList();
+
+    if(response.isNotEmpty){
+      //check if form is already saved
+
+      for (var element in pendingMessages) {
+        if(message != element.message){
+
+          saveFormString.add(jsonEncode(element));
+        }
+      }
+      prefs.setStringList(key, saveFormString);
+    }
+
+
+  }
+
+
+
+
+  Future<List<Map>> getMessages(key) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> saveFormString = prefs.getStringList(key) ?? [];
+    List<Map> formData = [];
+    if (saveFormString.isNotEmpty) {
+      for (var element in saveFormString) {
+
+        formData.add(json.decode(element));
+
+      }
+    }
+    return formData;
   }
 
   void removeUser() async {

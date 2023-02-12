@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sure_move/Presentation/Views/Profile/updateEmailAddress.dart';
 import 'package:sure_move/Presentation/Views/Profile/updatePhoneNumber.dart';
 import 'package:sure_move/Presentation/Views/Profile/userData.dart';
 
@@ -53,7 +54,7 @@ class ProfileTabView extends StatelessWidget {
           children: [
             UsersData(),
             UpdatePhoneNumber(),
-            UsersData(),
+            UpdateEmailAddress(),
           ],
         ),
       ),

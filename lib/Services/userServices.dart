@@ -21,7 +21,9 @@ class UserServices{
       Response response = await https.get(url, headers: {'Content-Type': 'application/json','authorization':token });
       final Map<String, dynamic> jsonDecoded = json.decode(response.body);
       if (jsonDecoded['status'] == true) {
+
         return Success(response: response,data: jsonDecoded);
+
       }
       return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
     } on HttpException {
@@ -56,6 +58,7 @@ class UserServices{
       Response response = await https.put(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
       final Map<String, dynamic> jsonDecoded = json.decode(response.body);
       if (jsonDecoded['status'] == true) {
+
         return Success(response: response,data: jsonDecoded,message: jsonDecoded['message']);
       }
       return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
@@ -77,30 +80,19 @@ class UserServices{
   static  uploadImage({file}) async {
     try {
 
-      String token = await UserPreferences().getToken();
       var url = Uri.parse("$uploadApiUrl/upload-files");
-      var body ={
-        "file":file,
-      };
+      var request = https.MultipartRequest('POST', url);
+      request.files.add(await https.MultipartFile.fromPath("file", file));
+      var res = await request.send();
 
-      // var request = https.MultipartRequest('POST', url);
-      // request.files.add(
-      //     await https.MultipartFile.fromPath(
-      //     "picture",
-      //         file
-      //
-      // ));
-      // var res = await request.send();
-      // print(res.statusCode);
-     // print(res.reasonPhrase);
+        if (res.statusCode == 200) {
+          var response = await https.Response.fromStream(res);
 
+          final Map<String, dynamic> jsonDecoded = json.decode(response.body);
 
-        Response response = await https.post(url, headers: {'Content-Type': 'multipart/form-data'},body: body);
-        final Map<String, dynamic> jsonDecoded = json.decode(response.body);
-        if (jsonDecoded['status'] == true) {
-          return Success(response: response,data: jsonDecoded,message: jsonDecoded['message']);
+          return Success(response: response,data: jsonDecoded);
         }
-        return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
+        return Failure(code: USER_INVALID_RESPONSE, errorResponse: res.reasonPhrase);
       } on HttpException {
         return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
       } on FormatException {
@@ -112,7 +104,7 @@ class UserServices{
 
 
     }catch (e) {
-      print(e);
+
       return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
     }
   }
@@ -125,12 +117,103 @@ class UserServices{
       String token = await UserPreferences().getToken();
       var url = Uri.parse("$uploadApiUrl/delete-files");
 
-      Response response = await https.post(url, headers: {'Content-Type': 'application/json' },body: body);
+      Response response = await https.delete(url, headers: {'Content-Type': 'application/json' },body: body);
       final Map<String, dynamic> jsonDecoded = json.decode(response.body);
       if (jsonDecoded['status'] == true) {
         return Success(response: response,data: jsonDecoded,message: jsonDecoded['message']);
       }
 
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
+    } on HttpException {
+      return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
+    } on FormatException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
+    } on SocketException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
+    } on TimeoutException{
+      return Failure(code: TIME_OUT, errorResponse: "Time out error");
+    }
+
+    catch (e) {
+      return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
+    }
+  }
+
+  static Future<Object> getAllNotification() async {
+    try {
+      String token = await UserPreferences().getToken();
+      var url = Uri.parse("$apiUrl/commons/get-notification?page=1");
+
+      Response response = await https.get(url, headers: {'Content-Type': 'application/json','authorization':token });
+      final Map<String, dynamic> jsonDecoded = json.decode(response.body);
+      if (jsonDecoded['status'] == true) {
+
+        return Success(response: response,data: jsonDecoded);
+
+      }
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
+    } on HttpException {
+      return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
+    } on FormatException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
+    } on SocketException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
+    } on TimeoutException{
+      return Failure(code: TIME_OUT, errorResponse: "Time out error");
+    }
+
+    catch (e) {
+      return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
+    }
+  }
+
+  static Future<Object> writeToSupport(header,message) async {
+    try {
+      String token = await UserPreferences().getToken();
+      var url = Uri.parse("$apiUrl/send-email-verification-code");
+      var body = json.encode({
+        "header":header,
+        "message":message
+      });
+      Response response = await https.post(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
+      final Map<String, dynamic> jsonDecoded = json.decode(response.body);
+      if (jsonDecoded['status'] == true) {
+
+        return Success(response: response,data: jsonDecoded);
+
+      }
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
+    } on HttpException {
+      return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
+    } on FormatException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
+    } on SocketException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
+    } on TimeoutException{
+      return Failure(code: TIME_OUT, errorResponse: "Time out error");
+    }
+
+    catch (e) {
+      return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
+    }
+  }
+
+  static Future<Object> accountStatus(type) async {
+    try {
+      String token = await UserPreferences().getToken();
+      String userId = await UserPreferences().getUserId();
+      var url = Uri.parse("$apiUrl/users/account-status");
+      var body = json.encode({
+        "authId":userId,
+        "type":type,
+      });
+      Response response = await https.put(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
+      final Map<String, dynamic> jsonDecoded = json.decode(response.body);
+      if (jsonDecoded['status'] == true) {
+
+        return Success(response: response,data: jsonDecoded, message: jsonDecoded["message"]);
+
+      }
       return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
     } on HttpException {
       return Failure(code: NO_INTERNET, errorResponse: "Internal server error");

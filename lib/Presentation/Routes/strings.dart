@@ -45,4 +45,10 @@ const ratingDriver = "/rating-driver";
 const usersData = "/user-data";
 const verifyUpdatedMobileNumber = "/verify-updated-mobile-number";
 const verifyEmailOTP = "/verify-email-otp";
+const notificationScreen = "/notification-screen";
+const penaltyScreen = "/penalty-screen";
+const captureDriver = "/capturing-screen";
+const driverEmailAddress = "/driver-email-screen";
+const verifyDriverEmailOTP = "/verify-driver-emailOTP";
+const capturingScreen = "/capturing-screen";
 

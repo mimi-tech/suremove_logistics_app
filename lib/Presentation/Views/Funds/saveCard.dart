@@ -145,6 +145,7 @@ class _SaveCardState extends State<SaveCard> {
                   _paymentCard.cvv.toString(),
                   _paymentCard.number!.substring(0,4),
                   _paymentCard.number!.substring(12,16),
+                  _cardNumber.text
                 ));
 
                  Navigator.pop(context);

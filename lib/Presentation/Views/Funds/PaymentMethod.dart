@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sure_move/Logic/Authentication/authState.dart';
+import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingState.dart';
 import 'package:sure_move/Logic/sharedPreference.dart';
+import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
-import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
 import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
-import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Funds/CashTransfer/verifyUser.dart';
 import 'package:sure_move/Presentation/Views/Funds/Funding/amountScreen.dart';
 import 'package:sure_move/Presentation/Views/Funds/saveCard.dart';
 import 'package:sure_move/Presentation/utils/generalAppbar.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
+import 'package:sure_move/Providers/userProvider.dart';
 class PaymentMethods extends StatefulWidget {
   const PaymentMethods({Key? key}) : super(key: key);
 
@@ -53,6 +53,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
 
   @override
   Widget build(BuildContext context) {
+    NewUser user = Provider.of<UserProvider>(context).user;
 
      UserPreferences().getCardDetailsNew().then((value) => {
        firstDigits = value.cardFirstFourDigit,
@@ -122,18 +123,18 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                          )
                        ],
                      ),
-                     firstDigits == ""?Text(""): Row(
+                     firstDigits == ""?const Text(""): Row(
                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                        children: [
 
-                         Text("${firstDigits} xxxx xxxx ${lastDigits}"),
+                         Text("$firstDigits xxxx xxxx $lastDigits"),
                          IconButton(onPressed: (){
-                           BlocProvider.of<BookingBloc>(context).add(UserRemoveCardRequested(""));
-                         }, icon: Icon(Icons.cancel))
+                           BlocProvider.of<BookingBloc>(context).add(const UserRemoveCardRequested(""));
+                         }, icon: const Icon(Icons.cancel))
                        ],
                      ),
                      spaceLine(),
-                     FundsGeneralButton(title:kCard2 ,tapStudiesButton: (){
+                     FundsGeneralButton(title:firstDigits != null && firstDigits != ""?"Replace card":kCard2 ,tapStudiesButton: (){
                        showModalBottomSheet(
                            isScrollControlled: true,
                            context: context,
@@ -203,7 +204,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                                   style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kLightBlue,fontSize: kFontSize13),
                                 ),
                                 TextSpan(
-                                  text: "NGN 34873",
+                                  text: "NGN ${user.walletBalance}.00",
                                   style: Theme.of(context).textTheme.overline,
                                 ),
 
@@ -284,7 +285,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                     ),
                     spaceLine(),
                     Text(kPromo2,style: Theme.of(context).textTheme.caption),
-                    Text("NGN 87384",style: Theme.of(context).textTheme.overline),
+                    Text("NGN ${user.promoBalance}.00",style: Theme.of(context).textTheme.overline),
 
 
 

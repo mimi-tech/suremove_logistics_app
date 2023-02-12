@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
 import 'package:sure_move/Logic/Authentication/authState.dart';
@@ -32,25 +33,25 @@ class _UpdatePhoneNumberState extends State<UpdatePhoneNumber> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(backgroundColor: kWhiteColor,iconTheme: const IconThemeData(color: kBlackColor),),
+        body: BlocConsumer<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state is AuthDenied) {
+                ScaffoldMsg().errorMsg(context, state.errors[0]);
+              }
 
-        body: SingleChildScrollView(
-            child:BlocConsumer<AuthBloc, AuthState>(
-                listener: (context, state) {
-                  if (state is AuthDenied) {
-                    ScaffoldMsg().errorMsg(context, state.errors[0]);
-                  }
+              if(state is AuthCodeSent){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => VerifyUpdatedMobileNumber(verificationCode:state.message[0], phoneNumber:_countryCode + _phoneNumber.text)),
+                );
+              }
 
-                  if(state is AuthCodeSent){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => VerifyUpdatedMobileNumber(verificationCode:state.message[0], phoneNumber:_countryCode + _phoneNumber.text)),
-                    );
-                  }
-
-                },
-                builder: (context, state) {
-                  return  Container(
+            },
+            builder: (context, state) {
+              return  ModalProgressHUD(
+                inAsyncCall: (state is AuthLoading)?true:false,
+                child: SingleChildScrollView(
+                  child: Container(
                     margin: EdgeInsets.symmetric(horizontal: kMargin),
                     child: Column(
                       children: [
@@ -118,7 +119,7 @@ class _UpdatePhoneNumberState extends State<UpdatePhoneNumber> {
                                 ])),
 
                         spacing(),
-                        (state is AuthLoading)?LoadingButton(): GeneralButton(tapStudiesButton: (){
+                         GeneralButton(tapStudiesButton: (){
 
                           final form = _formKey.currentState;
                           if (form!.validate()) {
@@ -128,13 +129,15 @@ class _UpdatePhoneNumberState extends State<UpdatePhoneNumber> {
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
+                            print(_countryCode + _phoneNumber.text);
                             BlocProvider.of<AuthBloc>(context).add(SendOtpRequested(_countryCode + _phoneNumber.text));
                           }},title: kVerify,)
 
                       ],
                     ),
-                  );
-                })
-        ));
+                  ),
+                ),
+              );
+            }));
   }
 }

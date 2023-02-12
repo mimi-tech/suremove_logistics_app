@@ -43,7 +43,12 @@ class _HomePageState extends State<HomePage> {
               if(user == null && !user.isOngoingBooking! ){
                 ScaffoldMsg().errorMsg(context, kOnGoingError);
               }else{
-                Navigator.pushNamed(context, itemDetails);
+                if(user.isActive == false || user.blocked == true){
+                  Navigator.pushNamed(context, penaltyScreen);
+                }else{
+                  Navigator.pushNamed(context, itemDetails);
+                }
+
               }
               },
             child: Center(child: Text("Book".toUpperCase(),style: Theme.of(context).textTheme.overline,))),
@@ -61,12 +66,12 @@ class _HomePageState extends State<HomePage> {
               spacing(),
               spacing(),
                Column(
-                 children: const [
+                 children: [
                    LogoDesign(),
 
                    Align(
                        alignment: Alignment.topLeft,
-                       child: DrawerHandle()),
+                       child: DrawerHandle(user: user)),
                  ],
                ),
 

@@ -34,6 +34,19 @@ class Validator {
     return null;
   }
 
+  static String? validateExpiringDate(String? value) {
+    if(value!.isEmpty) {
+      return "Expiring date can't be empty";
+    }
+    return null;
+  }
+  static String? validateIssuedDate(String? value) {
+    if(value!.isEmpty) {
+      return "Issued date can't be empty";
+    }
+    return null;
+  }
+
   static String? validateUsername(String? value) {
     if(value!.isEmpty) {
       return "user name can't be empty";
@@ -149,9 +162,6 @@ class Validator {
   static String? validateAmount(String? value) {
     if(value!.isEmpty) {
       return "Amount can't be empty";
-    }
-    if(int.parse(value) < 1000) {
-      return "Amount should be less than 100 NGN";
     }
 
     return null;

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/DriverLogic/driverEvent.dart';
 import 'package:sure_move/Logic/DriverLogic/driverState.dart';
 import 'package:sure_move/Models/bookingModel.dart';
+import 'package:sure_move/Models/companyModel.dart';
 import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/utils/enums.dart';
@@ -14,6 +15,7 @@ import 'package:sure_move/Providers/bookingProviders.dart';
 import 'package:sure_move/Providers/driverProvider.dart';
 import 'package:sure_move/Services/apiStatus.dart';
 import 'package:sure_move/Services/bookingServices.dart';
+import 'package:sure_move/Services/companyServices.dart';
 import 'package:sure_move/Services/driverService.dart';
 
 
@@ -200,4 +202,24 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
       emit(DriverDenied([e.toString()]));
     }
   }
-  }
+//---Driver registration section---
+
+  Future<List<CompanyModel>> getCompanyList()async{
+
+    try{
+      var response = await CompanyServices.companyList();
+      if(response is Success){
+        final List<dynamic> responseData = response.data!["data"];
+        final result = responseData.map((json) => CompanyModel.fromJson(json)).toList();
+        return result;
+      }
+      if(response is Failure){
+        throw response.errorResponse!;
+      }
+      throw [];
+    }catch(e){
+      throw e;
+    }
+  }}
+
+

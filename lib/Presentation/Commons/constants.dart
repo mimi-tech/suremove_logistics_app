@@ -22,3 +22,7 @@ class RegConstants{
 class BookingConstants{
   String? customerSourceAddress;
 }
+
+class GeneralConstants{
+   String emailCode = "666666";
+}

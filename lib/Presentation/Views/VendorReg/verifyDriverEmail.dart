@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
 import 'package:sure_move/Logic/Authentication/authState.dart';
+import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
@@ -12,22 +14,24 @@ import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
+import 'package:sure_move/Providers/userProvider.dart';
 
 
-class VerifyEmailOTP extends StatefulWidget {
-  const VerifyEmailOTP({Key? key}) : super(key: key);
+class VerifyDriverEmailOTP extends StatefulWidget {
+  const VerifyDriverEmailOTP({Key? key}) : super(key: key);
 
   @override
-  State<VerifyEmailOTP> createState() => _VerifyEmailOTPState();
+  State<VerifyDriverEmailOTP> createState() => _VerifyDriverEmailOTPState();
 }
 
-class _VerifyEmailOTPState extends State<VerifyEmailOTP> {
+class _VerifyDriverEmailOTPState extends State<VerifyDriverEmailOTP> {
 
   @override
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
-  String errorText = "Invalid Transaction";
+  String errorText = "Invalid code";
   bool showError = false;
+
   final defaultPinTheme = PinTheme(
 
     width: 56,
@@ -89,42 +93,45 @@ class _VerifyEmailOTPState extends State<VerifyEmailOTP> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-      if (state is AuthDenied) {
-        ScaffoldMsg().errorMsg(context, state.errors[0]);
-      }
-      if(state is AuthSuccess){
-       Navigator.pushNamedAndRemoveUntil(context, loginPage, (route) => false);
-       ScaffoldMsg().successMsg(context, state.success);
-      }
-    },
-    builder: (context, state) {
-    return ModalProgressHUD(
-    inAsyncCall: (state is AuthLoading)?true:false,
-    child: SingleChildScrollView(child: Container(
-        margin: EdgeInsets.symmetric(horizontal: kMargin),
-        child: Column(
-          children: [
-            spacing(),
-            Text(kVerifyEmail,style: Theme.of(context).textTheme.bodyText1,),
-            spacing(),
-            animatingBorders(),
-            showError?Text(errorText,style: const TextStyle(color: kRedColor),):const Text(""),
-            spacing(),
+        appBar: AppBar(title: Text(kCreateDriverAccount.toUpperCase()),),
 
-            GeneralButton(title: kVerify, tapStudiesButton: (){
-             if(_pinPutController.text == GeneralConstants().emailCode){
-              BlocProvider.of<AuthBloc>(context).add(AuthVerifyEmailCode());
-            }}
+        body: BlocConsumer<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state is AuthDenied) {
+                ScaffoldMsg().errorMsg(context, state.errors[0]);
+              }
+              if(state is AuthSuccess){
+                Navigator.pushReplacementNamed(context, pickCompany);
+                ScaffoldMsg().successMsg(context, "Email verified successfully");
+                AuthBloc().onGettingUserRequested(context);
+              }
+            },
+            builder: (context, state) {
+              return ModalProgressHUD(
+                inAsyncCall: (state is AuthLoading)?true:false,
+                child: SingleChildScrollView(child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: kMargin),
+                  child: Column(
+                    children: [
+                      spacing(),
+                      Text(kVerifyEmail,style: Theme.of(context).textTheme.bodyText1,),
+                      spacing(),
+                      animatingBorders(),
+                      showError?Text(errorText,style: const TextStyle(color: kRedColor),):const Text(""),
+                      spacing(),
+
+                      GeneralButton(title: kVerify, tapStudiesButton: (){
+                        if(_pinPutController.text == GeneralConstants().emailCode){
+                          BlocProvider.of<AuthBloc>(context).add(AuthVerifyEmailCode());
+                        }}
 
 
-            ),
+                      ),
 
-            space(),
-          ],
-        ),
-      )),
-    );}));
+                      space(),
+                    ],
+                  ),
+                )),
+              );}));
 
-}}
+  }}

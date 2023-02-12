@@ -98,17 +98,18 @@ class CustomerTransactionRequested extends BookingEvent {
 
 
 class UserAddCardRequested extends BookingEvent {
-  const UserAddCardRequested(this.cardNumber, this.exp_month, this.exp_year, this.cvv, this.bin,this.last4);
+  const UserAddCardRequested(this.cardNumber, this.exp_month, this.exp_year, this.cvv, this.bin,this.last4,this.formattedCardNumber);
   final String cardNumber;
   final String exp_month;
   final String exp_year;
   final String cvv;
   final dynamic bin;
   final dynamic last4;
+  final dynamic formattedCardNumber;
 
 
   @override
-  List<Object> get props => [cardNumber, exp_month,exp_year, cvv,bin,last4];
+  List<Object> get props => [cardNumber, exp_month,exp_year, cvv,bin,last4,formattedCardNumber];
 }
 
 class UserRemoveCardRequested extends BookingEvent {

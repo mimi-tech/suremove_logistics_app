@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
 import 'package:sure_move/Models/bookingRequirmentsModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
-import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
-import 'package:sure_move/Presentation/utils/generalDialog.dart';
 import 'package:sure_move/Providers/bookingProviders.dart';
 class ItemDetails extends StatefulWidget {
   const ItemDetails({Key? key}) : super(key: key);

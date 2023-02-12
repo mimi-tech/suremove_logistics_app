@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sure_move/Logic/ProviderViewModel/userNotifier.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
+import 'package:sure_move/Presentation/Views/VendorReg/vendorRegCollections.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
 
 class LicenceScreen extends StatefulWidget {
@@ -28,7 +31,9 @@ class _LicenceScreenState extends State<LicenceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title:  Text(kVendorReg.toUpperCase()),),
-        body: SingleChildScrollView(
+        body: Consumer<UserNotifier>(
+        builder: (context, modal, child) {
+      return  SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: kMargin),
             child: Column(
@@ -61,43 +66,61 @@ class _LicenceScreenState extends State<LicenceScreen> {
 
                       spacing(),
                       const Text(kIssuedDate),
-                      TextFormField(
-                        controller: _issuedDate,
-                        autocorrect: true,
-                        autofocus: true,
-                        cursorColor: (kOrangeColor),
-                        keyboardType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
-                        style: Theme.of(context).textTheme.bodyText1,
-                        validator: Validator.validateField,
-                        decoration: const InputDecoration(
-                          hintText: "",
+                      GestureDetector(
+                        onTap: () async {
+                          var result = await modal.onIssuedDateSelector(context);
+                          if(result == true){
+                            _issuedDate.text = modal.issuedDate;
+                          }
+                          },
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: _issuedDate,
+                            autocorrect: true,
+                            autofocus: true,
+                            cursorColor: (kOrangeColor),
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.sentences,
+                            style: Theme.of(context).textTheme.bodyText1,
+                            validator: Validator.validateField,
+                            decoration: const InputDecoration(
+                              hintText: "",
 
+                            ),
+                            onSaved: (String? value) {
+                              issuedDate = value!;
+                            },
+                          ),
                         ),
-                        onSaved: (String? value) {
-                          issuedDate = value!;
-                        },
                       ),
 
                       spacing(),
                       const Text(kExpiringDate),
-                      TextFormField(
-                        controller: _expiringDate,
-                        autocorrect: true,
-                        autofocus: true,
-                        cursorColor: (kOrangeColor),
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                        obscuringCharacter: ".",
-                        style: Theme.of(context).textTheme.bodyText1,
-                        validator: Validator.validateLastName,
-                        decoration: const InputDecoration(
-                          hintText: "",
-
-                        ),
-                        onSaved: (String? value) {
-                          expiringDate = value!;
+                      GestureDetector(
+                        onTap: () async {
+                          var result = await modal.onExpiringDateSelector(context);
+                          if(result == true){
+                            _expiringDate.text = modal.expiringDate;
+                          }
                         },
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: _expiringDate,
+                            autocorrect: true,
+                            autofocus: true,
+                            cursorColor: (kOrangeColor),
+                            keyboardType: TextInputType.text,
+                            style: Theme.of(context).textTheme.bodyText1,
+                            validator: Validator.validateExpiringDate,
+                            decoration: const InputDecoration(
+                              hintText: "",
+
+                            ),
+                            onSaved: (String? value) {
+                              expiringDate = value!;
+                            },
+                          ),
+                        ),
                       ),
 
                     ],
@@ -107,12 +130,25 @@ class _LicenceScreenState extends State<LicenceScreen> {
 
                 spacing(),
                 GeneralButton(tapStudiesButton: (){
+                  final form = _formKey.currentState;
+
+                  if (form!.validate()) {
+                    form.save();
+                    var license = {
+                      "number":licenceNumber,
+                      "issuedDate":issuedDate,
+                      "expringDate":expiringDate
+                    };
+                    VendorRegData().driverRegDataJson(lincense: license);
+
+                  }
                   Navigator.pushNamed(context, vendorRegScreen3);
+
                 },title: kNextBtn,)
 
               ],
             ),
           ),
-        ));
+        );}));
   }
 }

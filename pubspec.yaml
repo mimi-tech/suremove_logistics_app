@@ -60,6 +60,8 @@ dependencies:
   flutter_paystack: ^1.0.5+1
   audioplayers: ^3.0.1
   file_picker: ^5.2.5
+  syncfusion_flutter_datepicker: ^20.4.49
+  image_picker: ^0.8.6+1
 
 dev_dependencies:
   flutter_test:

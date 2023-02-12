@@ -39,6 +39,15 @@ class UserDataSuccess extends UserState {
   List<Object> get props => [data,message];
 }
 
+class UserVerifySuccess extends UserState {
+  final NewUser? data;
+  final String? message;
+  const UserVerifySuccess(this.data,this.message);
+
+  @override
+  List<Object> get props => [];
+}
+
 
 class FileUploadedSuccess extends UserState {
   final List<dynamic> data;

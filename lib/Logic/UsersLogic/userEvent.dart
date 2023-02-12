@@ -29,7 +29,7 @@ class UserUpdateProfileRequested extends UserEvent {
 
 class UserUploadFileRequested extends UserEvent {
 const UserUploadFileRequested(this.file);
-final File file;
+final dynamic file;
 
 
 @override
@@ -46,4 +46,34 @@ class UserDeleteFileRequested extends UserEvent {
   List<Object> get props => [fileName];
 }
 
+class UserTransferCashRequested extends UserEvent {
+  const UserTransferCashRequested(this.amount,this.email);
+  final int amount;
+  final dynamic email;
+
+
+
+  @override
+  List<Object> get props => [amount,email];
+}
+
+class WriteToSupportRequested extends UserEvent {
+  const WriteToSupportRequested(this.header, this.message);
+
+  final dynamic header;
+  final dynamic message;
+
+
+  @override
+  List<Object> get props => [header, message];
+}
+
+class AccountStatusRequested extends UserEvent {
+  const AccountStatusRequested(this.type);
+
+  final dynamic type;
+  @override
+  List<Object> get props => [type];
+}
+class UserVerifyEmailCode extends UserEvent {}
 

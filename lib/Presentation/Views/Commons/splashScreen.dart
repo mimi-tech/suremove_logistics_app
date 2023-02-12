@@ -54,17 +54,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
       if (state is AuthAuthenticated) {
-        Navigator.pushNamed(context, homePage);
+        Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
+
       }
       if (state is AuthNotAuthenticated) {
-        Navigator.pushNamed(context, loginPage);
+
+        Navigator.pushNamedAndRemoveUntil(context, loginPage, (route) => false);
       }
       if (state is AuthDeniedForever) {
-        Navigator.pushNamed(context, permissionDeniedScreen);
+        Navigator.pushNamedAndRemoveUntil(context, permissionDeniedScreen, (route) => false);
       }
       if (state is AuthDenied) {
         ScaffoldMsg().errorMsg(context, state.errors[0]);
-        Navigator.pushNamed(context, loginPage);
+        Navigator.pushNamedAndRemoveUntil(context, loginPage, (route) => false);
+
       }
     },
     builder: (context, state) {

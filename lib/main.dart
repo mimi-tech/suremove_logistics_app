@@ -9,6 +9,7 @@ import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authState.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
 import 'package:sure_move/Logic/DriverLogic/driverBloc.dart';
+import 'package:sure_move/Logic/ProviderViewModel/userNotifier.dart';
 import 'package:sure_move/Logic/UsersLogic/userBloc.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider(create: (_) => BookingProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => DriverProvider()),
+      ChangeNotifierProvider(create: (_) => UserNotifier()),
     ],
            child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -82,7 +84,7 @@ class MyApp extends StatelessWidget {
 
                         await AuthBloc().onGettingUserRequested(context);
                         await BookingBloc().onBookingRequirementsRequested(context);
-
+                        await UserBloc().onSavingNotification();
                       }
 
                     },

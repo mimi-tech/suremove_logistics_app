@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
 import 'package:sure_move/Logic/sharedPreference.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingEvent.dart';
@@ -132,6 +133,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
       "cvv":event.cvv,
       "bin":event.bin,
       "last4":event.last4,
+      "formattedCardNumber":event.formattedCardNumber
     };
     CardDetailsModal cardDetailsModal = CardDetailsModal.fromJson(cardData);
 
@@ -225,19 +227,18 @@ try{
 
         var verifyResponse = await FundsServices.verifySuccessTxn(initializeResponse.data!["data"]["reference"]);
         if(verifyResponse is Success){
-          print("yes its true");
           var cardData = verifyResponse.data!['data']['authorization'];
-
           CardDetailsModal cardDetailsModal = CardDetailsModal.fromJson(cardData);
 
           //Save the user card details with shared pref
-          UserPreferences().cardDetails(cardDetailsModal);
+         // UserPreferences().cardDetails(cardDetailsModal);
           UserPreferences().saveCustomerId(verifyResponse.data!['data']['customer']['id']);
 
           var updateResponse = await FundsServices.updateWallet(event.amount,userId,"fund",event.email);
 
           if(updateResponse is Success){
             print("update wallet successful");
+            await AuthBloc().onGettingUserRequested(event.context);
          emit(PaymentSuccessful());
           }
           if(updateResponse is Failure){

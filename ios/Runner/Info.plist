@@ -56,5 +56,7 @@
     </array>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>This app needs to have access to your gallery for uploading your profile image</string>
+    <key>NSCameraUsageDescription</key>
+    <string>For capturing</string>
 </dict>
 </plist>

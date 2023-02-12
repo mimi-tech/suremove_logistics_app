@@ -58,7 +58,6 @@ class _VendorWaitingScreenState extends State<VendorWaitingScreen> {
   Widget build(BuildContext context) {
     DriverModel driver = Provider.of<DriverProvider>(context,listen: false).driver;
     bool showOnOff = driver.onlineStatus!;
-    //print(driver.driverId);
     return Scaffold(
         bottomNavigationBar: BottomAppBar(
           elevation: 25.0,
@@ -128,7 +127,15 @@ class _VendorWaitingScreenState extends State<VendorWaitingScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 50.0),
                         child: ElevatedButton(
-                          onPressed: (){Navigator.pop(context);},
+                          onPressed: () async {
+                            if(driver.onlineStatus == true){
+                             await DriversBloc().onUpdatingDriverStatusRequested(driver.driverId,"online",context);
+                             Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
+                            }else{
+                              Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
+
+                            }
+                            },
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
