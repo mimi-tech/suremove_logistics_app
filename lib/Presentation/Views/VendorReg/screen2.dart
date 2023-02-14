@@ -54,7 +54,7 @@ class _LicenceScreenState extends State<LicenceScreen> {
                         cursorColor: (kOrangeColor),
                         keyboardType: TextInputType.number,
                         style: Theme.of(context).textTheme.bodyText1,
-                        validator: Validator.validateField,
+                        validator: Validator.validateLicenceNumber,
                         decoration: const InputDecoration(
                           hintText: "",
 
@@ -82,7 +82,7 @@ class _LicenceScreenState extends State<LicenceScreen> {
                             keyboardType: TextInputType.text,
                             textCapitalization: TextCapitalization.sentences,
                             style: Theme.of(context).textTheme.bodyText1,
-                            validator: Validator.validateField,
+                            validator: Validator.validateIssuedDate,
                             decoration: const InputDecoration(
                               hintText: "",
 
@@ -140,9 +140,9 @@ class _LicenceScreenState extends State<LicenceScreen> {
                       "expringDate":expiringDate
                     };
                     VendorRegData().driverRegDataJson(lincense: license);
+                    Navigator.pushNamed(context, vendorRegScreen3);
 
                   }
-                  Navigator.pushNamed(context, vendorRegScreen3);
 
                 },title: kNextBtn,)
 

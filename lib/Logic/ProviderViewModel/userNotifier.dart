@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:place_picker/place_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingCollectionData.dart';
+import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/vendorRegCollections.dart';
 import 'package:sure_move/Presentation/utils/secrets.dart';
+import 'package:sure_move/Providers/driverProvider.dart';
+import 'package:sure_move/Services/apiStatus.dart';
+import 'package:sure_move/Services/driverService.dart';
 
 
 class UserNotifier extends ChangeNotifier {
@@ -17,6 +23,7 @@ class UserNotifier extends ChangeNotifier {
   dynamic issuedDate;
   dynamic expiringDate;
   String? imagePath;
+  String? userEmailAddress;
   setLoading(bool loading) async {
     _loading = loading;
     notifyListeners();
@@ -139,8 +146,8 @@ class UserNotifier extends ChangeNotifier {
       currentLocation: BookingCollections.bookingDetails[0].sourceAddress,
       currentLocationLat: BookingCollections.bookingDetails[0].sourceLatitude,
       currentLocationLog: BookingCollections.bookingDetails[0].sourceLogitude,
-      country: result.country,
-      state: result.administrativeAreaLevel1
+      country: result.country!.name,
+      state: result.administrativeAreaLevel1!.name
     );
 
     notifyListeners();
@@ -154,5 +161,31 @@ class UserNotifier extends ChangeNotifier {
       imagePath = file.path;
       notifyListeners();
   }
+}
+
+createDriverAccount(context)async{
+    setLoading(true);
+    var response = await DriverServices.registerDriver(
+      VendorRegData.driverRegData[0].companyId,
+      VendorRegData.driverRegData[0].homeAddress,
+      VendorRegData.driverRegData[0].currentLocation,
+      VendorRegData.driverRegData[0].currentLocationLat,
+      VendorRegData.driverRegData[0].currentLocationLog,
+      VendorRegData.driverRegData[0].lincense,
+      VendorRegData.driverRegData[0].owner,
+      VendorRegData.driverRegData[0].country,
+      VendorRegData.driverRegData[0].state,
+      VendorRegData.driverRegData[0].driverEmail,);
+
+    if(response is Success){
+      await AuthBloc().onGettingUserRequested(context);
+      setLoading(false);
+      return "Success";
+    }
+    if(response is Failure){
+      print("Failed ${ response.errorResponse}");
+      setLoading(false);
+      return response.errorResponse;
+    }
 }
 }

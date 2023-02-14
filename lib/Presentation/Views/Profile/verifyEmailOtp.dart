@@ -71,7 +71,7 @@ class _VerifyEmailOTPState extends State<VerifyEmailOTP> {
       ),
       pinAnimationType: PinAnimationType.slide,
       onCompleted: (String value){
-        if(_pinPutController.text != GeneralConstants().emailCode){
+        if(_pinPutController.text != emailCode){
           setState(() {
             showError = !showError;
           });
@@ -114,7 +114,7 @@ class _VerifyEmailOTPState extends State<VerifyEmailOTP> {
             spacing(),
 
             GeneralButton(title: kVerify, tapStudiesButton: (){
-             if(_pinPutController.text == GeneralConstants().emailCode){
+             if(_pinPutController.text == emailCode){
               BlocProvider.of<AuthBloc>(context).add(AuthVerifyEmailCode());
             }}
 

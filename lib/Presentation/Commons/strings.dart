@@ -38,6 +38,7 @@ const String kUsername2 = 'Username';
 const String kReferalText = 'Enter your referral username';
 const String kCustomerError= 'Please select the company you want them to refill your gass';
 const String kPassword = 'Please enter your password';
+const String kPassword2 = 'Please enter your new password';
 const String kRePassword = 'Please re-enter your password';
 const String kReferal = 'Enter the referral username of who introduced you to this app';
 const String kEmailReceipt = 'Please make sure that this email address is valid because you need to verify it before registration will be completed. Thank you.';
@@ -213,6 +214,7 @@ const String kThanks = 'Thank you';
 const String kThanks2 ='Your details have been submitted successfully. To complete this process, kindly come to our office @ ';
 const String kThanks3 = 'check your email for requirement details.';
 const String kVerifyEmail  =  "A code has been sent to your email, Please enter the code correctly";
+const String kVerifyPhoneNumber  =  "A code has been sent to your phone number, Please enter the code correctly";
 const String kThanks4 = 'Thank you for requesting to become our vendor. While coming to our office @';
 const kSelectCompanyError = "Please select a company";
 

@@ -94,12 +94,13 @@ class AuthRegisterRequested extends AuthEvent {
 }
 
 class AuthUpdatePasswordRequested extends AuthEvent {
-  const AuthUpdatePasswordRequested(this.password);
+  const AuthUpdatePasswordRequested(this.password,this.email);
   final String password;
+  final String email;
 
 
   @override
-  List<Object> get props => [password];
+  List<Object> get props => [password,email];
 }
 
 class AuthSendEmailVerificationCode extends AuthEvent {
@@ -121,3 +122,19 @@ class AuthUpdatePhoneNumberRequested extends AuthEvent {
   List<Object> get props => [newPhoneNumber];
 }
 class AuthVerifyEmailCode extends AuthEvent {}
+
+class AuthSendPhoneNumberCodeRequested extends AuthEvent {
+  const AuthSendPhoneNumberCodeRequested(this.phoneNumber);
+  final String phoneNumber;
+  @override
+  List<Object> get props => [phoneNumber];
+}
+
+class UserUploadFilesRequested extends AuthEvent {
+  const UserUploadFilesRequested(this.file);
+  final dynamic file;
+
+
+  @override
+  List<Object> get props => [file];
+}

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
 import 'package:sure_move/Logic/Authentication/authState.dart';
+import 'package:sure_move/Logic/ProviderViewModel/userNotifier.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
@@ -14,6 +15,8 @@ import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
 import 'package:sure_move/Presentation/Views/Profile/verifyEmailOtp.dart';
+import 'package:sure_move/Presentation/Views/VendorReg/vendorRegCollections.dart';
+import 'package:sure_move/Presentation/utils/enums.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
 import 'package:sure_move/Providers/userProvider.dart';
 
@@ -39,8 +42,14 @@ class _DriverEmailAddressState extends State<DriverEmailAddress> {
       if (state is AuthDenied) {
         ScaffoldMsg().errorMsg(context, state.errors[0]);
       }
-      if(state is AuthSuccess){
+      if (state is AuthDoNotCreateDriversAccount) {
+        ScaffoldMsg().errorMsg(context, "This account cannot be used to create drivers account");
+      }
+      if(state is AuthCreateDriversAccount) {
+        VendorRegData().driverRegDataJson(profileImageUrl: state.success!.profileImageUrl);
+
         Navigator.pushReplacementNamed(context, verifyDriverEmailOTP);
+
       }
     },
     builder: (context, state) {
@@ -90,6 +99,7 @@ class _DriverEmailAddressState extends State<DriverEmailAddress> {
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
+                            VendorRegData().driverRegDataJson(driverEmail: _newEmail.text.trim());
                             BlocProvider.of<AuthBloc>(context).add(AuthSendEmailVerificationCode(_newEmail.text.trim(),null,));
 
                           }},title:kVerify,)

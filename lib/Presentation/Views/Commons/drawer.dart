@@ -106,6 +106,12 @@ class _DrawerPageState extends State<DrawerPage> {
                 onTap: (){Navigator.pushNamed(context, vendorWaitingScreen);},
                 leading:SvgPicture.asset('assets/vendor_icon.svg'),
                 title:  Text(kWork,style: Theme.of(context).textTheme.bodyText2),
+              ):driver.approved == false?ListTile(
+                onTap: (){
+                  Navigator.pushNamed(context, successfulScreen);
+                },
+                leading:SvgPicture.asset('assets/vendor_icon.svg'),
+                title:  Text(kVendor3,style: Theme.of(context).textTheme.bodyText2),
               ):ListTile(
                 onTap: (){Navigator.pushNamed(context, penaltyScreen);},
                 leading:SvgPicture.asset('assets/vendor_icon.svg'),

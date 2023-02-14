@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
+import 'package:sure_move/Presentation/Views/Authentication/Registration/verifyEmailCode.dart';
 import 'package:sure_move/Presentation/Views/Authentication/forgotPassword/verifyEmailCode.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/awaitingScreen.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/ratingDriver.dart';
@@ -11,7 +12,6 @@ import 'package:sure_move/Presentation/Views/Profile/profileTabview.dart';
 import 'package:sure_move/Presentation/Views/Profile/userData.dart';
 import 'package:sure_move/Presentation/Views/Profile/verifyEmailOtp.dart';
 import 'package:sure_move/Presentation/Views/Rejections/permissionDenied.dart';
-import 'package:sure_move/Presentation/Views/VendorReg/capturing.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/driverEmailAddress.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/screen0.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/screen1.dart';
@@ -55,6 +55,7 @@ import 'package:sure_move/Presentation/Views/Funds/PaymentMethod.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/screen1.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/screen2.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/screen3.dart';
+import 'package:sure_move/Presentation/Views/VendorReg/successfulScreen.dart';
 import 'package:sure_move/Presentation/Views/VendorReg/verifyDriverEmail.dart';
 
 class AppRouter {
@@ -223,8 +224,11 @@ class AppRouter {
         case verifyDriverEmailOTP:
         return MaterialPageRoute( builder: (_) => const VerifyDriverEmailOTP());
 
-        case capturingScreen:
-        return MaterialPageRoute( builder: (_) => const CapturingScreen());
+        case successfulScreen:
+        return MaterialPageRoute( builder: (_) => const SuccessfulScreen());
+
+        case verifyEmailCodeRegistration:
+        return MaterialPageRoute( builder: (_) => const VerifyEmailCodeRegistration());
 
 
 

@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sure_move/Logic/UsersLogic/userBloc.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
@@ -23,7 +27,6 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Gender _gender = Gender.male;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +36,38 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
     margin: EdgeInsets.symmetric(horizontal: kMargin),
       child: Column(
           children: [
-            SvgPicture.asset('assets/user.svg'),
-            Text("Add Photo [Optional]",style: Theme.of(context).textTheme.headline6,),
+            RegConstants().pickedImage == null? SvgPicture.asset('assets/user.svg'):
+            CircleAvatar(
+                radius: 60,
+                backgroundColor: Colors.transparent,
+                child: ClipOval(
+                    child: Image.file(RegConstants().pickedImage!,
+                      height: 200.h,
+                      width: 200.w,
+
+                      fit: BoxFit.cover,
+                    ))),
+
+            GestureDetector(
+                onTap: () async {
+                  var result = await  UserBloc().pickFile();
+                  if(result != null){
+
+                    setState(() {
+                      RegConstants().pickedImage = result;
+                    });
+                  }else{
+                    setState(() {
+                      RegConstants().pickedImage = null;
+                    });
+                  }
+                },
+                child: RegConstants().pickedImage == null?Text("Add Photo [Optional]",style: Theme.of(context).textTheme.headline6,)
+                :GestureDetector(
+                    onTap: (){setState(() {
+                      RegConstants().pickedImage = null;
+                    });},
+                    child: Text("Cancel",style: Theme.of(context).textTheme.bodyText2,))),
             spacing(),
             const Text(kName),
             spacing(),

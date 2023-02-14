@@ -10,6 +10,7 @@ import 'package:http/http.dart';
 
 class AuthServices{
    static dynamic apiUrl = APIConstants.baseUrl;
+   static dynamic smsApiUrl = APIConstants.smsUrl;
   static Future<Object> loginUser(emailAddress, password) async {
     try {
 
@@ -86,12 +87,14 @@ class AuthServices{
 
    static Future<Object> sendEmailVerificationCode({emailAddress, newEmailAddress}) async {
      try {
+       String token = await UserPreferences().getToken();
+
        var body = json.encode({
-         'email': emailAddress,
-         "newEmailAddress":newEmailAddress
+         'emailAddress': emailAddress,
+         "newEmailAddress":newEmailAddress.toString()
 
        });
-       var url = Uri.parse("$apiUrl/forgotPassword");
+       var url = Uri.parse("$apiUrl/send-email-code");
 
        Response response = await https.post(
            url, headers: {'Content-Type': 'application/json'}, body: body);
@@ -119,19 +122,20 @@ class AuthServices{
      }
    }
 
-   static Future<Object> updatePassword(password) async {
+   static Future<Object> updatePassword(password,email) async {
      try {
        var body = json.encode({
          'password': password,
+         "email":email
 
        });
        var url = Uri.parse("$apiUrl/update-password");
 
-       Response response = await https.post(
+       Response response = await https.put(
            url, headers: {'Content-Type': 'application/json'}, body: body);
        final Map<String, dynamic> jsonDecoded = json.decode(response.body);
        if (jsonDecoded['status'] == true) {
-         return Success(response: response, data: jsonDecoded);
+         return Success(response: response, data: jsonDecoded,message: jsonDecoded["message"]);
        }
        return Failure(
            code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
@@ -224,5 +228,38 @@ class AuthServices{
      }
    }
 
+
+   static Future<Object> sendPhoneNumberCode(phoneNumber) async {
+     try {
+       var body = json.encode({
+         'phoneNumber': phoneNumber,
+
+       });
+       var url = Uri.parse("$smsApiUrl/send-sms-verficaiton-code");
+
+       Response response = await https.post(url, headers: {'Content-Type': 'application/json'}, body: body);
+       final Map<String, dynamic> jsonDecoded = json.decode(response.body);
+       if (jsonDecoded['status'] == true) {
+         return Success(response: response, data: jsonDecoded,message: jsonDecoded["message"]);
+       }
+       return Failure(
+           code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
+     } on HttpException {
+       return Failure(
+           code: NO_INTERNET, errorResponse: "Internal server error");
+     } on FormatException {
+       return Failure(
+           code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
+     } on SocketException {
+       return Failure(code: USER_INVALID_RESPONSE,
+           errorResponse: "No internet connection");
+     } on TimeoutException {
+       return Failure(code: TIME_OUT, errorResponse: "Time out error");
+     }
+
+     catch (e) {
+       return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
+     }
+   }
 
 }

@@ -36,6 +36,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthSendEmailVerificationCode>(_onAuthSendEmailVerificationCode);
     on<AuthUpdatePhoneNumberRequested>(_onAuthUpdatePhoneNumber);
     on<AuthVerifyEmailCode>(_onAuthVerifyEmailCode);
+    on<AuthSendPhoneNumberCodeRequested>(_onAuthSendPhoneNumberCode);
+    on<UserUploadFilesRequested>(_onUserUploadFileRequested);
   }
 
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -128,7 +130,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
          UserPreferences().saveToken(response.data!["token"]);
         UserPreferences().saveAuthId(response.data!["data"]['id']);
 
-       emit(const AuthSuccess([]));
+       emit( AuthSuccess([],""));
         emit(AuthGetUser());
       }
       if(response is Failure){
@@ -196,7 +198,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 // Create a PhoneAuthCredential with the code
       PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: event.verificationId, smsCode: event.otp);
       await auth.signInWithCredential(credential);
-      emit(const AuthSuccess([]));
+      emit( AuthSuccess([],""));
     } on FirebaseAuthException catch (e) {
       emit( AuthDenied([e.message.toString()]));
     }
@@ -226,7 +228,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           UserPreferences().saveUser(authUser);
           UserPreferences().saveToken(response.data!["token"]);
           UserPreferences().saveAuthId(response.data!["data"]['id']);
-          emit(const AuthSuccess([]));
+          emit( AuthSuccess([],""));
         }
         if(response is Failure){
           emit(AuthDenied([response.errorResponse.toString()]));
@@ -247,17 +249,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       //get the users details from the storage
       var response = await AuthServices.sendEmailVerificationCode(emailAddress: event.email,newEmailAddress: event.newEmailAddress);
       if (response is Success) {
-        print("9999");
-        GeneralConstants().emailCode = response.data!["code"];
-        emit(const AuthSuccess([]));
+        emailCode = response.data!["code"].toString();
+       print(emailCode);
+        NewUser authUser = NewUser.fromJson(response.data!["data"]);
+       if(authUser.accountType == AccountType.driver.name || authUser.accountType == AccountType.admin.name || authUser.accountType == AccountType.company.name){
+         emit(AuthDoNotCreateDriversAccount());
+         emailCode = response.data!["code"].toString();
+         emit(AuthSuccess([response.data!["data"]],""));
+       }else{
+         emit(AuthCreateDriversAccount(authUser));
+         emailCode = response.data!["code"].toString();
+         emit(AuthSuccess([response.data!["data"]],""));
+       }
+
+
       }
       if(response is Failure){
-        print("yyyy");
+        print(response.errorResponse);
         emit(AuthDenied([response.errorResponse.toString()]));
       }
     } catch (e) {
-      print("oooo");
-      emit(const AuthDenied([kError]));
+      print("oooo$e");
+      //emit( AuthDenied([e.toString()]));
     }
   }
 
@@ -265,9 +278,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try{
       emit(AuthLoading());
       //get the users details from the storage
-      var response = await AuthServices.updatePassword(event.password);
+      var response = await AuthServices.updatePassword(event.password,event.email);
       if (response is Success) {
-        emit(const AuthSuccess([]));
+        emit( AuthSuccess([],response.message));
       }
       if(response is Failure){
         emit(AuthDenied([response.errorResponse.toString()]));
@@ -316,7 +329,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       //get the users details from the storage
       var response = await AuthServices.verifyEmailVerificationCode();
       if (response is Success) {
-        emit( AuthSuccess([response.data!["message"].toString()]));
+        emit( AuthSuccess([response.data!["message"].toString()],""));
 
       }
       if(response is Failure){
@@ -324,6 +337,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       emit(const AuthDenied([kError]));
+    }
+  }
+
+  Future<FutureOr<void>> _onAuthSendPhoneNumberCode(AuthSendPhoneNumberCodeRequested event, Emitter<AuthState> emit) async {
+    try{
+      emit(AuthLoading());
+      //get the users details from the storage
+      var response = await AuthServices.sendPhoneNumberCode(event.phoneNumber);
+      if (response is Success) {
+        phoneNumberCode = response.data!["code"];
+        emit( AuthSuccess([],response.message));
+
+      }
+      if(response is Failure){
+        emit(AuthDenied([response.errorResponse.toString()]));
+      }
+    } catch (e) {
+      emit(const AuthDenied([kError]));
+    }
+  }
+
+  Future<FutureOr<void>> _onUserUploadFileRequested(UserUploadFilesRequested event, Emitter<AuthState> emit) async {
+    try {
+
+      emit(AuthLoading());
+      var response = await UserServices.uploadImage(file: event.file);
+      if(response is Success){
+        emit(ImageUploadedSuccess([response.data!["message"].toString(), response.data!["data"]["image"]]));
+      }
+      if(response is Failure){
+
+        emit(AuthDenied([response.errorResponse.toString()]));
+      }
+
+    }catch(e){
+
+      emit(AuthDenied([e.toString()]));
     }
   }
 }

@@ -51,4 +51,6 @@ const captureDriver = "/capturing-screen";
 const driverEmailAddress = "/driver-email-screen";
 const verifyDriverEmailOTP = "/verify-driver-emailOTP";
 const capturingScreen = "/capturing-screen";
+const successfulScreen = "/successful-screen";
+const verifyEmailCodeRegistration = "/verify-email-code-registration";
 

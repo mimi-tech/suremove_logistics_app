@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:sure_move/Models/userModel.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState([List props = const []]): super();
@@ -33,8 +34,9 @@ class AuthLoading extends AuthState {
 
 
 class AuthSuccess extends AuthState {
-  final List<String>? success;
-  const AuthSuccess(this.success);
+  final List<dynamic>? success;
+  String? message;
+   AuthSuccess(this.success, this.message);
 
   @override
   List<Object> get props => [];
@@ -78,4 +80,25 @@ class AuthGetUser extends AuthState {
 
   @override
   List<Object> get props => [];
+}
+
+class AuthDoNotCreateDriversAccount extends AuthState {
+  @override
+  List<Object> get props => [];
+}
+
+class AuthCreateDriversAccount extends AuthState {
+  final NewUser? success;
+  const AuthCreateDriversAccount(this.success);
+
+  @override
+  List<Object> get props => [];
+}
+
+class ImageUploadedSuccess extends AuthState {
+  final List<dynamic> data;
+  const ImageUploadedSuccess(this.data);
+
+  @override
+  List<Object> get props => [data];
 }

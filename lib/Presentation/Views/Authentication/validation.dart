@@ -34,6 +34,12 @@ class Validator {
     return null;
   }
 
+  static String? validateLicenceNumber(String? value) {
+    if(value!.isEmpty) {
+      return "Licence number";
+    }
+    return null;
+  }
   static String? validateExpiringDate(String? value) {
     if(value!.isEmpty) {
       return "Expiring date can't be empty";

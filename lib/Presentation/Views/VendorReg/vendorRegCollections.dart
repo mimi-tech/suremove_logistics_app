@@ -13,7 +13,8 @@ class VendorRegData{
     owner,
     country,
     state,
-    driverEmail
+    driverEmail,
+    profileImageUrl
 }){
     DriverModel dataJson  =DriverModel(
       companyId: companyId,
@@ -25,7 +26,8 @@ class VendorRegData{
       owner: owner,
       country: country,
       state: state,
-      driverEmail: driverEmail
+      driverEmail: driverEmail,
+        profileImageUrl:profileImageUrl
     );
 
     if(driverRegData.isNotEmpty){
@@ -39,6 +41,7 @@ class VendorRegData{
         value.country = country??value.country;
         value.state = state??value.state;
         value.driverEmail = driverEmail??value.driverEmail;
+        value.profileImageUrl = profileImageUrl??value.profileImageUrl;
 
     }
     }else{

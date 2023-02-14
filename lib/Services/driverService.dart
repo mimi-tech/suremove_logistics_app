@@ -186,20 +186,35 @@ class DriverServices{
     }
   }
 
-  static Future<Object> ratingDriver( message,companyID,rate,customerInfo,driverInfo,driverId) async {
+  static Future<Object>registerDriver(
+      companyId,
+      homeAddress,
+      currentLocation,
+      currentLocationLat,
+      currentLocationLog,
+      lincense,
+      owner,
+      country,
+      state,
+      driverEmail
+      ) async {
     try {
 
       var body = jsonEncode({
-        "message":message,
-        "companyID":companyID,
-        "rate":rate,
-        "customerInfo":customerInfo,
-        "driverInfo":driverInfo,
-        "driverId":driverId
+        "companyId":companyId,
+        "homeAddress":homeAddress,
+        "currentLocation":currentLocation,
+        "currentLocationLat":currentLocationLat,
+        "currentLocationLog":-122.406417,//currentLocationLog,
+        "lincense":lincense,
+        "owner":owner,
+        "country":country,
+        "state":state,
+        "driverEmail":driverEmail,
       });
-      var url = Uri.parse("$apiUrl/drivers/rate-a-driver");
+      var url = Uri.parse("$apiUrl/drivers/create-driver-account");
       String token = await UserPreferences().getToken();
-      Response response = await https.put(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
+      Response response = await https.post(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
       final Map<String, dynamic> jsonDecoded = json.decode(response.body);
       if (jsonDecoded['status'] == true) {
 
@@ -215,7 +230,7 @@ class DriverServices{
       return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
     } on TimeoutException{
       return Failure(code: TIME_OUT, errorResponse: "Time out error");
-    }
+     }
 
     catch (e) {
       return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
@@ -267,5 +282,43 @@ class DriverServices{
 
   }
 
+  static Future<Object> ratingDriver( message,companyID,rate,customerInfo,driverInfo,driverId) async {
+    try {
+
+      var body = jsonEncode({
+        "message":message,
+        "companyID":companyID,
+        "rate":rate,
+        "customerInfo":customerInfo,
+        "driverInfo":driverInfo,
+        "driverId":driverId
+      });
+      var url = Uri.parse("$apiUrl/drivers/rate-a-driver");
+      String token = await UserPreferences().getToken();
+      Response response = await https.put(url, headers: {'Content-Type': 'application/json','authorization':token },body: body);
+      final Map<String, dynamic> jsonDecoded = json.decode(response.body);
+      if (jsonDecoded['status'] == true) {
+
+
+        return Success(response: response,data: jsonDecoded);
+      }
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: jsonDecoded['message']);
+    } on HttpException {
+      return Failure(code: NO_INTERNET, errorResponse: "Internal server error");
+    } on FormatException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "Invalid format");
+    } on SocketException {
+      return Failure(code: USER_INVALID_RESPONSE, errorResponse: "No internet connection");
+    } on TimeoutException{
+      return Failure(code: TIME_OUT, errorResponse: "Time out error");
+    }
+
+    catch (e) {
+      return Failure(code: UNKNOWN_ERROR, errorResponse: e.toString());
+    }
+
+
+
+  }
 
 }

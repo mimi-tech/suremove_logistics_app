@@ -2,11 +2,15 @@
 class BookingRequirementsModel {
   List<dynamic>? sizeRange;
   List<dynamic>? weightRange;
+  dynamic companyName;
+  dynamic companyAddress;
 
   BookingRequirementsModel({
 
     this.sizeRange,
     this.weightRange,
+    this.companyName,
+    this.companyAddress
 
 
 
@@ -17,6 +21,8 @@ class BookingRequirementsModel {
     return BookingRequirementsModel(
       sizeRange : responseData['sizeRange'] ?? [],
       weightRange: responseData['weightRange'] ?? [],
+      companyName: responseData['companyName'] ?? "",
+      companyAddress: responseData['companyAddress'] ?? "",
     );
   }
   Map<String, dynamic> toJson() {
@@ -24,5 +30,7 @@ class BookingRequirementsModel {
 
       "sizeRange": sizeRange,
       "weightRange": weightRange,
+      "companyName":companyName,
+      "companyAddress":companyAddress
     };
   }}

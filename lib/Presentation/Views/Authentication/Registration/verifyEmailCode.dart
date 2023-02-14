@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -18,14 +18,14 @@ import 'package:sure_move/Presentation/utils/generalButton.dart';
 import 'package:sure_move/Providers/userProvider.dart';
 
 
-class VerifyEmailCode extends StatefulWidget {
-  const VerifyEmailCode({Key? key}) : super(key: key);
+class VerifyEmailCodeRegistration extends StatefulWidget {
+  const VerifyEmailCodeRegistration({Key? key}) : super(key: key);
 
   @override
-  State<VerifyEmailCode> createState() => _VerifyEmailCodeState();
+  State<VerifyEmailCodeRegistration> createState() => _VerifyEmailCodeRegistrationState();
 }
 
-class _VerifyEmailCodeState extends State<VerifyEmailCode> {
+class _VerifyEmailCodeRegistrationState extends State<VerifyEmailCodeRegistration> {
 
   @override
   final TextEditingController _pinPutController = TextEditingController();
@@ -95,12 +95,14 @@ class _VerifyEmailCodeState extends State<VerifyEmailCode> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: Text("Verify code".toUpperCase()),),
-        body:  SingleChildScrollView(child: Container(
+        appBar: AppBar(title: Text(kCreateDriverAccount.toUpperCase()),),
 
-                  margin: EdgeInsets.symmetric(horizontal: kMargin,vertical: 20.0.sp),
+        body:  SingleChildScrollView(child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: kMargin),
                   child: Column(
                     children: [
+                      spacing(),
+                      SvgPicture.asset('assets/email.svg'),
                       spacing(),
                       Text(kVerifyEmail,style: Theme.of(context).textTheme.bodyText1,),
                       spacing(),
@@ -110,7 +112,8 @@ class _VerifyEmailCodeState extends State<VerifyEmailCode> {
 
                       GeneralButton(title: kVerify, tapStudiesButton: (){
                         if(_pinPutController.text == emailCode){
-                          Navigator.pushReplacementNamed(context, updatePassword);
+                          Navigator.pushReplacementNamed(context, registrationScreen1);
+
                         }}
 
 
@@ -120,7 +123,6 @@ class _VerifyEmailCodeState extends State<VerifyEmailCode> {
                     ],
                   ),
                 )),
-              );}
+              );
 
-
-  }
+  }}
