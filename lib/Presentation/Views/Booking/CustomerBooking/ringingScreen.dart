@@ -15,6 +15,7 @@ import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/Widgets/curvePainter.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/Widgets/curveWave.dart';
+import 'package:sure_move/Providers/bookingProviders.dart';
 import 'package:sure_move/Providers/userProvider.dart';
 
 class RipplesAnimation extends StatefulWidget {
@@ -93,6 +94,7 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
       listener: (context, state) {
 
     if(state is BookingSuccess){
+      Provider.of<BookingProvider>(context,listen: false).setUser(state.booking[0]);
    Navigator.pushNamedAndRemoveUntil(context, connectedVendorPage, (route) => false);
     }
      if(state is PaymentSuccessful){

@@ -56,11 +56,6 @@
        <activity
            android:name="com.yalantis.ucrop.UCropActivity"
            />
-       <queries>
-           <intent>
-               <action android:name="android.intent.action.VIEW" />
-               <data android:scheme="sms" />
-           </intent>
-       </queries>
+
     </application>
 </manifest>

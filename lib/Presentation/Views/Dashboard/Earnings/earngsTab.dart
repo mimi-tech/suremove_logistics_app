@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Views/Dashboard/Earnings/allEarnings.dart';
+import 'package:sure_move/Presentation/Views/Dashboard/Earnings/dailyEarning.dart';
+import 'package:sure_move/Presentation/Views/Dashboard/Earnings/monthlyEarnings.dart';
+import 'package:sure_move/Presentation/Views/Dashboard/Earnings/weeklyEarnings.dart';
+import 'package:sure_move/Presentation/Views/Dashboard/Earnings/yearlyEarnings.dart';
 class TotalEarningsTab extends StatefulWidget {
   const TotalEarningsTab({Key? key}) : super(key: key);
 
@@ -15,7 +19,7 @@ class _TotalEarningsTabState extends State<TotalEarningsTab>with TickerProviderS
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
-    _tabController.animateTo(2);
+    _tabController.animateTo(0);
   }
   static const List<Tab> _tabs = [
     Tab(child:Text("All")),
@@ -40,10 +44,10 @@ class _TotalEarningsTabState extends State<TotalEarningsTab>with TickerProviderS
         controller: _tabController,
         children: const [
           AllEarnings(),
-          AllEarnings(),
-          AllEarnings(),
-          AllEarnings(),
-          AllEarnings(),
+          AllDailyEarnings(),
+          AllWeeklyEarnings(),
+          AllMonthlyEarnings(),
+          AllYearlyEarnings(),
         ],
       ),
 

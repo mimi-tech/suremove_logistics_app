@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:sure_move/Logic/AdminLogic/adminBloc.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authState.dart';
 import 'package:sure_move/Logic/BookingLogic/bookingBloc.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthBloc>(create: (context) => AuthBloc()),
         BlocProvider<DriversBloc>(create: (context) => DriversBloc()),
         BlocProvider<UserBloc>(create: (context) => UserBloc()),
+        BlocProvider<AdminBloc>(create: (context) => AdminBloc()),
 
       ],
       // create: (context) {

@@ -11,7 +11,7 @@ import 'package:sure_move/Presentation/Commons/scaffoldMsg.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Commons/drawer.dart';
-import 'package:sure_move/Presentation/Views/Widgets/drawerHandle.dart';
+import 'package:sure_move/Presentation/Views/Commons/drawerHandle.dart';
 import 'package:sure_move/Presentation/utils/logo.dart';
 import 'package:sure_move/Providers/userProvider.dart';
 import 'package:sure_move/Services/apiConstants.dart';
@@ -40,7 +40,8 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(15.0),
             ),
             onPressed: () async {
-              if(user == null && !user.isOngoingBooking! ){
+              if(user.firstName != null){
+              if( user.isOngoingBooking! == true ){
                 ScaffoldMsg().errorMsg(context, kOnGoingError);
               }else{
                 if(user.isActive == false || user.blocked == true){
@@ -49,6 +50,9 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pushNamed(context, itemDetails);
                 }
 
+              }
+              }else{
+                ScaffoldMsg().errorMsg(context, kPoorInternet);
               }
               },
             child: Center(child: Text("Book".toUpperCase(),style: Theme.of(context).textTheme.overline,))),
@@ -67,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               spacing(),
                Column(
                  children: [
-                   LogoDesign(),
+                   const LogoDesign(),
 
                    Align(
                        alignment: Alignment.topLeft,

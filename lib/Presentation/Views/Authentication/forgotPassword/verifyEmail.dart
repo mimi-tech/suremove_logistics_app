@@ -75,7 +75,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
                                 ),
                                 onSaved: (String? value) {
-                                  RegConstants().email = value!;
+                                  email = value!;
                                 },
                               ),
 

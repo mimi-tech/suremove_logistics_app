@@ -18,7 +18,9 @@ class BookingInitial extends BookingState {
 }
 
 class BookingSuccess extends BookingState {
+  final List<BookingModel> booking;
 
+  const BookingSuccess(this.booking);
   @override
   List<Object> get props => [];
 }

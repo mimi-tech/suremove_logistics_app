@@ -52,12 +52,14 @@ class DriverUpdateBookingRequested extends DriverEvent {
 }
 
 class DriverConfirmBookingRequested extends DriverEvent {
-  const DriverConfirmBookingRequested(this.driverId, this.companyId, );
+  const DriverConfirmBookingRequested(this.driverId, this.companyId, this.bookingAmount, this.distance );
   final String driverId;
   final String companyId;
+  final dynamic bookingAmount;
+  final dynamic distance;
 
   @override
-  List<Object> get props => [driverId,companyId,];
+  List<Object> get props => [driverId,companyId,bookingAmount, distance];
 }
 
 class DriverGetABookingRequested extends DriverEvent {

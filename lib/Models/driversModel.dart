@@ -30,8 +30,15 @@ class DriverModel {
   dynamic monthlyCount;
   dynamic weeklyCount;
   dynamic dailyCount;
+  dynamic dailyAmount;
   dynamic dateAdded;
   bool? isActive;
+  dynamic day;
+  dynamic week;
+  dynamic month;
+  dynamic year;
+  dynamic timeCovered;
+
 
 
 
@@ -66,8 +73,14 @@ class DriverModel {
     this.monthlyCount,
     this.weeklyCount,
     this.dailyCount,
+    this.dailyAmount,
     this.dateAdded,
     this.isActive,
+    this.day,
+    this.week,
+    this.month,
+    this.year,
+    this.timeCovered
   });
   // now create converter
 
@@ -103,8 +116,13 @@ class DriverModel {
       monthlyCount: responseData['monthlyCount'] ?? 0,
       weeklyCount: responseData['weeklyCount'] ?? 0,
       dailyCount: responseData['dailyCount'] ?? 0,
+      dailyAmount: responseData['dailyAmount'] ?? 0,
       dateAdded: responseData['dateAdded'] ?? "",
-
+      day: responseData['day'] ?? DateTime.now().day,
+      week: responseData['week'] ?? 0,
+      month: responseData['month'] ?? DateTime.now().month,
+      year: responseData['year'] ?? DateTime.now().year,
+      timeCovered: responseData['timeCovered'] ?? "0",
 
     );
   }
@@ -140,9 +158,14 @@ class DriverModel {
       "monthlyCount":monthlyCount,
       "weeklyCount":weeklyCount,
       "dailyCount":dailyCount,
+      "dailyAmount":dailyAmount,
       "dateAdded":dateAdded,
-      "isActive":isActive
-
+      "isActive":isActive,
+      "day":day,
+      "week":week,
+      "month":month,
+      "year":year,
+      "timeCovered":timeCovered
 
     };
   }}

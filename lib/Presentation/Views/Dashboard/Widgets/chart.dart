@@ -2,6 +2,10 @@ import 'dart:async';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sure_move/Models/driversModel.dart';
+import 'package:sure_move/Presentation/utils/dateFormat.dart';
+import 'package:sure_move/Providers/driverProvider.dart';
 
 class BarChartSample1 extends StatefulWidget {
   const BarChartSample1({super.key});
@@ -64,26 +68,26 @@ class BarChartSample1State extends State<BarChartSample1> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: Icon(
-                    isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: const Color(0xff0f4a3c),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isPlaying = !isPlaying;
-                      if (isPlaying) {
-                        refreshState();
-                      }
-                    });
-                  },
-                ),
-              ),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.all(8),
+            //   child: Align(
+            //     alignment: Alignment.topRight,
+            //     child: IconButton(
+            //       icon: Icon(
+            //         isPlaying ? Icons.pause : Icons.play_arrow,
+            //         color: const Color(0xff0f4a3c),
+            //       ),
+            //       onPressed: () {
+            //         setState(() {
+            //           isPlaying = !isPlaying;
+            //           if (isPlaying) {
+            //             refreshState();
+            //           }
+            //         });
+            //       },
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -120,21 +124,37 @@ class BarChartSample1State extends State<BarChartSample1> {
   }
 
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+    DriverModel driver = Provider.of<DriverProvider>(context).driver;
+
     switch (i) {
       case 0:
-        return makeGroupData(0, 5, isTouched: i == touchedIndex);
+        return makeGroupData(0,
+            day == driver.day && month == driver.month && year == driver.year && weekDay == 1 ? driver.dailyCount.toDouble():0,
+            isTouched: i == touchedIndex);
       case 1:
-        return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+        return makeGroupData(1,
+            day == driver.day && month == driver.month && year == driver.year && weekDay == 2 ? driver.dailyCount.toDouble():0,
+            isTouched: i == touchedIndex);
       case 2:
-        return makeGroupData(2, 5, isTouched: i == touchedIndex);
+        return makeGroupData(2,
+            day == driver.day && month == driver.month && year == driver.year && weekDay == 3 ? driver.dailyCount.toDouble():0,
+            isTouched: i == touchedIndex);
       case 3:
-        return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+        return makeGroupData(3,
+            day == driver.day && month == driver.month && year == driver.year && weekDay == 4 ? driver.dailyCount.toDouble():0,
+            isTouched: i == touchedIndex);
       case 4:
-        return makeGroupData(4, 9, isTouched: i == touchedIndex);
+        return makeGroupData(4,
+            day == driver.day && month == driver.month && year == driver.year && weekDay == 5 ? driver.dailyCount.toDouble():0,
+            isTouched: i == touchedIndex);
       case 5:
-        return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+        return makeGroupData(5,
+            day == driver.day && month == driver.month && year == driver.year && weekDay == 6 ? driver.dailyCount.toDouble():0,
+            isTouched: i == touchedIndex);
       case 6:
-        return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+        return makeGroupData(6,
+            day == driver.day && month == driver.month && year == driver.year && weekDay == 7 ? driver.dailyCount.toDouble():0,
+            isTouched: i == touchedIndex);
       default:
         return throw Error();
     }

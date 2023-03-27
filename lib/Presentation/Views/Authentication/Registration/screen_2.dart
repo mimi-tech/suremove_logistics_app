@@ -49,20 +49,25 @@ class _RegistrationScreen2State extends State<RegistrationScreen2> {
       controller: _pinPutController,
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: PinTheme(
+          width: 56,
+          height: 56,
         decoration: BoxDecoration(
           border: Border.all(color: kOrangeColor),
           borderRadius: BorderRadius.circular(8),
+
         )
       ),
 
       submittedPinTheme: PinTheme(
+          width: 56,
+          height: 56,
         decoration: BoxDecoration(
           border: Border.all(color: kGreen),
           borderRadius: BorderRadius.circular(8),
         )
       ),
       onChanged: (String? value){
-        RegConstants().txnPin = value!;
+        txnPin = value!;
       },
       pinAnimationType: PinAnimationType.slide,
     );
@@ -88,7 +93,7 @@ class _RegistrationScreen2State extends State<RegistrationScreen2> {
                     children: [
 
                       animatingBorders(),
-                      spacing(),
+                      spacing(),  spacing(),
                       const Text(kReferal,textAlign: TextAlign.center,),
 
                       TextFormField(
@@ -100,11 +105,11 @@ class _RegistrationScreen2State extends State<RegistrationScreen2> {
                         textCapitalization: TextCapitalization.sentences,
                         style: Theme.of(context).textTheme.bodyText1,
                         decoration: const InputDecoration(
-                          hintText: "Referral username",
+                          hintText: "Referral username [optional]",
 
                         ),
                         onSaved: (String? value) {
-                          RegConstants().referralId = value!;
+                          referralId = value!;
                         },
                       ),
 

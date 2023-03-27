@@ -35,6 +35,7 @@ class _UpdateEmailAddressState extends State<UpdateEmailAddress> {
   @override
   Widget build(BuildContext context) {
     NewUser user = Provider.of<UserProvider>(context).user;
+    _oldEmail.text = user.email.toString();
     return Scaffold(
         body: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
@@ -78,7 +79,7 @@ class _UpdateEmailAddressState extends State<UpdateEmailAddress> {
 
                                 ),
                                 onSaved: (String? value) {
-                                  RegConstants().email = value!;
+
                                 },
                               ),
 
@@ -97,7 +98,7 @@ class _UpdateEmailAddressState extends State<UpdateEmailAddress> {
 
                                 ),
                                 onSaved: (String? value) {
-                                  RegConstants().email = value!;
+                                  email = value!;
                                 },
                               ),
 
@@ -119,9 +120,9 @@ class _UpdateEmailAddressState extends State<UpdateEmailAddress> {
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
-                            BlocProvider.of<AuthBloc>(context).add(AuthSendEmailVerificationCode(_oldEmail.text.trim(),_newEmail.text.trim(),));
+                            BlocProvider.of<AuthBloc>(context).add(UserSendEmailCodeRequested(_newEmail.text.trim(),));
 
-                          }},title:kRegister,)
+                          }},title:kVerify,)
 
                       ],
                     ),

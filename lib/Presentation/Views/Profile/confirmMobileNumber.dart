@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
@@ -28,9 +29,24 @@ class VerifyUpdatedMobileNumber extends StatefulWidget {
 }
 
 class _VerifyUpdatedMobileNumberState extends State<VerifyUpdatedMobileNumber> {
-  final TextEditingController _otp = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String? otp;
+  final TextEditingController _pinPutController = TextEditingController();
+  final FocusNode _pinPutFocusNode = FocusNode();
+  String errorText = "Invalid code";
+  bool showError = false;
+
+  final defaultPinTheme = PinTheme(
+
+    width: 56,
+    height: 56,
+    textStyle: const TextStyle(fontSize: 20, color:kTextColor, fontWeight: FontWeight.w600),
+
+    decoration: BoxDecoration(
+      border: Border.all(color: kOrangeColor),
+      borderRadius: BorderRadius.circular(8),
+    ),
+  );
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +57,7 @@ class _VerifyUpdatedMobileNumberState extends State<VerifyUpdatedMobileNumber> {
               if (state is AuthDenied) {
                 ScaffoldMsg().errorMsg(context, state.errors[0]);
               }
-              if(state is AuthSuccess){
-                BlocProvider.of<AuthBloc>(context).add(AuthUpdatePhoneNumberRequested(widget.phoneNumber!));
 
-              }
               if(state is UpdatePhoneNumberSuccess){
                 Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
                 ScaffoldMsg().successMsg(context,state.success);
@@ -56,67 +69,83 @@ class _VerifyUpdatedMobileNumberState extends State<VerifyUpdatedMobileNumber> {
               return  ModalProgressHUD(
                 inAsyncCall: (state is AuthLoading)?true:false,
                 child: SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: kMargin),
-                    child: Column(
-                      children: [
-                        SvgPicture.asset('assets/mobile.svg'),
+                  child: Column(
+                    children: [
+                      SvgPicture.asset('assets/mobile.svg'),
 
-                        spacing(),
-                        const Text(kPinError),
-                        spacing(),
-                        Form(
-                            key: _formKey,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            child: Column(
-                                crossAxisAlignment:CrossAxisAlignment.start,
-                                children: [
-                                  spacing(),
-
-                                  TextFormField(
-                                    controller: _otp,
-                                    autocorrect: true,
-                                    autofocus: true,
-                                    cursorColor: (kOrangeColor),
-                                    keyboardType: TextInputType.phone,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context).textTheme.bodyText1,
-                                    validator: Validator.validatePhoneNumber,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-
-                                    decoration: const InputDecoration(
-                                      hintText: "Enter OTP",
+                      spacing(),
+                      spacing(),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text: "$kVerifyPhoneNumber: ",
+                            style: Theme.of(context).textTheme.bodyText1,
+                            children: <TextSpan>[
+                              TextSpan(
+                                text:widget.phoneNumber,
+                                style: Theme.of(context).textTheme.headline5!.copyWith(color: kDarkRedColor),
+                              ),
 
 
-                                    ),
-                                    onSaved: (String? value) {
-                                      otp = value!;
-                                    },
-                                  ),
+                            ]
 
-                                  spacing(),
-                                ])),
+                        ),
+                      ),
 
-                        spacing(),
-                        GeneralButton(tapStudiesButton: (){
-                          final form = _formKey.currentState;
-                          if (form!.validate()) {
-                            form.save();
-                            FocusScopeNode currentFocus = FocusScope.of(context);
+                      spacing(),
+                  Pinput(
 
-                            if (!currentFocus.hasPrimaryFocus) {
-                              currentFocus.unfocus();
-                            }
-                            BlocProvider.of<AuthBloc>(context).add(VerifyOtpRequested(widget.verificationCode.toString(),_otp.text));
-                          }
-                        },title: "Validate",)
-                      ],
+                    autofocus: true,
+                    obscureText: true,
+                    obscuringCharacter: "*",
+                    keyboardType:TextInputType.number,
+                    length: 6,
+                    focusNode: _pinPutFocusNode,
+                    controller: _pinPutController,
+                    defaultPinTheme: defaultPinTheme,
+                    focusedPinTheme: PinTheme(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: kOrangeColor),
+                          borderRadius: BorderRadius.circular(8),
+                        )
                     ),
+
+                    submittedPinTheme: PinTheme(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: kGreen),
+                          borderRadius: BorderRadius.circular(8),
+                        )
+                    ),
+                    pinAnimationType: PinAnimationType.slide,
+                    onCompleted: (String value){
+                      if(_pinPutController.text != phoneNumberCode){
+
+                        setState(() {
+                          showError = !showError;
+                        });
+                      }else{
+                        BlocProvider.of<AuthBloc>(context).add(AuthUpdatePhoneNumberRequested(widget.phoneNumber!));
+
+                      }
+
+                    },
+                    onChanged: (String value){
+                      setState(() {
+                        showError = false;
+                      });
+                    },
                   ),
-                ),
-              );
+                      showError?Text(errorText,style: const TextStyle(color: kRedColor),):const Text(""),
+                      spacing(),
+
+                      ],
+                  ),
+                ));
+
             }));
   }
 }

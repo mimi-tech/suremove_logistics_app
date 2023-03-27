@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
+import 'package:sure_move/Presentation/Views/Authentication/Registration/emailScreen.dart';
 import 'package:sure_move/Presentation/Views/Authentication/Registration/verifyEmailCode.dart';
 import 'package:sure_move/Presentation/Views/Authentication/forgotPassword/verifyEmailCode.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/awaitingScreen.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/ratingDriver.dart';
 import 'package:sure_move/Presentation/Views/Booking/VendorBooking/penaltyScreen.dart';
 import 'package:sure_move/Presentation/Views/Commons/notifications.dart';
+import 'package:sure_move/Presentation/Views/Dashboard/History/withdrawals.dart';
 import 'package:sure_move/Presentation/Views/Funds/saveCard.dart';
 import 'package:sure_move/Presentation/Views/Profile/confirmMobileNumber.dart';
 import 'package:sure_move/Presentation/Views/Profile/profileTabview.dart';
@@ -88,6 +90,8 @@ class AppRouter {
 
         case verifyEmail:
         return MaterialPageRoute( builder: (_) => const VerifyEmail());
+       case emailScreen:
+        return MaterialPageRoute( builder: (_) => const EmailScreen());
 
         case updatePassword:
         return MaterialPageRoute( builder: (_) => const UpdatePassword());
@@ -229,6 +233,9 @@ class AppRouter {
 
         case verifyEmailCodeRegistration:
         return MaterialPageRoute( builder: (_) => const VerifyEmailCodeRegistration());
+
+        case withdrawalHistory:
+        return MaterialPageRoute( builder: (_) => const WithdrawalHistory());
 
 
 

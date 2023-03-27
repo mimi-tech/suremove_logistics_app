@@ -14,6 +14,8 @@ const String kGeneratePin = 'Please click on generate admin PIN below to create 
 const String kGeneratePin2 = "You have successfully generated a PIN for ";
 const String kPasswordError = 'Please enter your password';
 const String kMobileError = 'Please enter your phone number';
+const String kMobile = 'Please enter new your phone number';
+const String kMobile2 = 'Your old phone number is';
 const String kMobileError2 = 'Please enter your new phone number';
 const String kEmailError = 'Please enter your Email address';
 const String kEmailError5 = 'Please enter admin email';
@@ -140,7 +142,7 @@ const String kTxnError = 'Sorry incorrect pin';
 //Dashboard
 const String kToday = 'Today';
 const String kWalletBal = 'Wallet Balance';
-const String kReferrialEarnings = 'PROMOTIONAL EARNINGS';
+const String kReferrialEarnings = 'REFERRAL EARNINGS';
 const String kLearnMoreText = 'Here a vendor delivers to you a good refilled cylinder that matches your own cylinder regulator. He first inspects your cylinder to make sure its in good condition.If any problem, he will recommend solution which will be added to your order fee and then adds identification sticker on your empty cylinder. He will refill and return it to you on your next order and take his own finished cylinder. /n Or he gives you a branded company cylinder that will not be tampered with, and can only be refilled by the vendor. Any bridge of contract will be paid for according to agreement.';
 const String kMyEarnings = 'TOTAL EARNINGS ';
 const String kNoEarns = 'Sorry you have not earned from us';
@@ -220,3 +222,7 @@ const kSelectCompanyError = "Please select a company";
 
 //API Strings
 const String kError = "Unknown error, please try again";
+const String kNoReferral = "You have no referral";
+const String kPoorInternet = "Please wait... Poor internet connection";
+const String kNoEarnings = "No earning";
+const String kNoWithdrawal = "No withdrawal made ";

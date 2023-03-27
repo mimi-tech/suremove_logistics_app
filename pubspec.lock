@@ -275,10 +275,12 @@ packages:
   flutter_paystack:
     dependency: "direct main"
     description:
-      name: flutter_paystack
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5+1"
+      path: "."
+      ref: master
+      resolved-ref: f24afe7120952ed98efc919b9125947357ff5b45
+      url: "https://github.com/mimi-tech/flutter_paystack.git"
+    source: git
+    version: "1.0.7"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

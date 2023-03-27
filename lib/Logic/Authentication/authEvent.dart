@@ -62,7 +62,6 @@ class AuthRegisterRequested extends AuthEvent {
       this.lastName,
       this.gender,
       this.referralId,
-      this.whoAreYou,
       this.txnPin
       );
   final String email;
@@ -72,9 +71,8 @@ class AuthRegisterRequested extends AuthEvent {
   final String profileImageUrl;
   final String firstName;
   final String lastName;
-  final Gender gender;
+  final String gender;
   final String referralId;
-  final AccountType whoAreYou;
   final String txnPin;
 
   @override
@@ -88,7 +86,7 @@ class AuthRegisterRequested extends AuthEvent {
     lastName,
     gender,
     referralId,
-    whoAreYou,
+
     txnPin
   ];
 }
@@ -137,4 +135,13 @@ class UserUploadFilesRequested extends AuthEvent {
 
   @override
   List<Object> get props => [file];
+}
+
+class UserSendEmailCodeRequested extends AuthEvent {
+  const UserSendEmailCodeRequested(this.token);
+  final dynamic token;
+
+
+  @override
+  List<Object> get props => [token];
 }

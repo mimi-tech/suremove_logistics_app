@@ -6,23 +6,21 @@ import 'package:sure_move/Models/driversModel.dart';
 import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
-import 'package:sure_move/Presentation/Commons/dimens.dart';
 import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Views/Dashboard/Widgets/earningConstructors.dart';
 import 'package:sure_move/Presentation/Views/Dashboard/Widgets/headers.dart';
 import 'package:sure_move/Presentation/utils/NoDataFound.dart';
-import 'package:sure_move/Presentation/utils/enums.dart';
 import 'package:sure_move/Presentation/utils/progressbar.dart';
 import 'package:sure_move/Providers/driverProvider.dart';
 import 'package:sure_move/Providers/userProvider.dart';
-class AllEarnings extends StatefulWidget {
-  const AllEarnings({Key? key}) : super(key: key);
+class AllMonthlyEarnings extends StatefulWidget {
+  const AllMonthlyEarnings({Key? key}) : super(key: key);
 
   @override
-  State<AllEarnings> createState() => _AllEarningsState();
+  State<AllMonthlyEarnings> createState() => _AllMonthlyEarningsState();
 }
 
-class _AllEarningsState extends State<AllEarnings> {
+class _AllMonthlyEarningsState extends State<AllMonthlyEarnings> {
   Future<List <EarningModel>> ?  earningsList;
   var items;
   var companyDetails;
@@ -32,7 +30,7 @@ class _AllEarningsState extends State<AllEarnings> {
     super.initState();
     NewUser user = Provider.of<UserProvider>(context,listen: false).user;
     DriverModel driver = Provider.of<DriverProvider>(context,listen: false).driver;
-    earningsList  =  AdminBloc.getAllEarnings(user,driver.driverId);
+    earningsList  =  AdminBloc.getMonthlyEarnings(user,driver.driverId);
   }
 
   @override
@@ -41,7 +39,7 @@ class _AllEarningsState extends State<AllEarnings> {
     super.didChangeDependencies();
     NewUser user = Provider.of<UserProvider>(context,listen: false).user;
     DriverModel driver = Provider.of<DriverProvider>(context,listen: false).driver;
-    earningsList  =  AdminBloc.getAllEarnings(user,driver.driverId);
+    earningsList  =  AdminBloc.getMonthlyEarnings(user,driver.driverId);
   }
 
   Widget _earningList(){
@@ -60,13 +58,13 @@ class _AllEarningsState extends State<AllEarnings> {
   }
 
   Widget _earningsList(List<EarningModel>? earnings){
-    return Column(
+    return earnings!.isEmpty?const NoDataFound(title: kNoEarnings): Column(
       children: [
         Expanded(
           child: ListView(
             children: [
               ListView.builder(
-                  itemCount: earnings!.length,
+                  itemCount: earnings.length,
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: ( context, index){
@@ -78,17 +76,17 @@ class _AllEarningsState extends State<AllEarnings> {
                         Card(
                           child: Column(children:  [
                             EarningConstructor(
-                              dateString: earnings[index].createdAt,
-                              itemSize: items["size"].toString(),
-                              itemQuantity:items["number"].toString(),
-                              itemName: items["name"].toString(),
-                              company: companyDetails["name"],
-                              paymentMethod: earnings[index].methodOfPayment,
-                              deliveryFee: earnings[index].driverAmount,
-                              contributorFee: earnings[index].contributorAmount,
-                              partnerFee:earnings[index].partnerAmount,
-                              ownerFee: earnings[index].ownerAmount,
-                              total: earnings[index].totalAmount
+                                dateString: earnings[index].createdAt,
+                                itemSize: items["size"].toString(),
+                                itemQuantity:items["number"].toString(),
+                                itemName: items["name"].toString(),
+                                company: companyDetails["name"],
+                                paymentMethod: earnings[index].methodOfPayment,
+                                deliveryFee: earnings[index].driverAmount,
+                                contributorFee: earnings[index].contributorAmount,
+                                partnerFee:earnings[index].partnerAmount,
+                                ownerFee: earnings[index].ownerAmount,
+                                total: earnings[index].totalAmount
 
                             )
                           ],),
@@ -107,11 +105,11 @@ class _AllEarningsState extends State<AllEarnings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kWhiteColor,
-        automaticallyImplyLeading: false,
-        title: const AnalysisHeaders(),),
-      body:_earningList()
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          automaticallyImplyLeading: false,
+          title: const AnalysisHeaders(),),
+        body:_earningList()
     );
   }
 

@@ -8,7 +8,6 @@ Widget space()=>SizedBox(height: 60.0.h);
 Widget spacing()=>SizedBox(height: 20.0.h);
 String? emailCode;
 String? phoneNumberCode;
-class RegConstants{
   String? email;
   String? username;
   String? password;
@@ -21,7 +20,7 @@ class RegConstants{
   String? profileImageUrl;
   File? pickedImage;
   Gender? gender;
-}
+
 
 class BookingConstants{
   String? customerSourceAddress;

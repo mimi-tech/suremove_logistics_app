@@ -125,7 +125,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                           currentFocus.unfocus();
                         }
                         if(_password.text == _cPassword.text){
-                          BlocProvider.of<AuthBloc>(context).add(AuthUpdatePasswordRequested(_password.text, RegConstants().email!));
+                          BlocProvider.of<AuthBloc>(context).add(AuthUpdatePasswordRequested(_password.text, email!));
 
                         }else{
                           ScaffoldMsg().errorMsg(context, "Password dose not match");

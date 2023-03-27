@@ -156,11 +156,13 @@ class DriverServices{
     }
   }
 
-  static Future<Object> driverConfirmBooking(driverId,companyId) async {
+  static Future<Object> driverConfirmBooking(driverId,companyId,bookingAmount,distance) async {
 
     var body = jsonEncode({
       "driverId":driverId,
       "companyId":companyId,
+      "bookingAmount":bookingAmount,
+      "distance":distance,
     });
     try {
       var url = Uri.parse("$apiUrl/booking/driver-confirm-booking");

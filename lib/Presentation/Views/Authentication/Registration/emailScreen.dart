@@ -42,7 +42,7 @@ class _EmailScreenState extends State<EmailScreen> {
                 ScaffoldMsg().errorMsg(context, state.errors[0]);
               }
               if (state is AuthSuccess) {
-                Navigator.pushReplacementNamed(context, verifyEmailCodeRegistration);
+                Navigator.pushNamed(context, verifyEmailCodeRegistration);
               }
             },
             builder: (context, state) {
@@ -74,7 +74,7 @@ class _EmailScreenState extends State<EmailScreen> {
 
                               ),
                               onSaved: (String? value) {
-                                RegConstants().email = value!;
+                                email = value!;
                               },
                             ),
 
@@ -92,7 +92,8 @@ class _EmailScreenState extends State<EmailScreen> {
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }
-                          BlocProvider.of<AuthBloc>(context).add(AuthSendEmailVerificationCode(_newEmail.text.trim(),null,));
+
+                          BlocProvider.of<AuthBloc>(context).add(UserSendEmailCodeRequested(""));
 
                         }},title:kVerify,)
 

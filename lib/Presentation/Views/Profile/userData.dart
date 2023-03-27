@@ -185,7 +185,7 @@ class _UsersDataState extends State<UsersData> {
 
                           ),
                           onSaved: (String? value) {
-                            RegConstants().firstname = value!;
+                            firstname = value!;
                           },
                         ),
 
@@ -206,7 +206,7 @@ class _UsersDataState extends State<UsersData> {
 
                           ),
                           onSaved: (String? value) {
-                            RegConstants().lastname = value!;
+                            lastname = value!;
                           },
                         ),
 
@@ -227,7 +227,7 @@ class _UsersDataState extends State<UsersData> {
 
                           ),
                           onSaved: (String? value) {
-                            RegConstants().username = value!;
+                            username = value!;
                           },
                         ),
                       ],
@@ -247,7 +247,7 @@ class _UsersDataState extends State<UsersData> {
                           onChanged: (Gender? value) {
                             setState(() {
                               _gender = value!;
-                              RegConstants().gender = _gender;
+                              gender = _gender;
                             });
                           },
                         ),
@@ -260,7 +260,7 @@ class _UsersDataState extends State<UsersData> {
                           onChanged: (Gender? value) {
                             setState(() {
                               _gender = value!;
-                              RegConstants().gender = _gender;
+                              gender = _gender;
                             });
                           },
                         ),

@@ -13,6 +13,7 @@ import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Booking/CustomerBooking/verifyTxn.dart';
 import 'package:sure_move/Presentation/Views/Funds/saveCard.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
+import 'package:sure_move/Presentation/utils/googlemapScreen.dart';
 
 class DisplayAmount extends StatefulWidget {
   const DisplayAmount({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _DisplayAmountState extends State<DisplayAmount> {
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
-                  child: Text("jk")//GoogleMapScreen(latitude: lat,longitude: lng),
+                  child: GoogleMapScreen(latitude: lat,longitude: lng),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(18.0),

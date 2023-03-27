@@ -136,7 +136,9 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
              dynamic company = booking.companyDetails;
              BlocProvider.of<DriversBloc>(context).add(DriverConfirmBookingRequested(
                  booking.driverId.toString(),
-                 company["id"]
+                 company["id"],
+                 booking.totalAmount,
+                 booking.timeTaken.toDOuble()
              ));
             },title: "Package delivered".toUpperCase(),):const Text(""),
             spacing(),

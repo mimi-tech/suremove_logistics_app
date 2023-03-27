@@ -18,6 +18,8 @@ class NewUser {
   bool? isActive;
   bool? blocked;
   dynamic promoBalance;
+  dynamic totalEarning;
+  dynamic totalWithdrawal;
 
   NewUser({
 
@@ -38,9 +40,9 @@ class NewUser {
     this.isOngoingBooking,
     this.isActive,
     this.blocked,
-    this.promoBalance
-
-
+    this.promoBalance,
+    this.totalEarning,
+    this.totalWithdrawal
 
   });
   // now create converter
@@ -65,6 +67,8 @@ class NewUser {
       isActive: responseData['inActive'] ?? true,
       blocked: responseData['blocked'] ?? false,
       promoBalance: responseData['promoBalance'] ?? 0,
+      totalEarning: responseData['totalEarning'] ?? 0,
+      totalWithdrawal: responseData['totalWithdrawal'] ?? 0,
 
     );
   }
@@ -88,6 +92,8 @@ class NewUser {
       "isOngoingBooking":isOngoingBooking,
       "isActive":isActive,
       "blocked":blocked,
-      "promoBalance":promoBalance
+      "promoBalance":promoBalance,
+      "totalEarning":totalEarning,
+      "totalWithdrawal":totalWithdrawal,
     };
   }}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
 import 'package:sure_move/Logic/Authentication/authState.dart';
@@ -16,6 +17,7 @@ import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
 import 'package:sure_move/Presentation/utils/enums.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
+import 'package:sure_move/Providers/userProvider.dart';
 
 class RegistrationScreen3 extends StatefulWidget {
   const RegistrationScreen3({Key? key}) : super(key: key);
@@ -37,29 +39,29 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
     return Scaffold(
         appBar: AppBar(backgroundColor: kWhiteColor,iconTheme: const IconThemeData(color: kBlackColor),),
         body: BlocConsumer<AuthBloc, AuthState>(
-    listener: (context, state) {
+    listener: (context, state) async {
     if (state is AuthDenied) {
     ScaffoldMsg().errorMsg(context, state.errors[0]);
     }
     if(state is AuthSuccess){
+      Provider.of<UserProvider>(context,listen: false).setUser(state.success![0]);
 
-   Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
-   ScaffoldMsg().successMsg(context,"Account created successfully");
+      Navigator.pushNamedAndRemoveUntil(context, homePage, (route) => false);
+   ScaffoldMsg().successMsg(context,"Registration successful");
 
     }
     if(state is ImageUploadedSuccess){
       BlocProvider.of<AuthBloc>(context).add(AuthRegisterRequested(
-        RegConstants().email!,
-        RegConstants().password!,
-        RegConstants().phoneNumber!,
-        RegConstants().username!,
+        email.toString(),
+        password.toString(),
+        phoneNumber.toString(),
+        username.toString(),
           state.data[1],
-        RegConstants().firstname!,
-        RegConstants().lastname!,
-        RegConstants().gender!,
-        RegConstants().referralId!,
-        AccountType.customer,
-        RegConstants().txnPin!,
+        firstname.toString(),
+        lastname.toString(),
+        gender!.name,
+        referralId.toString(),
+        txnPin.toString(),
 
       ));
     }
@@ -72,7 +74,7 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
               margin: EdgeInsets.symmetric(horizontal: kMargin),
               child: Column(
                 children: [
-                  SvgPicture.asset('assets/email.svg'),
+                  SvgPicture.asset('assets/unlock.svg'),
                   spacing(),
                   Form(
                     key: _formKey,
@@ -89,7 +91,6 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
                           autofocus: true,
                           cursorColor: (kOrangeColor),
                           keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.sentences,
                           style: Theme.of(context).textTheme.bodyText1,
                           validator: Validator.validateUsername,
                           decoration: const InputDecoration(
@@ -97,7 +98,7 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
 
                           ),
                           onSaved: (String? value) {
-                            RegConstants().username = value!;
+                            username = value!;
                           },
                         ),
 
@@ -118,7 +119,7 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
 
                           ),
                           onSaved: (String? value) {
-                            RegConstants().password = value!;
+                            password = value!;
                           },
                         ),
 
@@ -139,7 +140,7 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
 
                           ),
                           onSaved: (String? value) {
-                            RegConstants().cPassword = value!;
+                            cPassword = value!;
                           },
                         ),
 
@@ -159,23 +160,22 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
                       if (!currentFocus.hasPrimaryFocus) {
                         currentFocus.unfocus();
                       }
-                      if(RegConstants().pickedImage == null){
+                      if(pickedImage == null){
                         BlocProvider.of<AuthBloc>(context).add(AuthRegisterRequested(
-                          RegConstants().email!,
-                          RegConstants().password!,
-                          RegConstants().phoneNumber!,
-                          RegConstants().username!,
-                          RegConstants().profileImageUrl!,
-                          RegConstants().firstname!,
-                          RegConstants().lastname!,
-                          RegConstants().gender!,
-                          RegConstants().referralId!,
-                          AccountType.customer,
-                          RegConstants().txnPin!,
+                          email!,
+                          password!,
+                          phoneNumber!,
+                          username!,
+                          "",
+                          firstname!,
+                          lastname!,
+                          gender!.name,
+                          referralId!,
+                          txnPin!,
 
                         ));
                       }else{
-                        BlocProvider.of<AuthBloc>(context).add(UserUploadFilesRequested(RegConstants().pickedImage));
+                        BlocProvider.of<AuthBloc>(context).add(UserUploadFilesRequested(pickedImage!.path));
 
                       }
 

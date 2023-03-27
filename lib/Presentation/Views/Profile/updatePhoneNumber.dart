@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
 import 'package:sure_move/Logic/Authentication/authEvent.dart';
 import 'package:sure_move/Logic/Authentication/authState.dart';
+import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
@@ -17,6 +19,7 @@ import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Authentication/validation.dart';
 import 'package:sure_move/Presentation/Views/Profile/confirmMobileNumber.dart';
 import 'package:sure_move/Presentation/utils/generalButton.dart';
+import 'package:sure_move/Providers/userProvider.dart';
 class UpdatePhoneNumber extends StatefulWidget {
   const UpdatePhoneNumber({Key? key}) : super(key: key);
 
@@ -30,8 +33,11 @@ class _UpdatePhoneNumberState extends State<UpdatePhoneNumber> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? phoneNumber;
   String _countryCode = '';
+
   @override
   Widget build(BuildContext context) {
+    NewUser user = Provider.of<UserProvider>(context).user;
+ String oldPhoneNumber = user.phoneNumber.toString();
     return Scaffold(
         body: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
@@ -39,10 +45,10 @@ class _UpdatePhoneNumberState extends State<UpdatePhoneNumber> {
                 ScaffoldMsg().errorMsg(context, state.errors[0]);
               }
 
-              if(state is AuthCodeSent){
+              if(state is AuthSuccess){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => VerifyUpdatedMobileNumber(verificationCode:state.message[0], phoneNumber:_countryCode + _phoneNumber.text)),
+                  MaterialPageRoute(builder: (context) => VerifyUpdatedMobileNumber(verificationCode:phoneNumberCode, phoneNumber:_countryCode + _phoneNumber.text)),
                 );
               }
 
@@ -56,17 +62,32 @@ class _UpdatePhoneNumberState extends State<UpdatePhoneNumber> {
                     child: Column(
                       children: [
                         SvgPicture.asset('assets/mobile.svg'),
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              text: "$kMobile2 ",
+                              style: Theme.of(context).textTheme.bodyText1,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: oldPhoneNumber.toString(),
+                                  style: Theme.of(context).textTheme.headline5!.copyWith(color: kDarkRedColor),
+                                ),
 
+
+                              ]
+
+                          ),
+                        ),
                         spacing(),
-                        const Text(kMobileError),
-                        spacing(),
+                        const Text(kMobile),
+
                         Form(
                             key: _formKey,
                             autovalidateMode: AutovalidateMode.onUserInteraction,
                             child: Column(
                                 crossAxisAlignment:CrossAxisAlignment.start,
                                 children: [
-                                  spacing(),
+
 
                                   TextFormField(
                                     controller: _phoneNumber,
@@ -111,7 +132,7 @@ class _UpdatePhoneNumberState extends State<UpdatePhoneNumber> {
                                     ),
                                     onSaved: (String? value) {
                                       phoneNumber = value!;
-                                      RegConstants().phoneNumber = _countryCode + phoneNumber!;
+                                      phoneNumber = _countryCode + phoneNumber!;
                                     },
                                   ),
 
@@ -129,8 +150,8 @@ class _UpdatePhoneNumberState extends State<UpdatePhoneNumber> {
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
-                            print(_countryCode + _phoneNumber.text);
-                            BlocProvider.of<AuthBloc>(context).add(SendOtpRequested(_countryCode + _phoneNumber.text));
+
+                            BlocProvider.of<AuthBloc>(context).add(AuthSendPhoneNumberCodeRequested(_countryCode + _phoneNumber.text));
                           }},title: kVerify,)
 
                       ],

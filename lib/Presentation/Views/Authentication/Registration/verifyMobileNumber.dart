@@ -71,7 +71,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
       pinAnimationType: PinAnimationType.slide,
       onCompleted: (String value){
         if(_pinPutController.text != phoneNumberCode){
-          print(emailCode);
+
           setState(() {
             showError = !showError;
           });
@@ -87,7 +87,6 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
   }
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as Map;
     return Scaffold(
         appBar: AppBar(backgroundColor: kWhiteColor,iconTheme: const IconThemeData(color: kBlackColor),),
 
@@ -98,7 +97,23 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
 
       spacing(),
     spacing(),
-    Text(kVerifyPhoneNumber,style: Theme.of(context).textTheme.bodyText1,),
+      RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+            text: "$kVerifyPhoneNumber: ",
+            style: Theme.of(context).textTheme.bodyText1,
+            children: <TextSpan>[
+              TextSpan(
+                text: phoneNumber.toString(),
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: kDarkRedColor),
+              ),
+
+
+            ]
+
+        ),
+      ),
+
     spacing(),
     animatingBorders(),
     showError?Text(errorText,style: const TextStyle(color: kRedColor),):const Text(""),
@@ -106,7 +121,9 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
 
           GeneralButton(title: kVerify, tapStudiesButton: (){
             if(_pinPutController.text == phoneNumberCode){
-              BlocProvider.of<AuthBloc>(context).add(AuthVerifyEmailCode());
+              Navigator.pushReplacementNamed(context, emailScreen);
+
+              //BlocProvider.of<AuthBloc>(context).add(AuthVerifyEmailCode());
             }}
           )],
     ),

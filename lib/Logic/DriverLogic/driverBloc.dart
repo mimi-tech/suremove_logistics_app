@@ -140,7 +140,7 @@ class DriversBloc extends Bloc<DriverEvent, DriverState> {
 
   _onDriverConfirmBooking(DriverConfirmBookingRequested event, Emitter<DriverState> emit) async {
     emit(DriverLoading());
-    var response = await DriverServices.driverConfirmBooking(event.driverId,event.companyId);
+    var response = await DriverServices.driverConfirmBooking(event.driverId,event.companyId,event.bookingAmount,event.distance);
     if(response is Success){
       emit(DriverSuccess());
 

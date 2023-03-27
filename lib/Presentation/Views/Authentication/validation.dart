@@ -57,7 +57,7 @@ class Validator {
     if(value!.isEmpty) {
       return "user name can't be empty";
     }
-    if(value.length < 6) {
+    if(value.length < 3) {
       return "user name is too short";
     }
 

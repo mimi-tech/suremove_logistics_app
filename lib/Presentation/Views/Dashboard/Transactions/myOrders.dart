@@ -42,6 +42,7 @@ class _MyOrdersTxnState extends State<MyOrdersTxn> {
                     deliveryFee: "4094",
                     total: "43434",
 
+
                   )
                 ],),
               )

@@ -81,7 +81,7 @@ class _DriverEmailAddressState extends State<DriverEmailAddress> {
 
                                 ),
                                 onSaved: (String? value) {
-                                  RegConstants().email = value!;
+                                  email = value!;
                                 },
                               ),
 

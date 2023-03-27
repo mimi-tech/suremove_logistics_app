@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:sure_move/Models/driversModel.dart';
+import 'package:sure_move/Models/userModel.dart';
 import 'package:sure_move/Presentation/Commons/colors.dart';
 import 'package:sure_move/Presentation/Commons/constants.dart';
 import 'package:sure_move/Presentation/Commons/dimens.dart';
@@ -7,7 +10,12 @@ import 'package:sure_move/Presentation/Commons/strings.dart';
 import 'package:sure_move/Presentation/Routes/strings.dart';
 import 'package:sure_move/Presentation/Views/Dashboard/Widgets/chart.dart';
 import 'package:sure_move/Presentation/Views/Funds/Funding/amountScreen.dart';
+import 'package:sure_move/Presentation/utils/dateFormat.dart';
+import 'package:sure_move/Presentation/utils/enums.dart';
+import 'package:sure_move/Presentation/utils/formatCurrency.dart';
 import 'package:sure_move/Presentation/utils/profilePicture.dart';
+import 'package:sure_move/Providers/driverProvider.dart';
+import 'package:sure_move/Providers/userProvider.dart';
 class DashboardHome extends StatelessWidget {
   const DashboardHome({Key? key}) : super(key: key);
    Widget cardSpacing(){
@@ -15,6 +23,9 @@ class DashboardHome extends StatelessWidget {
    }
   @override
   Widget build(BuildContext context) {
+    NewUser user = Provider.of<UserProvider>(context).user;
+    DriverModel driver = Provider.of<DriverProvider>(context).driver;
+
     return Scaffold(
         backgroundColor: kOrangeColor,
         body: SingleChildScrollView(
@@ -28,7 +39,7 @@ class DashboardHome extends StatelessWidget {
                children: [
                  IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: kWhiteColor,)),
                  Text(kDashBoard.toUpperCase(),style: Theme.of(context).textTheme.overline,),
-                 ProfilePicture(image: "" ),
+                 ProfilePicture(image: user.profileImageUrl ),
 
                ],
              ),
@@ -40,15 +51,26 @@ class DashboardHome extends StatelessWidget {
                   cardSpacing(),
                   Text(kToday.toUpperCase(),style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: kFontSize16),),
                  spacing(),
-                  Text("0.00".toUpperCase(),style: Theme.of(context).textTheme.bodyText2),
+                  Text(
+                      day == driver.day && month == driver.month && year == driver.year?
+                      "${formatCurrency(driver.dailyAmount)}":"0.00",
+
+                      style: Theme.of(context).textTheme.bodyText2),
                   spacing(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("0 order(s)".toUpperCase(),style: Theme.of(context).textTheme.headline1),
-                        Text("0 hr".toUpperCase(),style: Theme.of(context).textTheme.headline1),
+                        Text(
+                            day == driver.day && month == driver.month && year == driver.year?
+                            "${driver.dailyCount} order(s)".toUpperCase():"0",
+                            style: Theme.of(context).textTheme.headline1),
+                        Text(
+                            day == driver.day && month == driver.month && year == driver.year?
+                            "${driver.timeCovered} hr":"0 hr",
+
+                            style: Theme.of(context).textTheme.headline1),
 
                       ],
                     ),
@@ -90,8 +112,7 @@ class DashboardHome extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(kWalletBal,style: Theme.of(context).textTheme.headline2,),
-                      Text("NGN 438934",style: Theme.of(context).textTheme.bodyText1,),
-
+                      Text("${formatCurrency(user.walletBalance)}",style: Theme.of(context).textTheme.bodyText1,),
                     ],
                   ),
                   spacing(),
@@ -112,22 +133,22 @@ class DashboardHome extends StatelessWidget {
                     HeaderText(
                         title: kReferrialEarnings,
                         subTitleColor: kOrangeColor,
-                        subTitle: "(NGN 4343)",
+                        subTitle: "${formatCurrency(user.promoBalance)}",
                         onPressed: (){Navigator.pushNamed(context, promotionalEarning);}
                     ),
                     cardSpacing(),
-                    HeaderText(
+                    user.accountType  != AccountType.customer.name ||user.accountType  != AccountType.admin.name ?HeaderText(
                         title: kMyEarnings,
                         subTitleColor: kSeaGreen,
-                        subTitle: "(NGN 4343)",
+                        subTitle: "${formatCurrency(user.totalEarning)}",
                         onPressed: (){Navigator.pushNamed(context, totalEarningsTab);}
-                    ),
+                    ):Text(""),
                     cardSpacing(),
                     HeaderText(
                         title: kWithdrawal,
                         subTitleColor: kDarkRedColor,
-                        subTitle: "(NGN 4343)",
-                        onPressed: (){}
+                        subTitle: "${formatCurrency(user.totalWithdrawal)}",
+                        onPressed: (){Navigator.pushNamed(context, withdrawalHistory);}
                     ),
                     cardSpacing(),
                     HeaderText(
@@ -149,7 +170,7 @@ class DashboardHome extends StatelessWidget {
               ),
             ),
             spacing(),
-            Card(
+            user.accountType == AccountType.driver.name ?  Card(
               color: kWhiteColor,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -169,7 +190,7 @@ class DashboardHome extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+            ):Text(""),
 
             spacing(),
             Card(
@@ -185,7 +206,7 @@ class DashboardHome extends StatelessWidget {
                     HeaderText(
                         title: kOngoingOrder,
                         subTitleColor: kBlackColor,
-                        subTitle: "(3)",
+                        subTitle: user.isOngoingBooking == true? "(1)":"(0)",
                         onPressed: (){Navigator.pushNamed(context, connectedVendorPage);}
                     ),
                   ],
@@ -205,16 +226,19 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NewUser user = Provider.of<UserProvider>(context).user;
+    DriverModel driver = Provider.of<DriverProvider>(context).driver;
+
     return Row(children: [
-      ProfilePicture(image: ""),
+      ProfilePicture(image: user.profileImageUrl),
       SizedBox(width: 10.w,),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        Text("Ugo Zenith",style: Theme.of(context).textTheme.headline1,),
+        Text("${user.firstName} ${user.lastName}",style: Theme.of(context).textTheme.headline1,),
         Row(children: [
           Icon(Icons.star,color: kOrangeColor,size: 10.0.sp,),
-          Text("2.5",style: Theme.of(context).textTheme.headline1,),
+          Text("${driver.rating.toDouble()}",style: Theme.of(context).textTheme.headline1,),
 
         ],)
       ],)

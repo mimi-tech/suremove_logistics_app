@@ -36,12 +36,12 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
     margin: EdgeInsets.symmetric(horizontal: kMargin),
       child: Column(
           children: [
-            RegConstants().pickedImage == null? SvgPicture.asset('assets/user.svg'):
+            pickedImage == null? SvgPicture.asset('assets/user.svg'):
             CircleAvatar(
                 radius: 60,
                 backgroundColor: Colors.transparent,
                 child: ClipOval(
-                    child: Image.file(RegConstants().pickedImage!,
+                    child: Image.file(pickedImage!,
                       height: 200.h,
                       width: 200.w,
 
@@ -54,18 +54,18 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
                   if(result != null){
 
                     setState(() {
-                      RegConstants().pickedImage = result;
+                      pickedImage = result;
                     });
                   }else{
                     setState(() {
-                      RegConstants().pickedImage = null;
+                      pickedImage = null;
                     });
                   }
                 },
-                child: RegConstants().pickedImage == null?Text("Add Photo [Optional]",style: Theme.of(context).textTheme.headline6,)
+                child: pickedImage == null?Text("Add Photo [Optional]",style: Theme.of(context).textTheme.headline6,)
                 :GestureDetector(
                     onTap: (){setState(() {
-                      RegConstants().pickedImage = null;
+                      pickedImage = null;
                     });},
                     child: Text("Cancel",style: Theme.of(context).textTheme.bodyText2,))),
             spacing(),
@@ -93,7 +93,7 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
 
                     ),
                     onSaved: (String? value) {
-                      RegConstants().firstname = value!;
+                      firstname = value!;
                     },
                   ),
 
@@ -113,7 +113,7 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
 
                     ),
                     onSaved: (String? value) {
-                      RegConstants().lastname = value!;
+                      lastname = value!;
                     },
                   ),
 
@@ -132,7 +132,7 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
                       onChanged: (Gender? value) {
                         setState(() {
                           _gender = value!;
-                          RegConstants().gender = _gender;
+                          gender = _gender;
                         });
                       },
                     ),
@@ -145,7 +145,7 @@ class _RegistrationScreen1State extends State<RegistrationScreen1> {
                       onChanged: (Gender? value) {
                         setState(() {
                           _gender = value!;
-                          RegConstants().gender = _gender;
+                          gender = _gender;
                         });
                       },
                     ),

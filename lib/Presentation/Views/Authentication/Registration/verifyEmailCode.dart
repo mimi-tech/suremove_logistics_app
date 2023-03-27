@@ -77,7 +77,7 @@ class _VerifyEmailCodeRegistrationState extends State<VerifyEmailCodeRegistratio
       pinAnimationType: PinAnimationType.slide,
       onCompleted: (String value){
         if(_pinPutController.text != emailCode){
-          print(emailCode);
+
           setState(() {
             showError = !showError;
           });
@@ -95,7 +95,7 @@ class _VerifyEmailCodeRegistrationState extends State<VerifyEmailCodeRegistratio
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: AppBar(title: Text(kCreateDriverAccount.toUpperCase()),),
+      appBar: AppBar(backgroundColor: kWhiteColor,iconTheme: const IconThemeData(color: kBlackColor),),
 
         body:  SingleChildScrollView(child: Container(
                   margin: EdgeInsets.symmetric(horizontal: kMargin),
@@ -104,7 +104,22 @@ class _VerifyEmailCodeRegistrationState extends State<VerifyEmailCodeRegistratio
                       spacing(),
                       SvgPicture.asset('assets/email.svg'),
                       spacing(),
-                      Text(kVerifyEmail,style: Theme.of(context).textTheme.bodyText1,),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text: "$kVerifyEmail: ",
+                            style: Theme.of(context).textTheme.bodyText1,
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: email.toString(),
+                                style: Theme.of(context).textTheme.headline5!.copyWith(color: kDarkRedColor),
+                              ),
+
+
+                            ]
+
+                        ),
+                      ),
                       spacing(),
                       animatingBorders(),
                       showError?Text(errorText,style: const TextStyle(color: kRedColor),):const Text(""),

@@ -185,7 +185,7 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
                           onChanged: (Gender? value) {
                             setState(() {
                               _gender = value!;
-                              RegConstants().gender = _gender;
+                              gender = _gender;
                             });
                           },
                         ),
@@ -198,7 +198,7 @@ class _ReceiversInfoState extends State<ReceiversInfo> {
                           onChanged: (Gender? value) {
                             setState(() {
                               _gender = value!;
-                              RegConstants().gender = _gender;
+                              gender = _gender;
                             });
                           },
                         ),

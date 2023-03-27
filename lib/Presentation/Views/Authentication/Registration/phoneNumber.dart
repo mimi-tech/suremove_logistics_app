@@ -27,7 +27,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
   Color btnColor = kTextFieldBorderColor;
   final TextEditingController _phoneNumber = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String? phoneNumber;
   String _countryCode = '';
   @override
   Widget build(BuildContext context) {
@@ -41,7 +40,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
     }
 
     if(state is AuthSuccess){
-      Navigator.pushNamedAndRemoveUntil(context, verifyMobileNumber, (route) => false);
+       Navigator.pushNamed(context, verifyMobileNumber);
     }
 
     },
@@ -108,8 +107,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
 
         ),
         onSaved: (String? value) {
-        phoneNumber = value!;
-        RegConstants().phoneNumber = _countryCode + phoneNumber!;
+
+        phoneNumber = _countryCode + value!;
+
         },
         ),
 
@@ -127,8 +127,11 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
         if (!currentFocus.hasPrimaryFocus) {
         currentFocus.unfocus();
         }
+
         BlocProvider.of<AuthBloc>(context).add(AuthSendPhoneNumberCodeRequested(_countryCode + _phoneNumber.text));
-                }},title: kVerify,)
+                }
+
+        },title: kVerify,)
 
               ],
             ),

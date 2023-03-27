@@ -5,6 +5,7 @@ const verifyMobileNumber = "/verify-phone-number-page";
 const registrationScreen2 = "/registration-Screen2";
 const registrationScreen3 = "/registration-Screen3";
 const verifyEmail = "/verify-email";
+const emailScreen = "/email-screen";
 const updatePassword = "/update-password";
 const homePage = "/home-page";
 const itemDetails = "/item-details";
@@ -53,4 +54,5 @@ const verifyDriverEmailOTP = "/verify-driver-emailOTP";
 const capturingScreen = "/capturing-screen";
 const successfulScreen = "/successful-screen";
 const verifyEmailCodeRegistration = "/verify-email-code-registration";
+const withdrawalHistory = "/withdrawal-history";
 

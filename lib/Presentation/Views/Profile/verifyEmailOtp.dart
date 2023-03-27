@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sure_move/Logic/Authentication/authBloc.dart';
@@ -89,14 +90,16 @@ class _VerifyEmailOTPState extends State<VerifyEmailOTP> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
+        appBar: AppBar(backgroundColor: kWhiteColor,iconTheme: const IconThemeData(color: kBlackColor),),
+
+        body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
       if (state is AuthDenied) {
         ScaffoldMsg().errorMsg(context, state.errors[0]);
       }
       if(state is AuthSuccess){
        Navigator.pushNamedAndRemoveUntil(context, loginPage, (route) => false);
-       ScaffoldMsg().successMsg(context, state.success);
+       ScaffoldMsg().successMsg(context, state.message);
       }
     },
     builder: (context, state) {
@@ -107,7 +110,24 @@ class _VerifyEmailOTPState extends State<VerifyEmailOTP> {
         child: Column(
           children: [
             spacing(),
-            Text(kVerifyEmail,style: Theme.of(context).textTheme.bodyText1,),
+            SvgPicture.asset('assets/email.svg'),
+            spacing(),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                  text: "$kVerifyEmail: ",
+                  style: Theme.of(context).textTheme.bodyText1,
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: email.toString(),
+                      style: Theme.of(context).textTheme.headline5!.copyWith(color: kDarkRedColor),
+                    ),
+
+
+                  ]
+
+              ),
+            ),
             spacing(),
             animatingBorders(),
             showError?Text(errorText,style: const TextStyle(color: kRedColor),):const Text(""),

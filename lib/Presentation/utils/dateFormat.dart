@@ -11,3 +11,9 @@ class DateFormatFunction extends StatelessWidget {
       ,style:TextStyle(color: kDarkRedColor) ,);
   }
 }
+
+dynamic day  = DateTime.now().day;
+dynamic month  = DateTime.now().month;
+dynamic year  = DateTime.now().year;
+dynamic weekDay  = DateTime.now().weekday;
+

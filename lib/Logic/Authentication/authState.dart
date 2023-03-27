@@ -43,7 +43,7 @@ class AuthSuccess extends AuthState {
 }
 
 class UpdatePhoneNumberSuccess extends AuthState {
-  final List<String>? success;
+  final String success;
   const UpdatePhoneNumberSuccess(this.success);
 
   @override

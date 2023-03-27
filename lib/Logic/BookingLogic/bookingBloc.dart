@@ -98,7 +98,7 @@ List<DriverModel> matchedDrivers = <DriverModel>[];
           amount: data,
           totalAmount:  data,
           distance: metersToKg,
-            timeTaken: "12mins"
+            timeTaken: "12"
         );
         //check if user has a payment method
         var result = await UserPreferences().getPaymentType();
@@ -287,7 +287,7 @@ try{
         }else{
 
           emit(BookingDenied([response.errorResponse.toString()]));
-          print("denied");
+
         }
       }
     } catch (e) {
@@ -329,10 +329,10 @@ try{
       var bookingStatus = await BookingServices.driverConnectionStatus(drivers[count].driverId);
       if (bookingStatus is Success) {
         BookingModel booking = BookingModel.fromJson(createBookingResponse.data!["data"]);
-        Provider.of<BookingProvider>(event.context,listen: false).setUser(booking);
+
         matchedDrivers.clear();
         matchedDrivers.add(drivers[count]);
-        emit(BookingSuccess());
+        emit(BookingSuccess([booking]));
       }
       if(bookingStatus is Failure){
         print("driver did not answer");
@@ -391,7 +391,7 @@ try{
               totalAmount:  data,
               item: items
           );
-          emit(BookingSuccess());
+          emit(BookingSuccess([]));
         }
         if(res is Failure){
           emit(BookingDenied([res.errorResponse.toString()]));
@@ -424,7 +424,7 @@ try{
     emit(BookingLoading());
     var response = await BookingServices.customerConfirmBooking(event.bookingId,event.customerAuth);
     if(response is Success){
-      emit(BookingSuccess());
+      emit(BookingSuccess([]));
 
     }
     if(response is Failure){
