@@ -18,6 +18,8 @@ this app provides a seamless user experience for both customers and logistics se
   <li>Microservices Architecture: The app is designed using a microservices architecture, allowing for modular development and easy scalability.</li>
 </ul>
 
+## Playstore Link: <a href="https://play.google.com/store/apps/details?id=co.miriamly.suremove"> Download app </a>
+
 ## Screenshots
 <table>
 <tr>
@@ -41,8 +43,8 @@ samples, guidance on mobile development, and a full API reference.
 ## Getting Started
 <p>To get started with the Inventory Management App, follow these steps:</p>
 
-1. Clone the repository: git clone https://github.com/mimi-tech/maka-assignment
-2. Navigate to the project directory: cd inventory-management-app 
+1. Clone the repository: git clone https://github.com/mimi-tech/suremove_logistics_app
+2. Navigate to the project directory: cd project name 
 3. Install the dependencies: flutter pub get 
 4. Run the app: flutter run
 
@@ -69,4 +71,3 @@ Contributions to the project are welcome! If you find any issues or would like t
 ## Contact
 <p>For any inquiries or further information, please contact <spans tyle="color: blue;">Miriam Onuoha</span> at <spans tyle="color: blue;">onuohamiriam44@gmail.com</span>.
 
-Thank you for using the Inventory Management App! Thank you for the assignment</p>
