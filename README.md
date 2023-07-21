@@ -22,12 +22,12 @@ this app provides a seamless user experience for both customers and logistics se
 <table>
 <tr>
 <td>
-<img src="https://github.com/mimi-tech/maka-assignment/assets/62711340/c188e2ec-2cf6-48be-b2b3-1d41a21a3d6c">
+<img src="https://github.com/mimi-tech/suremove_logistics_app/assets/62711340/bcd494c1-5156-4496-8d6f-707fe0aa9596">
 
 </td>
 
 <td>
-<img src="https://github.com/mimi-tech/maka-assignment/assets/62711340/9ab275a3-e2ed-4d6e-946b-d3ba196b6d8b">
+<img src="https://github.com/mimi-tech/suremove_logistics_app/assets/62711340/69d7bdcb-463b-44e1-a8e2-ad01ff54af7c">
 </td>
 </tr>
 </table>
